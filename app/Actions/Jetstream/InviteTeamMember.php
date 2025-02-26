@@ -34,7 +34,9 @@ class InviteTeamMember implements InvitesTeamMembers
             'role' => $role,
         ]);
 
-        Mail::to($email)->send(new TeamInvitation($invitation));
+        $affiliateLink = 'http://localhost:8000/aff/'.$user->username;
+
+        Mail::to($email)->send(new TeamInvitation($invitation, $affiliateLink));
     }
 
     /**

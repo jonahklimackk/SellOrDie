@@ -13,6 +13,12 @@
                 <!-- Navigation Links -->
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                        {{ __('Home') }}
+                    </x-nav-link>
+                </div>  
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
 <!--                     <x-nav-link href="{{ route('ads') }}" :active="request()->routeIs('ads')">
                         {{ __('Arm Yourself') }}
                     </x-nav-link> -->
@@ -21,26 +27,20 @@
                     </x-nav-link>
                 </div> 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('fight') }}" :active="request()->routeIs('fights')">
+                    <x-nav-link href="{{ route('fights') }}" :active="request()->routeIs('fights')">
                         {{ __('Fights') }}
                     </x-nav-link>
                 </div>
-
-<!--                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('stats') }}" :active="request()->routeIs('stats')">
-                        {{ __('Your Stats') }}
-                    </x-nav-link>
-                </div> -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('league') }}" :active="request()->routeIs('league')">
-                        {{ __('League') }}
+                        {{ __('The League') }}
                     </x-nav-link>
                 </div>  
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('mailing') }}" :active="request()->routeIs('mailing')">
-                        {{ __('Send Mailing') }}
+<!--             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="/send/mailing/0" >
+                        {{ __('Send Mailings') }}
                     </x-nav-link>
-                </div>                                  
+                </div>    -->                            
 
             </div>
 
@@ -131,9 +131,12 @@
                             <x-dropdown-link href="{{ route('profile.show') }}">
                                 {{ __('Upgrade') }}
                             </x-dropdown-link>
-                            <x-dropdown-link href="{{ route('mailing') }}">
+<!--                             <x-dropdown-link href="/mailing/0">
                                 {{ __('Send Mailing') }}
-                            </x-dropdown-link>
+                            </x-dropdown-link> -->
+                            <x-dropdown-link href="/members/aff/stats">
+                                {{ __('Affiliate Program') }}
+                            </x-dropdown-link>                            
 
 
                             <div class="border-t border-gray-200 dark:border-gray-600"></div>

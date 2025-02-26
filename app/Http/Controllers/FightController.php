@@ -6,9 +6,12 @@ use DB;
 use Auth;
 use Str;
 use Redirect;
+use App\Models\FightViewLog;
 use App\Models\User;
+use App\Models\Mailings;
 use App\Models\Ads;
 use App\Models\Fight;
+use App\Models\FightLog;
 use App\Models\Votes;
 use App\Models\Team;
 use App\Models\TeamUser;
@@ -18,249 +21,336 @@ use Illuminate\Http\Request;
 
 class FightController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-
-        // if (rand(0,1)) {
-        //     dump('from a random closed fight');
-        //     $ads = Ads::fromClosedFights();
-        // }
-        // else {
-        //     dump('from random open fights');
-        $ads = Ads::fromOpenFights();
-        // }
-
-        // $votes = buildsVotes::build($ads);
-
-        //2 votes with the same key
-        //thats how one knows about the otehr
-        //so they can only vote once
-        $key = Str::random(100);
-        foreach ($ads as $ad){
-            $ad->key = $key;
-            Votes::create([
-                'team_id' => $ad->team_id,
-                'user_id' => $ad->user_id,
-                'ad_id' => $ad->id,
-                'key' => $key,
-            ]);    
-
-        }
-
-
-
-        return view('fight', compact('ads'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Fight $fight)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Fight $fight)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Fight $fight)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Fight $fight)
-    {
-        //
-    }
-
-
-    /**
-     * count clicks on ads in fight
-     */
-    public function vote($key, $adId)
-    {
-        //make suee it hasn't been vote4d on yet.
-        // $votes = Votes::where('key', $key)->get()->all();
-        // foreach ($votes as $vote){           
-        //     if ($vote->vote)
-        //         return "You already voted.";
-        // }
-
-        $vote = Votes::where('key', $key)->where('ad_id',$adId)->get()->first();
-        $vote->vote = true;
-        $vote->save();
+	/**
+	 * Show an open or closed
+	 */
+	public function index()
+	{
 
-        $clickedAd = Ads::where('id', $adId)->get()->first();
-        $notClickedAdId = Votes::where('key', $key)->where('ad_id', '!=', $adId)->get()->pluck('ad_id')->first();
-        $notClickedAd = Ads::find($notClickedAdId);
+		if (rand(0,1)) {
+			dump('from a random closed fight');
+			$ads = Ads::fromClosedFights();
+		}
+		else {
+			dump('from a random open fight');
+			$ads = Ads::fromOpenFights();
+		}
 
-        //open fight
-        if($clickedAd->fight() !== $notClickedAd->fight())
-        {   
+		//get random fighters' affiliate link
+		$referralLink = $this->getReferralLink($ads);				
 
-            dump('ads not equal');
-            dump("clicked ad id".$clickedAd->id);
-            dump("not clicked ad id".$notClickedAd->id);
-            dump($notClickedAd);
-            dump($clickedAd);
-            // $clickedAd->clicks++;
-            // $clickedAd->save();
+		//create votes too
+		$ads = $this->makeKey($ads);
 
-            $notClickedAdFight = Team::where('id',$notClickedAd->team_id)->get()->first();
-            $clickedAdFight = Team::where('id',$clickedAd->team_id)->get()->first();
 
-            // dump($notClickedAdFight->id);
-            // dump($notClickedAdFight->random_opponent_id);
+		return view('fight', compact('ads','referralLink'));
+	}
 
-            dump($clickedAdFight->id);
-            dump($clickedAdFight->random_opponent_id);
+	/**
+	 * Show the form for creating a new resource.
+	 */
+	public function create()
+	{
+		//
+	}
 
-            // dump($losingFight->random_opponent_id);
-            $randomOpponent = RandomOpponents::where('id',$clickedAdFight->random_opponent_id)->get()->first();
-            $randomOpponent->clicks++;
-            $randomOpponent->save();
+	/**
+	 * Store a newly created resource in storage.
+	 */
+	public function store(Request $request)
+	{
+		//
+	}
+
+
+
+
+
+
+
+	/**
+	 * show a closed fight given id
+	 */
+	public function showSpecific($fightId)
+	{
+		$fight = Team::find($fightId);
+
+		FightViewLog::logView($fight->id);
+
+		if(is_null($fight))
+			return "error: no fight exists here";
 
-            dump($randomOpponent);
+		$ads = Ads::where('team_id', $fight->id)->get()->all();
 
+		if (count($ads) > 2)
+			return "error: fight is full";
+		//1 ad? show a specific open fight
+		else if (count($ads) < 2 ) {
+
+			// dump("open fight");
+			//prevents ads from same person against itself
+			do{
+				//need anothere ad from an open fight
+				//fetch 2 random open ads and pick of those
+				$twoRandomOpenAds = Ads::fromOpenFights();
+				$rand = rand(0,1);
 
+				// $ads[0] is already set
+				$ads[1] = $twoRandomOpenAds[$rand];				
 
-            //this is what needs to happen
-            // $notClickedAd->fight()->random_opponent->clicks++
-            //so, fightsk or teams, now have random_opponent_id
+			} while ($ads[0] == $ads[1]);
+		}
+		//else then it's a closed fight with 2 ads already set
 
-            //when the user clicks Random Opponent, one is assigned
-            //and the random_opponenet in the table keeps track of al
-            //the times the ad isn't clicked - thusk, oponent cclicks
+		//get random fighters' affiliate link
+		$referralLink = $this->getReferralLink($ads);				
 
-            //so when you grab open fights, they're the one with on ad defined still but also has an randomopponent
-            //could be called ghost opponent but whatever
 
-            // dump(count($fight->id));
-            // foreach($fight as $item)
-            // {
-            //     dump($item);
-            // }
-            // dump($fight->id);
-            // $opponentsAd++;
+		$ads = $this->makeKey($ads);
 
 
-            // $fighterWon = User::where('id',$clickedAd->user_id)->get()->first();
-            // $fighterLost = User::where('id',$notClickedAd->user_id)->get()->first();
-            // dump($fighterWon);
-            // dump($fighterLost);
-            //must have a column called random_opponent_clicks
-            //you need some sort of ghost ad to fill up the team
-            //and keep tyrack of when your ad edidn't get clicked
 
-            //random_opponents is an ad that counts the clickso
-            //of when your aed didin't get dclicked
+		return view('fight', compact('ads','referralLink'));
+	}
 
 
-        }
-        // else {
-        //     $clickedAd->clicks++;
-        //     $clickedAd->save();
-        // }
+	/**
+	 * insert a vote to be checked
+	 * 
+	 */
+	public function makeKey($ads)
+	{
+		$key = Str::random(100);
+		foreach ($ads as $ad){
+			$ad->key = $key;
+			Votes::create([
+				'team_id' => $ad->team_id,
+				'user_id' => $ad->user_id,
+				'ad_id' => $ad->id,
+				'key' => $key,
+			]);   
+		}
+		return $ads;
 
-        // if ($fighter->belongsToTeam($notClickedAd->fight()))
-        //     dump("yes");
+	}
 
+	/**
+	 * Get the random Rerral link
+	 */
+	public function getReferralLink($ads)
+	{
+		if (rand(0,1)) {
+			$fighter = User::where('id', $ads[0]->user->id)->get()->first();
+			$referralLink = ENV('APP_URL')."/aff/".$fighter->username."/fights";
+		}
+		else {
+			$fighter = User::where('id', $ads[1]->user->id)->get()->first();
+			$referralLink = ENV('APP_URL')."/aff/".$fighter->username."/fights";
+		}		
+		return $referralLink;
+	}
 
-        exit;
 
-        // dump($clickedAd->fight());
+	/**
+	 * Show the form for editing the specified resource.
+	 */
+	public function edit(Fight $fight)
+	{
+		//
+	}
 
-            //if clickedd ad is not a part of this te4am, then it is an oopen
-        //fight wieh random opponent
+	/**
+	 * Update the specified resource in storage.
+	 */
+	public function update(Request $request, Fight $fight)
+	{
+		//
+	}
 
-        //if user not logged in then log them in
-        Auth::user()->credits++;
-        Auth::user()->save();
+	/**
+	 * Remove the specified resource from storage.
+	 */
+	public function destroy(Fight $fight)
+	{
+		//
+	}
 
-        $creditClick = CreditClicks::create([
-            'key' => $key,
-            'recipient_id' => Auth::user()->id,
-            'sender_id' => $clickedAd->user->id,
-            'credits' => rand(1,5),
-            'earned_credits' => false,
-            'ip' => ENV("REMOTE_ADDR"),
-        ]);
 
 
-        return view('frames.earn-credits',compact('creditClick'))->with('url',$clickedAd->url);
 
-        // return Redirect::to($clickedAd->url);
 
 
+	/**
+	 * Make the fight live
+	 */
+	public function start(Request $request)
+	{
+		$fight = Team::find($request->fight_id);
+		$fight->status = 'live';
+		$fight->save();
 
-    // return view('frames.earn-credits');
 
-        //delete the votes now?
+		return redirect("/ads")->with('message', 'Your fight is now live!');
+	}
 
-        // build the credit click url
 
 
-        
-        // $creditClicksUrl = new CreditClicks;
-        // $creditClicksUrl->recipient_id = $recipient->id;
-        // $creditClicksUrl->sender_id = $sender->id;
-        // $creditClicksUrl->mailing_id = $mailing->id;
-        // $creditClicksUrl->key = $key;
-        // $creditClicksUrl->credits = $credits;
-        // $creditClicksUrl->clicks = 0;
-        // $creditClicksUrl->earned_credits = false;
-        // $creditClicksUrl->save();
+	/**
+	 * stop the fijght
+	 */
+	public function stop(Request $request)
+	{
+		$fight = Team::find($request->fight_id);
+		$fight->status = 'config';
+		$fight->save();
 
 
+		return redirect("/ads")->with('message', 'Your fight is now back in config');
+	}
 
 
 
-        //credit the user for the click
-        // if the user is not logged in, then redirect to login
-        //     but if not logg3ed in, make a teopoaraoy adcount that accumuatr3es ccredits
-        // until they actualoy sign up
 
-        // //now I have to load credit cliocking frame
 
-        // Auth::user()->credits++;
-        // Auth::user()->save();
 
-        // and then what about knwoing if this is the first ad they clicked
+	/**
+	 * reset th stats
+	 */
+	public function reset(Request $request)
+	{
 
+		FightViewLog::where('fight_id', $request->fight_id)->delete();
 
+		$fightLog = FightLog::where('clicked_ad_fight_id', $request->fight_id)->delete();
+		$fightLog = FightLog::where('not_clicked_ad_fight_id', $request->fight_id)->delete();
 
 
-        // return Redirect::to($somecreiddtclickingframeurl);
+		return redirect("/ads")->with('message', 'You have reset your stats.');
+	}
 
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * Show an open or closed
+	 */
+	public function fightsWith3 ()
+	{
+		$fighters = User::all();
+		// $fighters = User::where('credits', '>=',1)->get()->all();
+
+		foreach($fighters as $fighter){
+			$fights = $fighter->allTeams();
+
+			foreach ($fights as $fight){  
+
+				dump($fight->isFull());
+				dump(count($fight->allAds()));
+				// foreach ($fight->allAds() as $ad){
+				//     $ad->delete();
+			}
+		}
+
+		return view('fight-with-3', compact('data'));
+	}
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * count clicks on ads in fight
+	 */
+	public function vote($key, $clickedAdId)
+	{
+		//keep them from choosing one opponent
+		//and then backing up and clicking on the other ad 
+		$votes = Votes::where('key', $key)->get()->all();
+		foreach ($votes as $vote){     
+			if ($vote->vote){
+				$clickedAd = Ads::find($clickedAdId);
+				return view('frames.already-judged-show-url')->with('url',$clickedAd->url);
+			}
+		}
+		$vote = Votes::where('key', $key)->where('ad_id', $clickedAdId)->get()->first();
+		$vote->vote = true;
+		$vote->save();
+
+
+		//this log is the only way to kee;p track of open fights
+		//random pairings - this way you can keep track of ghost opponents
+		// i might only need clicked_ad_id and not_clicked_ad_id
+
+		$clickedAd = Ads::find($clickedAdId);
+		$notClickedAd = Ads::find(Votes::where('key', $key)->where('ad_id', '!=', $clickedAdId)->get()->pluck('ad_id')->first());
+		$fightLog = FightLog::create([
+			'clicked_ad_id' => $clickedAd->id,
+			'not_clicked_ad_id' => $notClickedAd->id,
+			'clicked_ad_fight_id' => $clickedAd->team_id,
+			'not_clicked_ad_fight_id' => $notClickedAd->team_id,
+			'clicked_ad_user_id' => $clickedAd->user_id,
+			'notClicked_ad_user_id' => $notClickedAd->user_id,
+		]);
+
+		//credit the user for the click
+		// if the user is not logged in, then redirect to login
+		// but if not logg3ed in, make a teopoaraoy adcount that accumuatr3es ccredits
+		// until they actualoy sign up
+		if (Auth::user()) {
+			Auth::user()->credits++;
+			Auth::user()->save();
+		}
+		else{
+			//BIG TODO ITEM HERE
+			//persist the earning of crdits in cookei utnil
+			// user actuaoly signs up
+			dump('not loggedd in , or poential new users who clicked ads');
+		}
+
+		//same system as listjoe
+		$creditClick = CreditClicks::create([
+			'key' => $key,
+			'recipient_id' => Auth::user()->id,
+			'sender_id' => $clickedAd->user->id,
+			'credits' => rand(1,5),
+			'earned_credits' => false,
+			'ip' => ENV("REMOTE_ADDR"),
+		]);
+
+
+		return view('frames.earn-credits',compact('creditClick'))->with('url',$clickedAd->url);
+
+	}
+
+
+
+	/**
+	 *show the ad even though they already vogted
+	 * that way peop;le can get hits on already votes
+	 */
+	public function alreadyJudgedShowUrlTopFrame()
+	{
+
+
+		return view('frames.already-judged-show-url-top-frame');
+	}
+
+
 }

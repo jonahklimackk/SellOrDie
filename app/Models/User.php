@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Auth;
+use Cookie;
+use App\Models\Membership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,6 +15,7 @@ use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Ads;
 use App\Models\Fight;
+use App\Models\Team;
 use App\Models\Mailings;
 
 class User extends Authenticatable
@@ -34,6 +38,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
+        'sponsor_id'
     ];
 
     /**
@@ -114,6 +120,54 @@ class User extends Authenticatable
      {
         return Ads::where('user_id', $this->id)->get()->all();
     }      
+
+     /**
+     * get all ads
+     *
+     * @return integer
+     */
+     public function allLiveFights()
+     {
+        return Team::where('user_id', $this->id)->where('status', 'live')->get()->all();
+    } 
+
+
+
+
+    /**
+     * Eloquent relationship
+     *
+     * @return
+     */
+    public function membership()
+    {
+        return Memberships::where('name',Auth::user()->status)->get()->first();
+    }
+
+
+
+    /**
+     * Eloquent relationship
+     *
+     * @return
+     */
+    public function isUpgraded()
+    {
+        return true;
+    }
+
+
+    /**
+     * Figure out who the sponsor is at time of registration or fucking die
+     *
+     * @return boolean
+     */
+    public static function getSponsor()
+    {
+        $sponsor = Cookie::get('aff') ? User::where('username', Cookie::get('aff'))->get()->first() : User::find(config('listjoe.admin_id'));
+
+        return isset($sponsor) ? $sponsor : die('no sponsor id contact support immediately');
+    }
 
 
 }

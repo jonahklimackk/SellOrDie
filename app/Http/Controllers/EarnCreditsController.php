@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Mailing;
+use App\Models\Mailings;
 use App\Models\TopEmailAd;
 use App\Models\CreditClicks;
 use Illuminate\Http\Request;
@@ -42,7 +42,7 @@ class EarnCreditsController extends Controller
 
 
         //record a click for this mailing
-        $mailing = Mailing::where('id', $creditClick->mailing_id)->get()->first();
+        $mailing = Mailings::where('id', $creditClick->mailing_id)->get()->first();
         $mailing->clicks++;
         $mailing->save();
 

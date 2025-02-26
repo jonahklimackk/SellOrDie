@@ -4,7 +4,7 @@
 @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::registration()))
 {{ __('If you do not have a sell or die  account, you may can create one for free by clicking the button below. After creating an account, you may click the challenge acceptance button in this email to accept the fight invitation:') }}
 
-@component('mail::button', ['url' => route('register')])
+@component('mail::button', ['url' => $affiliateLink])
 {{ __('Create Account') }}
 @endcomponent
 

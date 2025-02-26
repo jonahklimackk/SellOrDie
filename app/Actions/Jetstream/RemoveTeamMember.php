@@ -4,6 +4,7 @@ namespace App\Actions\Jetstream;
 
 use App\Models\Team;
 use App\Models\User;
+use App\Models\Ads;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
@@ -17,6 +18,9 @@ class RemoveTeamMember implements RemovesTeamMembers
      */
     public function remove(User $user, Team $team, User $teamMember): void
     {
+        $ad = Ads::where('user_id',$user->id,)->where('team_id', $team->id)->get()->first();
+        $ad->delete();
+
         $this->authorize($user, $team, $teamMember);
 
         $this->ensureUserDoesNotOwnTeam($teamMember, $team);

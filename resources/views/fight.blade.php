@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Sell Or Die!</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -26,14 +26,26 @@
           <div align="center">
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
 
-              <!-- Click The Ad That Interests You The Most  -->
-              Which Ad Interests You The Most?
-              <main class="mt-10">
+    
+              <h1 class="mt-2  text-4xl font-medium text-gray-900 dark:text-white">
+                <!-- {{ $randomCallToAction ?? ''}} -->
+                Click The Ad That Interests You The Most
+ <!--                Which Ad Do You Like?
+                Judge This Fight
+                Which Ad Speaks To You -->
+              </h1>
+              <div class="float-right">
+              <a href="/fights">
+                <x-green-button>Next Fight</x-green-button>
+            </a>
+        </div>
+            <main class="mt-10">
                 <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                    <a
-                    href="/fights/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}"
+                    <div
                     id="docs-card"
+                    onclick="window.open('/fights/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}','newwindow',200,100)"
                     class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]" 
+                    style="cursor: pointer;"
                     >
                     <div class="relative flex items-center gap-6 lg:items-middle">
                         <div class="mt-2" x-show="! photoPreview">
@@ -48,11 +60,12 @@
                     <div class="mt-2">
                        {!!  nl2br($ads[0]->body) !!}
                    </div>
-               </a>
-               <a
-               href="/fights/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}"
+               </div>
+               <div
                id="docs-card"
+               onclick="window.open('/fights/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
                class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]" 
+               style="cursor: pointer;"
                >
                <div class="relative flex items-center gap-6 lg:items-middle">
                    <div class="mt-2" x-show="! photoPreview">
@@ -63,9 +76,21 @@
              </div>
          </div>
          {!! nl2br($ads[1]->body) !!}
-     </a>
+     </div>
  </div>
 </main>
+<div class='mt-20'>
+    <h1 class="mt-2  text-1xl font-medium text-gray-900 dark:text-white">
+        <!-- How do I get the affiliate linke -->
+        <!-- there are 2 sponosr here
+        maybe, only the team owner thats fine for open fights 
+        but closed fight has to be a random sponsor -->
+        <a href="{{ $referralLink }}">
+        Your Ad Here <br> Join Free
+        </a>
+    </h1>
+
+</div>
 </div>
 </div>
 </body>

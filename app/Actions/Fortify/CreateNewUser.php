@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use App\Helpers\AffiliateTracker;
 use Laravel\Jetstream\Jetstream;
 
 class CreateNewUser implements CreatesNewUsers
@@ -23,19 +24,44 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:100', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
+
         return DB::transaction(function () use ($input) {
+
+            AffiliateTracker::recordJoin($input['campaign_id'] );
+
+
             return tap(User::create([
                 'name' => $input['name'],
+                 'username' => $input['username'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
+                'sponsor_id' => $input['sponsor_id'],
             ]), function (User $user) {
                 $this->createTeam($user);
             });
+
+            $user->credits = config('sellordie.signup_bonus');
+            $user->save();
+            Mail::to($user)->send(new WelcomeEmail($user));
+
+
+            $sponsor = User::fetchSponsor($user);
+            $sponsor->credits += config('sellordie.referral_bonus');
+            $sponsor->save();
+            Mail::to($sponsor)->send(new ReferralNotice($user, $sponsor));
+
+
+            $admin = User::find(config('sellordie.admin_id'));
+            Mail::to($admin)->send(new ReferralNotice($user, $sponsor));
+
+
+
         });
     }
 

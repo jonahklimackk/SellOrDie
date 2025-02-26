@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+
+use App\Models\FightViewLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
@@ -82,19 +84,46 @@ class Team extends JetstreamTeam
         return $this->hasOne(Ads::class);
     }
 
+
     /**
-     * each team has only one ad
-     *
+     * grab all the ads for this fight
+     * 
      * @return integer
      */
-     public function allAds()
-     {
+    public function allAds()
+    {
         return Ads::where('team_id', $this->id)->get()->all();
     }
 
 
+    /**
+     * Is the fight full?
+     * 
+     * @return integer
+     */
+    public function isFull()
+    {
+        return Ads::where('team_id', $this->id)->get()->count() > 2 ? : 0;
+
+    }
+
+
+    // /**
+    //  * recordss a fight view??
+    //  * this should be in fight view log insetead
+    //  * 
+    //  * @return integer
+    //  */
+    // public function logView()
+    // {
+
+    //     FightViewLog::create([
+    //         'fight_id' => $this->id,            
+    //     ]);
 
 
 
+
+    // }    
 
 }

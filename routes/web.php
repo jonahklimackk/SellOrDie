@@ -3,13 +3,22 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdsController;
 use App\Http\Controllers\FightController;
+use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\SendMailingController;
 use App\Http\Controllers\EarnCreditsController;
+use App\Http\Controllers\AffiliateTrackingController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TestController;
 use App\Livewire\Mailings;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+// Route::get('/home', function () {
+//     return view('home');
+// })->name('home');
+
+Route::get('/home', [HomeController::class,'index'])->name('home');
+
 
 Route::get('/upgrade', function () {
     return view('upgrade.show')->name('upgrade');
@@ -26,16 +35,40 @@ Route::middleware([
 });
 
 
-//check this person's stats
-Route::get('/stats', function () {
-    return view('stats');
-})->name('stats');
+
+/*
+ * Affiliate Tracking / Affiliate Program
+ * http://klickdream.com/aff/username/campaign
+ *
+ */
+
+Route::get('/', [AffiliateTrackingController::class,'index']);
+Route::get('/aff/{username}', [AffiliateTrackingController::class,'aff']);
+Route::get('/aff/{username}/{campaign}', [AffiliateTrackingController::class,'affAndCampaign']);
+Route::get('/members/aff/stats', [AffiliateTrackingController::class, 'stats']);
+// Route::get('members/downline', [GrowYourDownlineController::class, 'downline']);
+// Route::get('members/reftools', [GrowYourDownlineController::class, 'reftools']); 
+// Route::get('members/downline/level/{lv}', [GrowYourDownlineController::class, 'showDownlineLv']);
 
 
-//check stats on all ds and fighters
-Route::get('/league', function () {
-    return view('league');
-})->name('league');
+
+
+
+/*
+ * Handle Fights
+ * 
+ */
+Route::get('/fights', [FightController::class,'index'])->name('fights');
+Route::get('/fights/vote/{key}/ad/{clickedAdId}',[FightController::class,'vote']);
+Route::get('/frames/already-judged-show-url-top-frame/',[FightController::class,'alreadyJudgedShowUrlTopFrame']);
+Route::get('/fights/show/{fightId}', [FightController::class,'showSpecific']);
+Route::post('/fight/start', [FightController::class,'start']);
+Route::post('/fight/stop', [FightController::class,'stop']);
+Route::post('/fight/reset', [FightController::class,'reset']);
+//debugging
+Route::get('/fights-with-3', [FightController::class,'fightsWith3']);
+
+
 
 
 
@@ -43,27 +76,51 @@ Route::get('/league', function () {
  * Click for Credits
  *
  */
-//listjoe.com/earn/6f431a093bc22dc8bd1e687b9e428e57/jonahslistbuilders
 //no need for sender username, it's all stored in creditClicks table
 Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
 Route::get('earn/redeem/{key}',[EarnCreditsController::class, 'afterCountdown']);
 Route::get('frames/earn-credits-top-frame/{key}', [EarnCreditsController::class,"showTopFrameBeforeCountdown"]);
 // Route::get('record/earn/{key}/view', [EarnCreditsController::class,'mailingRecordView']);
+Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
 
 
 
 
-Route::get('/fight', [FightController::class,'index'])->name('fight');
-Route::get('/fights/vote/{key}/ad/{adId}',[FightController::class,'vote']);
+
+
+/*
+ * Handle Mailings
+ * Mailing-ads
+ */
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/mailing', [SendMailingController::class,'index'])->name('mailing');
+    Route::get('/send/mailing/{mailingId}', [SendMailingController::class,'index']);
+    Route::post('/mailing/store', [SendMailingController::class,'store']);
+    Route::post('/mailing/update', [SendMailingController::class,'update']);
+    Route::post('/mailing/delete', [SendMailingController::class,'destroy']);
+    Route::post('/mailing/queue', [SendMailingController::class,'queue']);
+    Route::get('/mailing/history', [SendMailingController::class,'history']);
+    Route::get('/mailing/new', [SendMailingController::class,'showNew']);    
 });
 
+/*
+ * Sends Mailings
+ *
+ */
+Route::get('/process/next-mailing/{from}/{to}/{sort}',[SendMailingController::class, 'processMailing']);
+
+
+
+
+
+/*
+ * Handle Ads
+ *
+ */
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -72,16 +129,66 @@ Route::middleware([
     Route::get('/ads', [AdsController::class,'index'])->name('ads');
     Route::get('/ads/edit', [AdsController::class,'edit']);
     Route::post('/ads/create', [AdsController::class,'create']);
+    Route::post('/ads/delete', [AdsController::class,'delete']);
+    Route::post('/ads/random-opponent', [AdsController::class,'setRandomOpponent']);    
 });
 
-// Route::get('/ads', [App\Livewire\Ads::class,'render'])->name('ads');
 
+
+/*
+ * Tracking The League Stats
+ *
+ */
+Route::get('/league/{period?}', [LeagueController::class,'index'])->name('league');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * TESTING AND DEBugging
+ *
+ */
+
+Route::get('/league-period',[TestController::class,'showLeagueStatsInPeriod']);
+Route::get('/show/creditmail',[TestController::class,'showCreditMail']);
+Route::get('/test/aff', [TestController::class, 'showAffCookies']);
+// Route::get('/test/league', [TestController::class, 'testLeague']);
+Route::get('/fix/division-by-zero', [TestController::class, 'fixDivisionByZero']);
+
+
+Route::get('/get/rank/{fightId}', function ($fightId) {
+    $ranking = App\Models\Fight::getRank($fightId);
+
+    dd($ranking);
+
+});
 
 
 Route::get('/tailwind', function () {
     return view('tailwind');
 
 });
+
+Route::get('/show-hide', function () {
+    return view('show-hide');
+
+});
+
 
 Route::get('/assign-credits', function () {
     $users = App\Models\User::all();
@@ -92,3 +199,27 @@ Route::get('/assign-credits', function () {
     }
 });
 
+Route::get('/get-fight-views-log/{fightId}', function ($fightId) {
+    $clicks = App\Models\FightViewLog::where('fight_id', $fightId)->get()->count();
+    dump($clicks);
+
+
+});
+
+
+
+
+Route::get('/populate-fightviewlog', function () {
+
+    $fights = App\Models\Team::all();
+    foreach ($fights as $fight){
+        App\Models\FightViewLog::logView($fight->id); 
+    }
+
+});
+
+
+    
+Route::get('/ai', function () {
+    return view('ai');
+});

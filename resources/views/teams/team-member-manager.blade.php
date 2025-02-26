@@ -1,16 +1,30 @@
 <div>
-    @if (Gate::check('addTeamMember', $team))
-        <x-section-border />
+
 
 <?php
 
+$fight = App\Models\Team::where('id', Auth::user()->currentTeam->id)->get()->first();
 
-$numFighters = App\Models\User::where('current_team_id',Auth::user()->currentTeam->id )->get()->count();
+//if fight has a ad or 2 ad
+// $fightFighter = DB::table('team_user')->where('team_id',Auth::user()->currentTeam->id)->get()->all();
+$opponent = App\Models\Membership::where('team_id', Auth::user()->currentTeam->id)->get()->all();
+
+// dump($fight);
+// dump($opponent);
+// dump($memberships);
+
 
 ?>
-        @if($numFighters < 2)
-        <!-- Add Team Member -->
-        <div class="mt-10 sm:mt-0">
+
+       
+
+    @if (Gate::check('addTeamMember', $team))
+        <x-section-border />
+
+        
+ <!-- Add Team Member - limit 2 fighters to a fight -->
+        @if(! ($fight && $opponent))
+        <div class="mt-10 sm:mt-0">           
             <x-form-section submit="addTeamMember">
                 <x-slot name="title">
                     {{ __('Add Fighter') }}
@@ -82,6 +96,7 @@ $numFighters = App\Models\User::where('current_team_id',Auth::user()->currentTea
             </x-form-section>
         </div>
         @endif
+
     @endif
 
     @if ($team->teamInvitations->isNotEmpty() && Gate::check('addTeamMember', $team))

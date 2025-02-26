@@ -4,6 +4,7 @@ namespace App\Models;
 
 use DB;
 use App\Models\User;
+use App\Models\FightViewLog;
 use App\Models\RandomOpponents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -61,63 +62,42 @@ class Ads extends Model
 
         $possibleAds = [];
         foreach($fighters as $fighter){
-            $fights = $fighter->allTeams();       
+            $fights = $fighter->allLiveFights();  
+            // dd($fights);     
             foreach ($fights as $fight){   
                 $adsCount = count($fight->allAds());                
                 if ($adsCount === 2) {     
                     // dump('fight with 2 ads');
-                    // dump($fight->name);
-                    // $closedFights[] = $fight->allAds();
                 }
                 else if ($adsCount === 1) {
-                    // dump("this is an open fight");
-                    // dump($fight->name);
-                    // $openFights[] = $fight->ad;
+                    //1 ad means open fight, grab ads from
+                    //pool of other open fights
                     $possibleAds[$fight->id] = $fight->ad;
-
                 }
                 else if (! $adsCount) {
-                    // dump("this is a fight with no ads");
+                    // dump("this is a fight with 0 ads");
 
                 }
-                else {
-                    dump("just chec king");
-                    // dump("this is a fight that has ".$adsCount." ads");
-                        // foreach ($fight->allAds() as $ad){
-                        // $ad->delete();
-                }
-
+                else
+                    dump("this is a fight that has ".$adsCount." ads");
             }
+
         }
 
-        //the only problem witiht his is it someitmes has 2 ads from the same person
 
+        //the only problem witiht his is it 
+        //someitmes has 2 ads from the same person
         $randomFightIds = array_rand($possibleAds,2);
         foreach ($randomFightIds as $randomFightId){
             $randomFight = Team::find($randomFightId);
-            $randomFight->views++;
-            $randomFight->save();
+            // $randomFight->logview();
+            // $randomFight->views++;
+            // $randomFight->save();
+            FightViewLog::logView($randomFight->id);
+            //i don't even use this stat
             $randomFight->ad->views++;
             $randomFight->ad->save();
             $ads[] = $possibleAds[$randomFightId];
-        }
-
-
-        //this is onlly done through testing
-        //normallyl the random ooppoine would bget 
-        //pupt on the team as part of ad setup
-        foreach ($randomFightIds as $randomFightId){
-            $randomFight = Team::find($randomFightId);
-            // dd($randomFight->user_id);
-            // dd($randomFight->ad->id);
-            $randomOpponent = RandomOpponents::create([
-                'ad_id' => $randomFight->ad->id,
-                'team_id' => $randomFight->id,
-                'fighter_id' => $randomFight->user_id,
-                'clicks' => 0
-            ]);
-            $randomFight->random_opponent_id = $randomOpponent->id;
-            $randomFight->save();
         }
 
 
@@ -142,33 +122,32 @@ class Ads extends Model
 
         $possibleAds = [];
         foreach($fighters as $fighter){
-            $fights = $fighter->allTeams();
-       
+            $fights = $fighter->allLiveFights();
+
             foreach ($fights as $fight){   
                 $adsCount = count($fight->allAds());                
                 if ($adsCount === 2) {     
                     $possibleAds[$fight->id] = $fight->allAds();
                 }
-                // else if ($adsCount === 1) {
-                //     // dump("this is an open fight");
-                //     // dump($fight->name);
-                // }
-                // else if (! $adsCount) {
-                //     // dump("this is a fight with no ads");
+                else if ($adsCount === 1) {
+                    // dump("this is an open fight");
+                    // dump($fight->name);
+                }
+                else if (! $adsCount) {
+                    // dump("this is a fight with no ads");
 
-                // }
-                // else {
-                //     // dump("this is a fight that has ".$adsCount." ads");
-                //         // foreach ($fight->allAds() as $ad){
-                //         // $ad->delete();
-                // }
-
+                }
+                else 
+                    dump("this is a fight that has ".$adsCount." ads");
             }
         }
-        $randomFight = Team::where('id',array_rand($possibleAds))->get()->first();
-        $randomFight->views++;
-        $randomFight->save();
 
+        $randomFight = Team::where('id',array_rand($possibleAds))->get()->first();
+        FightViewLog::logView($randomFight->id);
+
+        //need to review this i don't use these stats edo i ?
+        //for teams/fights i grab the views
+        //for dclicdks in an open fight i use fightlog
         foreach($possibleAds[$randomFight->id] as $ad){
             $ad->views++;
             $ad->save();
@@ -188,5 +167,9 @@ class Ads extends Model
      {
         return $this->hasOne(Team::class);
     }
+
+
+
+
 
 }
