@@ -48,6 +48,11 @@ class SetsStartDate
 			$dates['start'] = new Carbon('2 months ago');
 			$dates['end'] = new Carbon('1 month ago');	
 		}
+		else if ($period == 'all')	
+		{
+			$dates['start'] = new Carbon('20 years ago');
+			$dates['end'] = new Carbon();	
+		}
 		else //default to today
 		{
 			$dates['start'] = new Carbon('yesterday');

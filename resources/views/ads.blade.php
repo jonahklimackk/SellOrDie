@@ -4,9 +4,9 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="bg-[#FDFDFC] dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
 
-                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+                <div class="p-6 lg:p-8 bg-[#FDFDFC] ">
 
                     <?PHP
 // dump($ad->random_opponent);
@@ -43,7 +43,7 @@
 
 
 
-            <h1 class="mt-2  text-4xl font-medium text-gray-900 dark:text-white">
+            <h1 class="mt-2  text-4xl font-medium text-gray-900 ">
                 Welcome To  {{ Auth::user()->currentTeam->name }}
             </h1>
 
@@ -52,7 +52,7 @@
                 <div class="mt-2 px-4 py-4 grid lg:grid-cols-3 items- bg-indigo-400 rounded-md font-semibold">
                    <!-- <div> Record: </div> <div> 135 Wins, 78 Lossses </div> -->
                    <!-- <div >Busy Bee Fight</div> <div></div> -->
-                   <div> Fights: </div> <div></div><div> {{ App\Models\FightViewLog::getViews($fight->id)  ?? 0}}</div>
+                   <div> Fights: </div> <div></div><div> {{ App\Models\FightViewLog::getViews($fight->id, 'all')  ?? 0}}</div>
                    @if(isset($opponentsAd))
                    <div> {{ $opponentsAd->user->name ?? '' }}'s Clicks:</div> 
                    <div></div><div>{{ $opponentsClicks ?? 0}}</div>
@@ -85,7 +85,7 @@
             </div>   
         </div>
         <div>
-           <p class="py-4  text-gray-500 dark:text-gray-400 leading-relaxed">
+           <p class="py-4  text-gray-500  leading-relaxed">
             If you want to make your name as the best Fighter in the SellorDie <a hfef="/league">league</a>, you gotta
             have a good weapon. Be sure that it packs the 1-2 punch to destroy your opponents!
             Fights is how many times your ad weapon has been viewed. Or, how many times you used this particular weapon. Fights are the number of fights you've been. A fight consits of 2 fighters and 2 ad weapons.  When you invite someone to your fight and they accept, You'll have an url to doisplay your fight and it will be shown to other fithers as they earn credits surfing.
@@ -158,7 +158,7 @@
       <x-input name="headline" placeholder="Your Headline Here" value="{{ $ad->headline ?? old('headline') ?? ''}}"/>
         <x-label> Category </x-label>
 
-        <select name="category" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+        <select name="category" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
             <option>Select Category</option>
             @foreach ($categories as $category)
             @if (!is_null($ad) && $ad->category == $category->category)
@@ -169,7 +169,31 @@
             @endforeach
         </select>
 
-        <textarea name="body" rows="12" cols="65" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{ $ad->body ?? old('body' ?? '')}}</textarea>
+        <!-- <textarea name="body" rows="12" cols="65" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ $ad->body ?? old('body' ?? '')}}</textarea> -->
+
+
+
+<!--         <div class="main-container">
+            <div
+                class="editor-container editor-container_classic-editor editor-container_include-block-toolbar editor-container_include-word-count"
+                id="editor-container"
+            >
+                <div class="editor-container__editor"><div id="editor"></div></div>
+                <div class="editor_container__word-count" id="editor-word-count"></div>
+            </div>
+        </div>
+        <script src="https://cdn.ckeditor.com/ckeditor5/44.3.0/ckeditor5.umd.js" crossorigin></script>
+        <script src="./main.js"></script> -->
+
+<textarea id="body" name="body" rows="12" cols="65" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"> 
+  {{ $ad->body ?? old('body' ?? '')}}
+</textarea>
+
+        <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>  
+        <script> 
+            var editor = new FroalaEditor('#body');
+        </script>
+
 
         <x-label /> Url
         <x-input name="url"  placeholder="Your Url Here" value=" {{ $ad->url ?? old('url') ?? ''}}"/>
@@ -203,7 +227,7 @@
         <a
         href="/fights/click/{{ $ad->url ?? ''}}" target="_blank"
         id="docs-card"
-        class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
+        class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10"
         >
 
 
@@ -212,7 +236,7 @@
                 <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="rounded-full size-20 object-cover">
             </div>
             <div class="mt-2">
-                <h1 class="text-xl font-semibold text-black dark:text-white">
+                <h1 class="text-xl font-semibold text-black ">
                     {{ $ad->headline ?? ''}}
                 </h1>
             </div>
@@ -227,7 +251,7 @@
     <a
     href="/fights/click/{{ $opponentsAd->url ?? ''}}" target="_blank"
     id="docs-card"
-    class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
+    class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 "
     >
 
 
@@ -236,7 +260,7 @@
             <img src="{{ $opponentsAd->user->profile_photo_url ?? ''}}" alt="{{ $opponentsAd->user->name ?? '' }}" class="rounded-full size-20 object-cover">
         </div>
         <div class="mt-2">
-            <h1 class="text-xl font-semibold text-black dark:text-white">
+            <h1 class="text-xl font-semibold text-black ">
                 {{ $opponentsAd->headline ?? ''}}
             </h1>
         </div>
@@ -251,7 +275,7 @@
 <a
 href="/fights/click/{{ $opponentsAd->url ?? ''}}" target="_blank"
 id="docs-card"
-class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
+class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10"
 >
 
 
@@ -260,7 +284,7 @@ class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 s
         <img src="/annonymous.png" class="rounded-full size-20 object-cover">
     </div>
     <div class="mt-2">
-        <h1 class="text-xl font-semibold text-black dark:text-white">
+        <h1 class="text-xl font-semibold text-black">
             Random Opponent
         </h1>
     </div>

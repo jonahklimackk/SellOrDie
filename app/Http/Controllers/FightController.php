@@ -28,11 +28,11 @@ class FightController extends Controller
 	{
 
 		if (rand(0,1)) {
-			dump('from a random closed fight');
+			// dump('from a random closed fight');
 			$ads = Ads::fromClosedFights();
 		}
 		else {
-			dump('from a random open fight');
+			// dump('from a random open fight');
 			$ads = Ads::fromOpenFights();
 		}
 

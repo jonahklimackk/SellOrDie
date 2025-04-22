@@ -40,11 +40,11 @@ class AdsController extends Controller
 
 	//get the draws & win loss %
 	$fight = Team::where('id', Auth::user()->currentTeam->id)->get()->first();
-	$draws = FightViewLog::getViews($fight->id) - ($clicks + $opponentsClicks);
+	$draws = FightViewLog::getViews($fight->id, "all") - ($clicks + $opponentsClicks);
 
 
 	if ($clicks || $opponentsClicks){  
-		$winLoss = ($clicks + (0.5*$draws)) / FightViewLog::getViews($fight->id);
+		$winLoss = ($clicks + (0.5*$draws)) / FightViewLog::getViews($fight->id,'all');
 		$winLoss *= 100;
 		$winLoss = number_format($winLoss, 2);
 	}
@@ -133,11 +133,11 @@ class AdsController extends Controller
 	}
 	//get the draws & win loss %
 	$fight = Team::where('id', Auth::user()->currentTeam->id)->get()->first();
-	$draws = FightViewLog::getViews($fight->id) - ($clicks + $opponentsClicks);
+	$draws = FightViewLog::getViews($fight->id, "all") - ($clicks + $opponentsClicks);
 
 
 	if ($clicks || $opponentsClicks){
-		$winLoss = ($clicks + (0.5*$draws))/$FightViewLog::getViews($fight->id);
+		$winLoss = ($clicks + (0.5*$draws))/FightViewLog::getViews($fight->id,'all');
 		$winLoss = number_format($winLoss, 2) * 100;
 	}
 	else
@@ -146,7 +146,7 @@ class AdsController extends Controller
 
 	
 		//note: all the sstats show zero while editing your ad
-	return view('ads', compact('ad','categories','opponentsAd','clicks', 'opponentsClicks','winLoss'))->with('edit', true);
+	return view('ads', compact('ad','categories','opponentsAd','clicks', 'opponentsClicks','winLoss','fight'))->with('edit', true);
 }
 
 

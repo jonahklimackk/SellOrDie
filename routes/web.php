@@ -223,3 +223,11 @@ Route::get('/populate-fightviewlog', function () {
 Route::get('/ai', function () {
     return view('ai');
 });
+
+Route::get('/ckeditor', function () {
+    return view('ckeditor');
+});
+
+Route::get('/froala', function () {
+    return view('froala');
+});

@@ -46,7 +46,7 @@ class Fight extends Model
 	  */
 	  public static function getRank($fightId)
 	  {		
-	  	$fights = LeagueController::getLeagueStats();
+	  	$fights = LeagueController::getLeagueStats('all');
 
 	  	$c=1;
 	  	foreach($fights as $fight){

@@ -50,11 +50,19 @@
             }
         }
     </script>    
+
+        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.3.0/ckeditor5.css" crossorigin>
+        <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5-premium-features/44.3.0/ckeditor5-premium-features.css" crossorigin>
+
+                <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css' />
+    
 </head>
-<body class="font-sans antialiased" onload="toggleVisibilityEdit();toggleVisibilityNew();">
+
+<body class=" bg-gray-900 font-sans antialiased" onload="toggleVisibilityEdit();toggleVisibilityNew();">
     <x-banner />
 
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="bg-gray-900 min-h-screen bg-gray-100 dark:bg-gray-900">
         @livewire('navigation-menu')
 
         <!-- Page Heading -->

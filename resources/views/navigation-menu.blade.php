@@ -32,7 +32,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('league') }}" :active="request()->routeIs('league')">
+                    <x-nav-link href="/league/today" :active="request()->routeIs('league/today')">
                         {{ __('The League') }}
                     </x-nav-link>
                 </div>  

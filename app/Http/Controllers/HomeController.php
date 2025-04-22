@@ -42,11 +42,11 @@ class HomeController extends Controller
 
 			//get the draws & win loss %
 			$data[$fight->id]['fight'] = Team::where('id', $fight->id)->get()->first();
-			$data[$fight->id]['draws'] = FightViewLog::getViews($fight->id) - ($data[$fight->id]['clicks'] + $data[$fight->id]['opponentsClicks']);
+			$data[$fight->id]['draws'] = FightViewLog::getViews($fight->id,'all') - ($data[$fight->id]['clicks'] + $data[$fight->id]['opponentsClicks']);
 
 
 			if ($data[$fight->id]['clicks'] || $data[$fight->id]['opponentsClicks']){  
-				$data[$fight->id]['winLoss']  = ($data[$fight->id]['clicks'] + (0.5*$data[$fight->id]['draws'])) / FightViewLog::getViews($fight->id);
+				$data[$fight->id]['winLoss']  = ($data[$fight->id]['clicks'] + (0.5*$data[$fight->id]['draws'])) / FightViewLog::getViews($fight->id,'all');
 				$data[$fight->id]['winLoss']  *= 100;
 				$data[$fight->id]['winLoss']  = number_format($data[$fight->id]['winLoss'], 2);
 			}
