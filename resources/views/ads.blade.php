@@ -17,9 +17,9 @@
                         <form action="/fight/start/" method="POST">
                            <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? ''}}">
                            @csrf
-                           <x-green-button>
+                           <x-red-button>
                             Start Fight
-                        </x-green-button>
+                        </x-red-button>
                     </form> 
                 </div>
                 @elseif(Auth::user()->currentTeam->status == 'live')
@@ -27,29 +27,31 @@
                     <form action="/fight/stop/" method="POST">
                        <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? ''}}">
                        @csrf
-                       <x-green-button>
+                       <x-red-button>
                         Fight is Live!
-                    </x-green-button>
+                    </x-red-button>
                 </form> 
             </div>               
 
             @else
             <div class=" float-right">
-                <x-green-button disabled>
+                <x-red-button disabled>
                     Start Fight
-                </x-green-button>
+                </x-red-button>
             </div>
             @endif
 
 
-
+            <div class="flex gap-5">
+                 <img src="/img/boxingglove.png" width="100" height="100"> 
             <h1 class="mt-2  text-4xl font-medium text-gray-900 ">
-                Welcome To  {{ Auth::user()->currentTeam->name }}
+               Welcome To  {{ Auth::user()->currentTeam->name }}
             </h1>
+        </div>
 
             <div class="flex flex-wrap float-right justify-between">   
 
-                <div class="mt-2 px-4 py-4 grid lg:grid-cols-3 items- bg-indigo-400 rounded-md font-semibold">
+                <div class="mt-2 px-4 py-4 grid lg:grid-cols-3 items- bg-[#04cef6] rounded-md font-semibold">
                    <!-- <div> Record: </div> <div> 135 Wins, 78 Lossses </div> -->
                    <!-- <div >Busy Bee Fight</div> <div></div> -->
                    <div> Fights: </div> <div></div><div> {{ App\Models\FightViewLog::getViews($fight->id, 'all')  ?? 0}}</div>
@@ -108,9 +110,9 @@
 
     @if(!is_null($ad) && !isset($edit))
     <div class="flex justify-around pt-4">
-        <div> Your Ad Weapon </div>
+        <div class="text-2xl"> Your Ad Weapon </div>
         @if (isset($opponentsAd))
-        <div> {{ $opponentsAd->user->name ?? ''}}'s Ad Weapon </div>
+        <div class="text-2xl"> {{ $opponentsAd->user->name ?? ''}}'s Ad Weapon </div>
         @elseif($ad->random_opponent)
         <div></div>
         <div>
@@ -185,7 +187,7 @@
         <script src="https://cdn.ckeditor.com/ckeditor5/44.3.0/ckeditor5.umd.js" crossorigin></script>
         <script src="./main.js"></script> -->
 
-<textarea id="body" name="body" rows="12" cols="65" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"> 
+<!-- <textarea id="body" name="body" rows="12" cols="65" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"> 
   {{ $ad->body ?? old('body' ?? '')}}
 </textarea>
 
@@ -193,6 +195,19 @@
         <script> 
             var editor = new FroalaEditor('#body');
         </script>
+ -->
+
+ <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+  tinymce.init({
+    selector: 'textarea',
+    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+  });
+</script>
+<textarea name="body">
+{{ $ad->body ?? old('body' ?? '')}}
+</textarea>
 
 
         <x-label /> Url
@@ -236,7 +251,7 @@
                 <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="rounded-full size-20 object-cover">
             </div>
             <div class="mt-2">
-                <h1 class="text-xl font-semibold text-black ">
+                <h1 class="text-5xl font-semibold text-black ">
                     {{ $ad->headline ?? ''}}
                 </h1>
             </div>
@@ -260,7 +275,7 @@
             <img src="{{ $opponentsAd->user->profile_photo_url ?? ''}}" alt="{{ $opponentsAd->user->name ?? '' }}" class="rounded-full size-20 object-cover">
         </div>
         <div class="mt-2">
-            <h1 class="text-xl font-semibold text-black ">
+            <h1 class="text-5xl font-semibold text-black ">
                 {{ $opponentsAd->headline ?? ''}}
             </h1>
         </div>
@@ -284,7 +299,7 @@ class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 s
         <img src="/annonymous.png" class="rounded-full size-20 object-cover">
     </div>
     <div class="mt-2">
-        <h1 class="text-xl font-semibold text-black">
+        <h1 class="text-5xl font-semibold text-black">
             Random Opponent
         </h1>
     </div>

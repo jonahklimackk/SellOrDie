@@ -17,22 +17,27 @@ use App\Livewire\Mailings;
 //     return view('home');
 // })->name('home');
 
-Route::get('/home', [HomeController::class,'index'])->name('home');
 
 
-Route::get('/upgrade', function () {
-    return view('upgrade.show')->name('upgrade');
-});
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
+    Route::get('/home', [HomeController::class,'index'])->name('home');
+
+    Route::get('/upgrade', function () {
+        return view('upgrade.show')->name('upgrade');
+    });    
+
     Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+        return redirect('/home');
+    })->name('dashboard');    
+
 });
+
 
 
 
@@ -58,17 +63,26 @@ Route::get('/members/aff/stats', [AffiliateTrackingController::class, 'stats']);
  * Handle Fights
  * 
  */
+
+//outside visitos can view fights but can't vote
 Route::get('/fights', [FightController::class,'index'])->name('fights');
-Route::get('/fights/vote/{key}/ad/{clickedAdId}',[FightController::class,'vote']);
-Route::get('/frames/already-judged-show-url-top-frame/',[FightController::class,'alreadyJudgedShowUrlTopFrame']);
-Route::get('/fights/show/{fightId}', [FightController::class,'showSpecific']);
-Route::post('/fight/start', [FightController::class,'start']);
-Route::post('/fight/stop', [FightController::class,'stop']);
-Route::post('/fight/reset', [FightController::class,'reset']);
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+
+    Route::get('/fights/vote/{key}/ad/{clickedAdId}',[FightController::class,'vote']);
+    Route::get('/frames/already-judged-show-url-top-frame/',[FightController::class,'alreadyJudgedShowUrlTopFrame']);
+    Route::get('/fights/show/{fightId}', [FightController::class,'showSpecific']);
+    Route::post('/fight/start', [FightController::class,'start']);
+    Route::post('/fight/stop', [FightController::class,'stop']);
+    Route::post('/fight/reset', [FightController::class,'reset']);
+});
+
 //debugging
 Route::get('/fights-with-3', [FightController::class,'fightsWith3']);
-
-
 
 
 
@@ -77,12 +91,17 @@ Route::get('/fights-with-3', [FightController::class,'fightsWith3']);
  *
  */
 //no need for sender username, it's all stored in creditClicks table
-Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
-Route::get('earn/redeem/{key}',[EarnCreditsController::class, 'afterCountdown']);
-Route::get('frames/earn-credits-top-frame/{key}', [EarnCreditsController::class,"showTopFrameBeforeCountdown"]);
-// Route::get('record/earn/{key}/view', [EarnCreditsController::class,'mailingRecordView']);
-Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
-
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
+    Route::get('earn/redeem/{key}',[EarnCreditsController::class, 'afterCountdown']);
+    Route::get('frames/earn-credits-top-frame/{key}', [EarnCreditsController::class,"showTopFrameBeforeCountdown"]);
+    // Route::get('record/earn/{key}/view', [EarnCreditsController::class,'mailingRecordView']);
+    Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
+});
 
 
 
@@ -139,9 +158,14 @@ Route::middleware([
  * Tracking The League Stats
  *
  */
-Route::get('/league/{period?}', [LeagueController::class,'index'])->name('league');
 
-
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/league/{period?}', [LeagueController::class,'index'])->name('league');
+});
 
 
 
@@ -219,7 +243,7 @@ Route::get('/populate-fightviewlog', function () {
 });
 
 
-    
+
 Route::get('/ai', function () {
     return view('ai');
 });
@@ -230,4 +254,20 @@ Route::get('/ckeditor', function () {
 
 Route::get('/froala', function () {
     return view('froala');
+});
+
+Route::get('/tiny', function () {
+    return view('tiny');
+});
+
+
+Route::get('/hover', function () {
+    return view('hover');
+});
+
+Route::get('/time', function () {
+    // return date("Y/m/d")
+    date_default_timezone_set('America/New_York');
+    echo "Today is " . date("Y/m/d") . "<br>";
+    echo "The time is " . date("h:i:sa");;
 });

@@ -9,19 +9,20 @@
 
 
                   <h1 class="mt-2  text-4xl font-medium text-gray-900 ">
-                    Official SellorDie League Rankings For {{ $humanPeriod }}
+                    Official Sell Or Die League Rankings For {{ $humanPeriod }}
                 </h1>
                 <p>&nbsp</p>
 
-                <p>have different stats for different member status (lightweigjtl  bantam wegith etc)</p>
+                <!-- <p>have different stats for different member status (lightweigjtl  bantam wegith etc)</p> -->
 
 
-                <a href="/league/today"><x-green-button>Today</x-green-button></a>
-                <a href="/league/yesterday"><x-green-button>Yesterday</x-green-button></a>
-                <a href="/league/thisweek"><x-green-button>This Week</x-green-button></a>
-                <a href="/league/lastweek"> <x-green-button>Last Week</x-green-button></a>
-                <a href="/league/thismonth"> <x-green-button>This Month</x-green-button></a>
-                <a href="/league/lastmonth">   <x-green-button>Last Month</x-green-button></a>
+                <a href="/league/today"><x-button>Today</x-button></a>
+                <a href="/league/yesterday"><x-button>Yesterday</x-button></a>
+                <a href="/league/thisweek"><x-button>This Week</x-button></a>
+                <a href="/league/lastweek"> <x-button>Last Week</x-button></a>
+                <a href="/league/thismonth"> <x-button>This Month</x-button></a>
+                <a href="/league/lastmonth">   <x-button>Last Month</x-button></a>
+                <a href="/league/all">   <x-button>All Time</x-button></a>
 
 <p>&nbsp;</p>
 
@@ -61,8 +62,9 @@
                             <td align="center"> {{ $loop->index+1 }}
                                 <td align="center">
 
-                                    <a href="/fights/show/{{ $fight->id }}" target="_new">
-                                        <x-green-button>{{ $fight->name }}</x-green-button>
+                                    <a href="/fights/show/{{ $fight->id }}" target="_new" class="inline-flex items-center font-semibold text-[#04cef6]">
+                                        <!-- <x-green-button>{{ $fight->name }}</x-green-button> -->
+                                        {{ $fight->name }}
                                     </a>
 
                                 </td>
@@ -108,7 +110,7 @@
 
 
 
-
+<!-- 
                 <p>
 
                     Daily Rankoings
@@ -150,7 +152,7 @@
             putting signs on your lawn concept
             I think tha'ts fro mscientifidc advertising
 
-            edownload sci ad to your phone
+            edownload sci ad to your phone -->
         </div>
 
 

@@ -39,7 +39,8 @@ class User extends Authenticatable
         'email',
         'password',
         'username',
-        'sponsor_id'
+        'sponsor_id',
+        'current_team_id'
     ];
 
     /**

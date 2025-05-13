@@ -49,9 +49,11 @@ class FightViewLog extends Model
 
         $dates = SetsStartDate::setDate($period);
 
+        // dd($dates);
+
         $clicks = DB::table('fight_view_log')
         ->where('fight_id',$fightId)
-        ->whereBetween('updated_at', [$dates['start'],$dates['end'] ])
+        ->whereBetween('created_at', [$dates['start'],$dates['end'] ])
         ->get();
 
 

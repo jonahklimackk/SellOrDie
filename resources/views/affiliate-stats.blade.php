@@ -2,12 +2,11 @@
 <x-app-layout>
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+      <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
 
-        <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
-          <div class="flex">
+        <div class="p-6 lg:p-8 bg-white">
             <div class="description">
-              <h1 class="mt-2  text-4xl font-medium text-gray-900 dark:text-white">Your SellorDie Affiliate Stats</h1>
+              <h1 class="mt-2  text-4xl font-medium text-gray-900">Your SellorDie Affiliate Stats</h1>
               <div class="mt-5">
                 We make promoting SellorDie as easy and as effective as possible by tracking your ads for you!
               </div>
@@ -39,7 +38,7 @@
             <div>
 
 
-<div class="mt-2 px-4 py-4  bg-indigo-400 rounded-md font-semibold">
+<div class="mt-2 px-4 py-4 bg-[#04cef6] rounded-md font-semibold">
             <table class="mt-5">
               <thead>
                 <tr>
@@ -69,7 +68,6 @@
 </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </x-app-layout>

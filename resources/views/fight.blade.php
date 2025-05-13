@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-     <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css'/>
+    <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css'/>
 
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -21,11 +21,11 @@
     </style>
     @endif
 </head>
-<body class="bg-gray-900 text-white p-8">
-        <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>  
-        <script> 
-            var editor = new FroalaEditor('#body');
-        </script>
+<body class="bg-[#1F2937] text-white p-8">
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>  
+    <script> 
+        var editor = new FroalaEditor('#body');
+    </script>
 
     <!-- <body class="font-sans antialiased dark:bg-black dark:text-white/50" style=" background-color: #6B6B6B;"> -->
         <!-- <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50"> -->
@@ -35,61 +35,59 @@
               <div align="center">
                 <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
 
-                    
-                  <h1 class="mt-2  text-4xl font-medium text-white dark:text-white">
-                    <!-- {{ $randomCallToAction ?? ''}} -->
-                    Click The Ad That Interests You The Most
- <!--                Which Ad Do You Like?
-                Judge This Fight
-                Which Ad Speaks To You -->
-            </h1>
-            <div class="float-right">
-              <a href="/fights">
-                <x-green-button>Next Fight</x-green-button>
-            </a>
-        </div>
-        <main class="mt-10">
-            <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-               <div
-               id="docs-card"
-               onclick="window.open('/fights/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
-               class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
-               style="cursor: pointer;"
-               >
-               <div class="relative flex items-center gap-6 lg:items-middle">
-                <div class="mt-2" x-show="! photoPreview">
-                    <img src="{{ $ads[0]->user->profile_photo_url }}" alt="{{ $ads[0]->user->name }}" class="rounded-full size-20 object-cover">
-                </div>
-                <div class="mt-2">
-                    <h1 class="text-xl font-semibold text-black">
-                        {{ $ads[0]->headline }}
+                    <div class="flex-1">
+                       <img src="/img/sellordie7.png" width="100" height="100">
+                       <h1 class="mt-2  text-4xl font-medium text-white dark:text-white">
+                        Click The Ad That Interests You The Most
                     </h1>
                 </div>
+                <div class="float-right">
+                  <a href="/fights">
+                    <x-red-button>Next Fight</x-red-button>
+                </a>
             </div>
+            <main class="mt-10">
+                <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                 <div
+                 id="docs-card"
+                 onclick="window.open('/fights/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
+                 class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
+                 style="cursor: pointer;"
+                 >
+                 <div class="relative flex items-center gap-6 lg:items-middle">
+                    <div class="mt-2" x-show="! photoPreview">
+                        <img src="{{ $ads[0]->user->profile_photo_url }}" alt="{{ $ads[0]->user->name }}" class="rounded-full size-20 object-cover">
+                    </div>
+                    <div class="mt-2">
+                        <h1 class="text-5xl font-semibold text-black">
+                            {{ $ads[0]->headline }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="mt-2">
+                 {!!  nl2br($ads[0]->body) !!}
+             </div>
+         </div>
+         <div
+         id="docs-card"
+         onclick="window.open('/fights/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
+         class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
+         style="cursor: pointer;"
+         >
+         <div class="relative flex items-center gap-6 lg:items-middle">
+             <div class="mt-2" x-show="! photoPreview">
+                <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
+            </div>            
             <div class="mt-2">
-               {!!  nl2br($ads[0]->body) !!}
+               <h1 class="text-5xl font-semibold text-black ">{{ nl2br($ads[1]->headline) }}</h1>
            </div>
        </div>
-       <div
-       id="docs-card"
-       onclick="window.open('/fights/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
-       class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
-       style="cursor: pointer;"
-       >
-       <div class="relative flex items-center gap-6 lg:items-middle">
-           <div class="mt-2" x-show="! photoPreview">
-            <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
-        </div>            
-        <div class="mt-2">
-         <h1 class="text-xl font-semibold text-black ">{{ nl2br($ads[1]->headline) }}</h1>
-     </div>
- </div>
- {!! nl2br($ads[1]->body) !!}
-</div>
+       {!! nl2br($ads[1]->body) !!}
+   </div>
 </div>
 </main>
 <div class='mt-20'>
-    <h1 class="mt-2  text-1xl font-medium text-gray-900 dark:text-white">
+    <h1 class="mt-2  text-xl font-medium text-gray-900 dark:text-white">
         <!-- How do I get the affiliate linke -->
         <!-- there are 2 sponosr here
         maybe, only the team owner thats fine for open fights 

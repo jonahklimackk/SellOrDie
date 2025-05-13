@@ -20,13 +20,15 @@ class SetsStartDate
 
 		if ($period == 'today')
 		{
-			$dates['start'] = new Carbon('yesterday');
-			$dates['end'] = new Carbon('today');
+			$dates['start'] = new Carbon('today');
+			$dates['end'] = new Carbon();
+			// dd($dates);
 		}
 		else if ($period == 'yesterday')
 		{
-			$dates['start'] = new Carbon('2 days ago');
-			$dates['end'] = new Carbon('yesterday');
+			$dates['start'] = new Carbon('yesterday');
+			$dates['end'] = new Carbon('today');
+			// dd($dates);
 		}		
 		else if ($period == 'thisweek')
 		{

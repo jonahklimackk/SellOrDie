@@ -30,6 +30,8 @@ class HomeController extends Controller
 			$data[$fight->id]['ad'] = Ads::where('user_id', Auth::user()->id)->where('team_id', $fight->id)->get()->first();			
 			$data[$fight->id]['opponentsAd'] = Ads::where('team_id', $fight->id)->where('user_id', '!=',Auth::user()->id)->get()->first();
 
+
+
 			//get all the dynamic fight pairings results - open fights
 			if ($data[$fight->id]['ad']) {
 				$data[$fight->id]['clicks'] = FightLog::where('clicked_ad_id', $data[$fight->id]['ad']->id)->get()->count();
@@ -55,6 +57,8 @@ class HomeController extends Controller
 
 
 			$data[$fight->id]['ranking'] = Fight::getRank($fight->id);
+
+			$data[$fight->id]['status'] = $fight->status;
 		}
 
 		// dd($data);

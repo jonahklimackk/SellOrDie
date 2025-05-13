@@ -21,6 +21,7 @@ class LeagueController extends Controller
 	 */
 	public function index($period)
 	{
+
 		$fights = LeagueController::getLeagueStats($period);
 
 		if ($period == "thisweek")
