@@ -25,9 +25,12 @@ split tests your ads (paid mmbemesfo noly) -->
         <title>Sell Or Die - The Ultimate Ad Battle</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-gray-900 text-white text-center p-8">
+    <body class="bg-[#1F2937] text-white text-center p-8">
         <div class="max-w-3xl mx-auto">
-            <h1 class="text-5xl font-bold text-red-600">SELL OR DIE</h1>
+            <!-- <h1 class="text-5xl font-bold text-red-600">SELL OR DIE</h1> -->
+            <div align="center">
+            <img src="/img/sellordie7.png" width="300" height="300">
+        </div>
             <p class="mt-6 text-lg">Do you have the courage to put your ad to the test against the fiercest competitors in the game?</p>
             <p class="mt-4 text-lg"><strong>Sell Or Die</strong> is not for the weak—this is the ultimate battlefield where only the best ads survive.</p>
             <p class="mt-4 text-lg">Enter the arena, challenge your peers, and prove once and for all who has the superior ad, the better program, and the highest conversion rate.</p>
