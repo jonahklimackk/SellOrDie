@@ -281,3 +281,5 @@ Route::get('/new-fight-top-frame', [NewFightController::class,'newFightTopFrame'
 Route::get('/new-fight-bottom-frame', [NewFightController::class,'newFightBottomFrame']);
 Route::get('/new-fight/vote/{key}/ad/{clickedAdId}',[NewFightController::class,'vote']);
 Route::get('new-fight/earn-credits-top-frame/{key}', [NewFightController::class,"showTopFrameBeforeCountdown"]);
+Route::get('/new-fight/already-judged-show-url-top-frame/',[NewFightController::class,'alreadyJudgedShowUrlTopFrame']);
+Route::get('/new-fight/earn/redeem/{key}',[NewFightController::class, 'afterCountdown']);

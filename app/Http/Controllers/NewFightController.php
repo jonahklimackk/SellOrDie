@@ -121,7 +121,7 @@ class NewFightController extends Controller
         foreach ($votes as $vote){     
             if ($vote->vote){
                 $clickedAd = Ads::find($clickedAdId);
-                return view('frames.already-judged-show-url')->with('url',$clickedAd->url);
+                return view('new-fight.already-judged-show-url')->with('url',$clickedAd->url);
             }
         }
         $vote = Votes::where('key', $key)->where('ad_id', $clickedAdId)->get()->first();
@@ -208,11 +208,70 @@ class NewFightController extends Controller
         }
         else{
             $setTimer = true;
-            $message = "Wait for the timer to count down and you'll earn ".$creditClick->credits. " credits";
+            $message = "Wait for the timer to count down and you'll earn ".$creditClick->credits. " more credits!";
         }
 
+        $credits = Auth::user()->credits;
 
-        return View('new-fight.top-frame',compact('creditClick','message','setTimer','sender'));
+
+        return View('new-fight.top-frame-countdown',compact('creditClick','message','setTimer','sender','credits'));
     }
 
+
+
+        /**
+     *show the ad even though they already vogted
+     * that way peop;le can get hits on already votes
+     */
+    public function alreadyJudgedShowUrlTopFrame()
+    {
+
+
+        return view('new-fight.already-judged-show-url-top-frame');
+    }
+
+
+
+    /**
+    * This gets called after the countdown
+    * to crediti the user also we have to
+    * check fraudulent clicks and see if it expired
+    * that's a lot of stuff for one function
+    * 
+    * This is all in a top frame, return is a string
+    * directly to the usere
+    *
+    * @param string $key
+    * @return string
+    */
+    public function afterCountdown(string $key)
+    {
+
+
+
+
+        $creditClick = CreditClicks::where('key',$key)->get()->first();
+
+        if (!$creditClick->earned_credits) {
+
+            $recipient = User::where('id', $creditClick->recipient_id)->get()->first();
+            $recipient->credits += $creditClick->credits;
+            $recipient->save();
+
+            $creditClick->earned_credits = true;
+            $creditClick->clicks++;
+            $creditClick->ip = env("REMOTE_ADDR");
+            $creditClick->save();
+
+            // return View('frames.top-frame-after-click')->with('message',"You've earned  ".$creditClick->credits." credits.");
+            return "You just earned  ".$creditClick->credits." more credits. <br> Total Credits: ".Auth::user()->credits;
+        }
+        else { //it never gets to here but just in case
+            $creditClick->clicks++;
+            $creditClick->save();
+            return "You've already clicked this link.";
+        }         
+
+
+    }
 }
