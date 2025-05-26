@@ -60,7 +60,7 @@ $nowPlus30Seconds->setTimezone('America/New_York');
 <link rel="stylesheet" href="/css/main.css" type="text/css" />
 </head>
 
-<body style="bgcolor: white;" onload="{{ $setTimer ?? '' }}">
+<body bgcolor="#1F2937" onload="{{ $setTimer ?? '' }}">
 
 	<script>
 

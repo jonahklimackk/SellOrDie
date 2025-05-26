@@ -336,6 +336,7 @@ class FightController extends Controller
 
 
 		return view('frames.earn-credits',compact('creditClick'))->with('url',$clickedAd->url);
+		// return redirect($clickedAd->url);
 
 	}
 
@@ -353,4 +354,13 @@ class FightController extends Controller
 	}
 
 
-}
+
+
+
+
+
+
+
+
+
+	}

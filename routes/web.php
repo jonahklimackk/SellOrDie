@@ -9,6 +9,7 @@ use App\Http\Controllers\EarnCreditsController;
 use App\Http\Controllers\AffiliateTrackingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\NewFightController;
 use App\Livewire\Mailings;
 
 
@@ -271,3 +272,12 @@ Route::get('/time', function () {
     echo "Today is " . date("Y/m/d") . "<br>";
     echo "The time is " . date("h:i:sa");;
 });
+
+
+
+// New Fight with frames testing
+Route::get('/new-fight', [NewFightController::class,'newFight']);
+Route::get('/new-fight-top-frame', [NewFightController::class,'newFightTopFrame']);
+Route::get('/new-fight-bottom-frame', [NewFightController::class,'newFightBottomFrame']);
+Route::get('/new-fight/vote/{key}/ad/{clickedAdId}',[NewFightController::class,'vote']);
+Route::get('new-fight/earn-credits-top-frame/{key}', [NewFightController::class,"showTopFrameBeforeCountdown"]);
