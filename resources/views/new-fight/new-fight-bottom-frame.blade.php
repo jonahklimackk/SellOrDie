@@ -62,7 +62,7 @@
                      style="cursor: pointer;"
                      >
                      @if(str_word_count($ads[0]->headline,0) == 1)
-                     <div class="relative flex-1 items-center gap-6 lg:items-center">
+                     <div class="relative flex items-center gap-6 lg:items-center">
                         @else
                         <div class="relative flex-1 items-center gap-6 lg:items-center">
                             @endif
@@ -87,9 +87,9 @@
                  style="cursor: pointer;"
                  >
                  @if(str_word_count($ads[1]->headline,0) == 1)
-                 <div class="relative flex-1  items-center gap-6 lg:items-center">
+                 <div class="relative flex  items-center gap-6 lg:items-center">
                     @else
-                    <div class="relative flex-1   items-center gap-6 lg:items-center">
+                    <div class="relative flex-1 items-center gap-6 lg:items-center">
                         @endif
                         <div class="mt-2 float-left" x-show="! photoPreview">
                             <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
