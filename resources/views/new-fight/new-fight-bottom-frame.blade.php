@@ -70,7 +70,7 @@
                                 <img src="{{ $ads[0]->user->profile_photo_url }}" alt="{{ $ads[0]->user->name }}" class="rounded-full size-20">
                             </div>
                             <div class="mt-2">
-                                <h1 class="text-5xl font-semibold text-black text-wrap mb-10">
+                                <h1 class="text-5xl font-semibold text-black mb-10">
                                     {{ $ads[0]->headline }}
                                 </h1>
                             </div>
@@ -87,7 +87,7 @@
                  style="cursor: pointer;"
                  >
                  @if(str_word_count($ads[1]->headline,0) == 1)
-                 <div class="relative flex-1   items-center gap-6 lg:items-center">
+                 <div class="relative flex-1  items-center gap-6 lg:items-center">
                     @else
                     <div class="relative flex-1   items-center gap-6 lg:items-center">
                         @endif
@@ -95,7 +95,7 @@
                             <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
                         </div>            
                         <div class="mt-2">
-                            <h1 class="text-5xl font-semibold text-black text-wrap mb-10">
+                            <h1 class="text-5xl font-semibold text-black  mb-10">
                             {{ nl2br($ads[1]->headline) }}
                         </h1>
                        </div>
