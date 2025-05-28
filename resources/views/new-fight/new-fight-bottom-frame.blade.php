@@ -62,23 +62,24 @@
                      style="cursor: pointer;"
                      >
                      @if(str_word_count($ads[0]->headline,0) == 1)
-                     <div class="relative flex items-center gap-6 lg:items-center">
+                     <div class="relative flex-1 flex-col items-center gap-6 lg:items-center">
                         @else
-                        <div class="relative flex-1 items-center gap-6 lg:items-center">
+                        <div class="relative flex-1 flex-col items-center gap-6 lg:items-center">
                             @endif
-                            <div class="mt-2 float-left" x-show="! photoPreview">
+                            <div class="mt-2 float-left">
                                 <img src="{{ $ads[0]->user->profile_photo_url }}" alt="{{ $ads[0]->user->name }}" class="rounded-full size-20">
                             </div>
                             <div class="mt-2">
-                                <h1 class="text-5xl font-semibold text-black text-wrap">
+                                <h1 class="text-5xl font-semibold text-black text-wrap mb-10">
                                     {{ $ads[0]->headline }}
                                 </h1>
                             </div>
-                        </div>
-                        <div class="mt-2">
-                         {!!  nl2br($ads[0]->body) !!}
+                            <div class="mt-20">
+                             {!!  nl2br($ads[0]->body) !!}
+                         </div>
                      </div>
                  </div>
+
                  <div
                  id="docs-card"
                  onclick="window.open('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
@@ -86,22 +87,26 @@
                  style="cursor: pointer;"
                  >
                  @if(str_word_count($ads[1]->headline,0) == 1)
-                 <div class="relative flex items-center gap-6 lg:items-center">
+                 <div class="relative flex-1 flex-col  items-center gap-6 lg:items-center">
                     @else
-                    <div class="relative flex-1 items-center gap-6 lg:items-center">
+                    <div class="relative flex-1 flex-col  items-center gap-6 lg:items-center">
                         @endif
                         <div class="mt-2 float-left" x-show="! photoPreview">
                             <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
                         </div>            
                         <div class="mt-2">
-                           <h1 class="text-5xl font-semibold text-black">{{ nl2br($ads[1]->headline) }}</h1>
+                            <h1 class="text-5xl font-semibold text-black text-wrap mb-10">
+                            {{ nl2br($ads[1]->headline) }}
+                        </h1>
                        </div>
-                   </div>
-                   {!! nl2br($ads[1]->body) !!}
-               </div>
-           </div>
-       </main>
-       <div class='mt-20'>
+                       <div class="mt-2">
+                         {!!  nl2br($ads[1]->body) !!}
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </main>
+     <div class='mt-20'>
         <h1 class="mt-2  text-xl font-medium text-gray-900 dark:text-white">
             <!-- How do I get the affiliate linke -->
         <!-- there are 2 sponosr here
