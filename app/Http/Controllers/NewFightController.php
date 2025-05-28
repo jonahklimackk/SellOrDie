@@ -51,14 +51,14 @@ class NewFightController extends Controller
      */
         public function newFightBottomFrame()
         {
-            if (rand(0,1)) {
+            // if (rand(0,1)) {
             // dump('from a random closed fight');
-                $ads = Ads::fromClosedFights();
-            }
-            else {
+                // $ads = Ads::fromClosedFights();
+            // }
+            // else {
             // dump('from a random open fight');
                 $ads = Ads::fromOpenFights();
-            }
+            // }
 
         //get random fighters' affiliate link
             $referralLink = $this->getReferralLink($ads);               

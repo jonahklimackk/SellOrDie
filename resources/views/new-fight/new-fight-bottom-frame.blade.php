@@ -61,12 +61,12 @@
                  class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
                  style="cursor: pointer;"
                  >
-                 <div class="relative flex items-center gap-6 lg:items-middle">
-                    <div class="mt-2" x-show="! photoPreview">
-                        <img src="{{ $ads[0]->user->profile_photo_url }}" alt="{{ $ads[0]->user->name }}" class="rounded-full size-20 object-cover">
+                 <div class="relative flex-1 items-center gap-6 lg:items-middle">
+                    <div class="mt-2 float-left" x-show="! photoPreview">
+                        <img src="{{ $ads[0]->user->profile_photo_url }}" alt="{{ $ads[0]->user->name }}" class="rounded-full size-20">
                     </div>
                     <div class="mt-2">
-                        <h1 class="text-5xl font-semibold text-black">
+                        <h1 class="text-5xl font-semibold text-black text-wrap">
                             {{ $ads[0]->headline }}
                         </h1>
                     </div>
@@ -81,8 +81,8 @@
          class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
          style="cursor: pointer;"
          >
-         <div class="relative flex items-center gap-6 lg:items-middle">
-             <div class="mt-2" x-show="! photoPreview">
+         <div class="relative flex-1 items-center gap-6 lg:items-middle">
+             <div class="mt-2 float-left" x-show="! photoPreview">
                 <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
             </div>            
             <div class="mt-2">

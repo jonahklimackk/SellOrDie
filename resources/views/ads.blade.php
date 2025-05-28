@@ -246,8 +246,8 @@
         >
 
 
-        <div class="relative flex items-center gap-6 lg:items-center">
-            <div class="mt-2" x-show="! photoPreview">
+        <div class="relative flex-1 items-center gap-6 lg:items-center">
+            <div class="mt-2 float-left" x-show="! photoPreview">
                 <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="rounded-full size-20 object-cover">
             </div>
             <div class="mt-2">
@@ -270,9 +270,9 @@
     >
 
 
-    <div class="relative flex items-center gap-6 lg:items-center">
-        <div class="mt-2" x-show="! photoPreview">
-            <img src="{{ $opponentsAd->user->profile_photo_url ?? ''}}" alt="{{ $opponentsAd->user->name ?? '' }}" class="rounded-full size-20 object-cover">
+    <div class="relative flex-1 items-center gap-6 lg:items-center">
+        <div class="mt-2 float-left" x-show="! photoPreview">
+            <img src="{{ $opponentsAd->user->profile_photo_url ?? ''}}" alt="{{ $opponentsAd->user->name ?? '' }}" class="  ">
         </div>
         <div class="mt-2">
             <h1 class="text-5xl font-semibold text-black ">
