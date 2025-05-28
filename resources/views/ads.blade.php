@@ -43,100 +43,100 @@
 
 
             <div class="flex gap-5">
-                 <img src="/img/boxingglove.png" width="100" height="100"> 
-            <h1 class="mt-2  text-4xl font-medium text-gray-900 ">
+             <img src="/img/boxingglove.png" width="100" height="100"> 
+             <h1 class="mt-2  text-4xl font-medium text-gray-900 ">
                Welcome To  {{ Auth::user()->currentTeam->name }}
-            </h1>
-        </div>
+           </h1>
+       </div>
 
-            <div class="flex flex-wrap float-right justify-between">   
+       <div class="flex flex-wrap float-right justify-between">   
 
-                <div class="mt-2 px-4 py-4 grid lg:grid-cols-3 items- bg-[#04cef6] rounded-md font-semibold">
-                   <!-- <div> Record: </div> <div> 135 Wins, 78 Lossses </div> -->
-                   <!-- <div >Busy Bee Fight</div> <div></div> -->
-                   <div> Fights: </div> <div></div><div> {{ App\Models\FightViewLog::getViews($fight->id, 'all')  ?? 0}}</div>
-                   @if(isset($opponentsAd))
-                   <div> {{ $opponentsAd->user->name ?? '' }}'s Clicks:</div> 
-                   <div></div><div>{{ $opponentsClicks ?? 0}}</div>
-                   @else
-                   <div>Opponent's Clicks:</div> <div></div><div>{{ $opponentsClicks ?? 0 }}</div>
-                   @endif
-                   <div> Your Clicks: </div><div></div> <div> {{ $clicks ?? 0}}</div> 
-                   <div> Your Record: </div> <div></div><div> {{ $clicks ?? 0}} - {{ $opponentsClicks ?? 0 }} - {{ $draws ?? 0 }}</div>
-                   <div> Win Percentage</div><div></div><div>{{ $winLoss ?? 0}}%</div>
-                   @if (Auth::user()->currentTeam->status == 'live')
-                   <div>Daily Ranking: </div> <div></div><div>{{ $ranking ?? ''}} place</div>
-                   @else
-                   <div>Daily Ranking: </div> <div></div><div> n/a </div>
-                   @endif
-                   <div> Status:</div><div></div><div>{{ Auth::user()->currentTeam->status }}</div>
-                   <div></div>
-                   <div align="center">
-                    <form action="/fight/reset" method="POST">
-                        @csrf
-                        <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? ''}}">
-                        @if(!(!$opponentsClicks && !$clicks && !Auth::user()->currentTeam->views))
-                        <x-button>
-                            reset
-                        </x-button>
-                        @endif
-                    </form>
-                </div>
-
-                <div></div>
-            </div>   
-        </div>
-        <div>
-           <p class="py-4  text-gray-500  leading-relaxed">
-            If you want to make your name as the best Fighter in the SellorDie <a hfef="/league">league</a>, you gotta
-            have a good weapon. Be sure that it packs the 1-2 punch to destroy your opponents!
-            Fights is how many times your ad weapon has been viewed. Or, how many times you used this particular weapon. Fights are the number of fights you've been. A fight consits of 2 fighters and 2 ad weapons.  When you invite someone to your fight and they accept, You'll have an url to doisplay your fight and it will be shown to other fithers as they earn credits surfing.
-        </p> 
-    </div>   
-
-    <div class="mb-6"><font color="red"><b>{{ session('red_message') ?? ''}}</b></font></div>
-        <div class="mb-6"><font color="green"><b>{{ session('green_message') ?? ''}}</b></font></div>
-
-
-    @if(!is_null($ad) && !isset($edit))
-    <div class="mt-6 px-10">
-        <form action="/ads/edit" method="GET">
-            <x-button>
-                Edit Ad
-            </x-button>
-        </form>
-    </div>
-    @endif
-
-    @if(!is_null($ad) && !isset($edit))
-    <div class="flex justify-around pt-4">
-        <div class="text-2xl"> Your Ad Weapon </div>
-        @if (isset($opponentsAd))
-        <div class="text-2xl"> {{ $opponentsAd->user->name ?? ''}}'s Ad Weapon </div>
-        @elseif($ad->random_opponent)
-        <div></div>
-        <div>
-            <form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
+        <div class="mt-2 px-4 py-4 grid lg:grid-cols-3 items- bg-[#04cef6] rounded-md font-semibold">
+           <!-- <div> Record: </div> <div> 135 Wins, 78 Lossses </div> -->
+           <!-- <div >Busy Bee Fight</div> <div></div> -->
+           <div> Fights: </div> <div></div><div> {{ App\Models\FightViewLog::getViews($fight->id, 'all')  ?? 0}}</div>
+           @if(isset($opponentsAd))
+           <div> {{ $opponentsAd->user->name ?? '' }}'s Clicks:</div> 
+           <div></div><div>{{ $opponentsClicks ?? 0}}</div>
+           @else
+           <div>Opponent's Clicks:</div> <div></div><div>{{ $opponentsClicks ?? 0 }}</div>
+           @endif
+           <div> Your Clicks: </div><div></div> <div> {{ $clicks ?? 0}}</div> 
+           <div> Your Record: </div> <div></div><div> {{ $clicks ?? 0}} - {{ $opponentsClicks ?? 0 }} - {{ $draws ?? 0 }}</div>
+           <div> Win Percentage</div><div></div><div>{{ $winLoss ?? 0}}%</div>
+           @if (Auth::user()->currentTeam->status == 'live')
+           <div>Daily Ranking: </div> <div></div><div>{{ $ranking ?? ''}} place</div>
+           @else
+           <div>Daily Ranking: </div> <div></div><div> n/a </div>
+           @endif
+           <div> Status:</div><div></div><div>{{ Auth::user()->currentTeam->status }}</div>
+           <div></div>
+           <div align="center">
+            <form action="/fight/reset" method="POST">
+                @csrf
+                <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? ''}}">
+                @if(!(!$opponentsClicks && !$clicks && !Auth::user()->currentTeam->views))
                 <x-button>
-                    Invite Opponent 
+                    reset
                 </x-button>
+                @endif
             </form>
-        </div>               
-        @else
+        </div>
+
+        <div></div>
+    </div>   
+</div>
+<div>
+   <p class="py-4  text-gray-500  leading-relaxed">
+    If you want to make your name as the best Fighter in the SellorDie <a hfef="/league">league</a>, you gotta
+    have a good weapon. Be sure that it packs the 1-2 punch to destroy your opponents!
+    Fights is how many times your ad weapon has been viewed. Or, how many times you used this particular weapon. Fights are the number of fights you've been. A fight consits of 2 fighters and 2 ad weapons.  When you invite someone to your fight and they accept, You'll have an url to doisplay your fight and it will be shown to other fithers as they earn credits surfing.
+</p> 
+</div>   
+
+<div class="mb-6"><font color="red"><b>{{ session('red_message') ?? ''}}</b></font></div>
+<div class="mb-6"><font color="green"><b>{{ session('green_message') ?? ''}}</b></font></div>
+
+
+@if(!is_null($ad) && !isset($edit))
+<div class="mt-6 px-10">
+    <form action="/ads/edit" method="GET">
+        <x-button>
+            Edit Ad
+        </x-button>
+    </form>
+</div>
+@endif
+
+@if(!is_null($ad) && !isset($edit))
+<div class="flex justify-around pt-4">
+    <div class="text-2xl"> Your Ad Weapon </div>
+    @if (isset($opponentsAd))
+    <div class="text-2xl"> {{ $opponentsAd->user->name ?? ''}}'s Ad Weapon </div>
+    @elseif($ad->random_opponent)
+    <div></div>
+    <div>
         <form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
             <x-button>
                 Invite Opponent 
             </x-button>
         </form>
-        <form action="/ads/random-opponent/" method="POST">
-           <input type="hidden" name="id" value="{{ $ad->id ?? ''}}">
-           @csrf
-           <x-button>
-            Random Opponent 
+    </div>               
+    @else
+    <form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
+        <x-button>
+            Invite Opponent 
         </x-button>
-    </form>                            
+    </form>
+    <form action="/ads/random-opponent/" method="POST">
+       <input type="hidden" name="id" value="{{ $ad->id ?? ''}}">
+       @csrf
+       <x-button>
+        Random Opponent 
+    </x-button>
+</form>                            
 
-    @endif
+@endif
 </div>                    
 @endif
 
@@ -195,37 +195,37 @@
         <script> 
             var editor = new FroalaEditor('#body');
         </script>
- -->
+    -->
 
- <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
-<script>
-  tinymce.init({
-    selector: 'textarea',
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-  });
-</script>
-<textarea name="body">
-{{ $ad->body ?? old('body' ?? '')}}
-</textarea>
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+        <script>
+          tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+    <textarea name="body">
+        {{ $ad->body ?? old('body' ?? '')}}
+    </textarea>
 
 
-        <x-label /> Url
-        <x-input name="url"  placeholder="Your Url Here" value=" {{ $ad->url ?? old('url') ?? ''}}"/>
+    <x-label /> Url
+    <x-input name="url"  placeholder="Your Url Here" value=" {{ $ad->url ?? old('url') ?? ''}}"/>
 
-            <div class="flex items-start">
-                <x-button class="mr-10">
-                 Submit Your Ad
-             </x-button>
-             <input type="hidden" name="id" value="{{ $ad->id ?? ''}}">
-         </form>
-         <form method="POST" action="/ads/delete">
-          @csrf
-          <input type="hidden" name="id" value="{{ $ad->id ?? ''}}">
-          <x-button>
-           Delete Ad
-       </x-button>
-   </div>
+        <div class="flex items-start">
+            <x-button class="mr-10">
+             Submit Your Ad
+         </x-button>
+         <input type="hidden" name="id" value="{{ $ad->id ?? ''}}">
+     </form>
+     <form method="POST" action="/ads/delete">
+      @csrf
+      <input type="hidden" name="id" value="{{ $ad->id ?? ''}}">
+      <x-button>
+       Delete Ad
+   </x-button>
+</div>
 </form>
 
 
@@ -246,44 +246,48 @@
         >
 
 
-        <div class="relative flex-1 items-center gap-6 lg:items-center">
+        @if(str_word_count($ad->headline,0) == 1)
+        <div class="relative flex items-center gap-6 lg:items-center">
+            @else
+            <div class="relative flex-1 items-center gap-6 lg:items-center">
+                @endif
+                <div class="mt-2 float-left" >
+                    <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="rounded-full size-20 object-cover">
+                </div>
+                <div class="mt-2">
+                    <h1 class="text-5xl font-semibold text-black">
+                        {{ $ad->headline ?? ''}}
+                    </h1>
+                </div>
+            </div>
+            <div class="mt-2">
+                {!! nl2br($ad->body) ?? '' !!}
+            </div>
+
+
+        </a>   
+        @if(isset($opponentsAd))
+        <a
+        href="/fights/click/{{ $opponentsAd->url ?? ''}}" target="_blank"
+        id="docs-card"
+        class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 "
+        >
+
+
+        <div class="relative flex items-center gap-6 lg:items-center">
             <div class="mt-2 float-left" x-show="! photoPreview">
-                <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="rounded-full size-20 object-cover">
+                <img src="{{ $opponentsAd->user->profile_photo_url ?? ''}}" alt="{{ $opponentsAd->user->name ?? '' }}" class="  ">
             </div>
             <div class="mt-2">
                 <h1 class="text-5xl font-semibold text-black ">
-                    {{ $ad->headline ?? ''}}
+                    {{ $opponentsAd->headline ?? ''}}
                 </h1>
             </div>
         </div>
         <div class="mt-2">
-            {!! nl2br($ad->body) ?? '' !!}
+            {!! nl2br($opponentsAd->body) ?? '' !!}
         </div>
-
-
-    </a>   
-    @if(isset($opponentsAd))
-    <a
-    href="/fights/click/{{ $opponentsAd->url ?? ''}}" target="_blank"
-    id="docs-card"
-    class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 "
-    >
-
-
-    <div class="relative flex-1 items-center gap-6 lg:items-center">
-        <div class="mt-2 float-left" x-show="! photoPreview">
-            <img src="{{ $opponentsAd->user->profile_photo_url ?? ''}}" alt="{{ $opponentsAd->user->name ?? '' }}" class="  ">
-        </div>
-        <div class="mt-2">
-            <h1 class="text-5xl font-semibold text-black ">
-                {{ $opponentsAd->headline ?? ''}}
-            </h1>
-        </div>
-    </div>
-    <div class="mt-2">
-        {!! nl2br($opponentsAd->body) ?? '' !!}
-    </div>
-</a>      
+    </a>      
 </div>
 </main>
 @elseif($ad->random_opponent)

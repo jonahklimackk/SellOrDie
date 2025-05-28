@@ -86,7 +86,7 @@
                 <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
             </div>            
             <div class="mt-2">
-               <h1 class="text-5xl font-semibold text-black ">{{ nl2br($ads[1]->headline) }}</h1>
+               <h1 class="text-5xl font-semibold text-black">{{ nl2br($ads[1]->headline) }}</h1>
            </div>
        </div>
        {!! nl2br($ads[1]->body) !!}
