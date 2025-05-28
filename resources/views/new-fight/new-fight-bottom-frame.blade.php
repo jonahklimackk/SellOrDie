@@ -25,14 +25,14 @@
 </head>
 <body class="bg-[#1F2937] text-white p-8">
 
-            <script>
-    function change(url)
-    {
+    <script>
+        function change(url)
+        {
 
     // parent.top_frame.location="https://listjoe.com";
-    parent.location=url;
-    }
-     </script>
+            parent.location=url;
+        }
+    </script>
     <!-- <a href="https://listjoe.com" target="top-frame">click top framechanges</a> -->
     <!-- <body class="font-sans antialiased dark:bg-black dark:text-white/50" style=" background-color: #6B6B6B;"> -->
         <!-- <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50"> -->
@@ -43,59 +43,67 @@
                 <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
 
                     <div class="flex-1">
-                       
+
                        <h1 class="mt-2  text-4xl font-medium text-white dark:text-white">
-                        
-                    </h1>
-                </div>
-                <div class="float-right">
-                  <a href="/fights">
-                   
-                </a>
-            </div>
-            <main class="mt-10">
-                <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+
+                       </h1>
+                   </div>
+                   <div class="float-right">
+                      <a href="/fights">
+
+                      </a>
+                  </div>
+                  <main class="mt-10">
+                    <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                     <div
+                     id="docs-card"
+                     onclick="change('/new-fight/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}')"
+                     class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
+                     style="cursor: pointer;"
+                     >
+                     @if(str_word_count($ads[0]->headline,0) == 1)
+                     <div class="relative flex items-center gap-6 lg:items-center">
+                        @else
+                        <div class="relative flex-1 items-center gap-6 lg:items-center">
+                            @endif
+                            <div class="mt-2 float-left" x-show="! photoPreview">
+                                <img src="{{ $ads[0]->user->profile_photo_url }}" alt="{{ $ads[0]->user->name }}" class="rounded-full size-20">
+                            </div>
+                            <div class="mt-2">
+                                <h1 class="text-5xl font-semibold text-black text-wrap">
+                                    {{ $ads[0]->headline }}
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                         {!!  nl2br($ads[0]->body) !!}
+                     </div>
+                 </div>
                  <div
                  id="docs-card"
-                 onclick="change('/new-fight/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}')"
+                 onclick="window.open('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
                  class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
                  style="cursor: pointer;"
                  >
-                 <div class="relative flex-1 items-center gap-6 lg:items-middle">
-                    <div class="mt-2 float-left" x-show="! photoPreview">
-                        <img src="{{ $ads[0]->user->profile_photo_url }}" alt="{{ $ads[0]->user->name }}" class="rounded-full size-20">
-                    </div>
-                    <div class="mt-2">
-                        <h1 class="text-5xl font-semibold text-black text-wrap">
-                            {{ $ads[0]->headline }}
-                        </h1>
-                    </div>
-                </div>
-                <div class="mt-2">
-                 {!!  nl2br($ads[0]->body) !!}
-             </div>
-         </div>
-         <div
-         id="docs-card"
-         onclick="window.open('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
-         class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
-         style="cursor: pointer;"
-         >
-         <div class="relative flex-1 items-center gap-6 lg:items-middle">
-             <div class="mt-2 float-left" x-show="! photoPreview">
-                <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
-            </div>            
-            <div class="mt-2">
-               <h1 class="text-5xl font-semibold text-black">{{ nl2br($ads[1]->headline) }}</h1>
+                 @if(str_word_count($ads[1]->headline,0) == 1)
+                 <div class="relative flex items-center gap-6 lg:items-center">
+                    @else
+                    <div class="relative flex-1 items-center gap-6 lg:items-center">
+                        @endif
+                        <div class="mt-2 float-left" x-show="! photoPreview">
+                            <img src="{{ $ads[1]->user->profile_photo_url }}" alt="{{ $ads[1]->name }}" class="rounded-full size-20 object-cover">
+                        </div>            
+                        <div class="mt-2">
+                           <h1 class="text-5xl font-semibold text-black">{{ nl2br($ads[1]->headline) }}</h1>
+                       </div>
+                   </div>
+                   {!! nl2br($ads[1]->body) !!}
+               </div>
            </div>
-       </div>
-       {!! nl2br($ads[1]->body) !!}
-   </div>
-</div>
-</main>
-<div class='mt-20'>
-    <h1 class="mt-2  text-xl font-medium text-gray-900 dark:text-white">
-        <!-- How do I get the affiliate linke -->
+       </main>
+       <div class='mt-20'>
+        <h1 class="mt-2  text-xl font-medium text-gray-900 dark:text-white">
+            <!-- How do I get the affiliate linke -->
         <!-- there are 2 sponosr here
         maybe, only the team owner thats fine for open fights 
         but closed fight has to be a random sponsor -->
