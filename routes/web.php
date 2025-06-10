@@ -10,6 +10,7 @@ use App\Http\Controllers\AffiliateTrackingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\NewFightController;
+use App\Http\Controllers\UpgradeController;
 use App\Livewire\Mailings;
 
 
@@ -29,9 +30,6 @@ Route::middleware([
 
     Route::get('/home', [HomeController::class,'index'])->name('home');
 
-    Route::get('/upgrade', function () {
-        return view('upgrade.show')->name('upgrade');
-    });    
 
     Route::get('/dashboard', function () {
         return redirect('/home');
@@ -39,6 +37,16 @@ Route::middleware([
 
 });
 
+
+
+/*
+ * Upgrade Processor
+ *
+ */
+
+Route::get('/upgrade', [UpgradeController::class,'show']);
+Route::get('/upgrade/monthly/thankyou', [UpgradeController::class,'monthlyThankYou']);
+Route::get('/upgrade/yearly/thankyou', [UpgradeController::class,'YearlyThankYou']);
 
 
 
@@ -276,7 +284,7 @@ Route::get('/time', function () {
 
 
 // New Fight with frames testing
-Route::get('/new-fight', [NewFightController::class,'newFight']);
+Route::get('/new-fight', [NewFightController::class,'newFight'])->name('new-fight');
 Route::get('/new-fight-top-frame', [NewFightController::class,'newFightTopFrame']);
 Route::get('/new-fight-bottom-frame', [NewFightController::class,'newFightBottomFrame']);
 Route::get('/new-fight/vote/{key}/ad/{clickedAdId}',[NewFightController::class,'vote']);
