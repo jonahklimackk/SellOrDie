@@ -51,40 +51,45 @@
 
        <div class="flex flex-wrap float-right justify-between">   
 
-        <div class="mt-2 px-4 py-4 grid lg:grid-cols-3 items- bg-[#04cef6] rounded-md font-semibold">
-           <!-- <div> Record: </div> <div> 135 Wins, 78 Lossses </div> -->
-           <!-- <div >Busy Bee Fight</div> <div></div> -->
-           <div> Fights: </div> <div></div><div> {{ App\Models\FightViewLog::getViews($fight->id, 'all')  ?? 0}}</div>
-           @if(isset($opponentsAd))
-           <div> {{ $opponentsAd->user->name ?? '' }}'s Clicks:</div> 
-           <div></div><div>{{ $opponentsClicks ?? 0}}</div>
-           @else
-           <div>Opponent's Clicks:</div> <div></div><div>{{ $opponentsClicks ?? 0 }}</div>
-           @endif
-           <div> Your Clicks: </div><div></div> <div> {{ $clicks ?? 0}}</div> 
-           <div> Your Record: </div> <div></div><div> {{ $clicks ?? 0}} - {{ $opponentsClicks ?? 0 }} - {{ $draws ?? 0 }}</div>
-           <div> Win Percentage</div><div></div><div>{{ $winLoss ?? 0}}%</div>
-           @if (Auth::user()->currentTeam->status == 'live')
-           <div>Daily Ranking: </div> <div></div><div>{{ $ranking ?? ''}} place</div>
-           @else
-           <div>Daily Ranking: </div> <div></div><div> n/a </div>
-           @endif
-           <div> Status:</div><div></div><div>{{ Auth::user()->currentTeam->status }}</div>
-           <div></div>
-           <div align="center">
-            <form action="/fight/reset" method="POST">
-                @csrf
-                <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? ''}}">
-                @if(!(!$opponentsClicks && !$clicks && !Auth::user()->currentTeam->views))
-                <x-button>
-                    reset
-                </x-button>
-                @endif
-            </form>
-        </div>
+<div class="bg-gray-800 shadow-2xl rounded-xl p-6 text-sm font-medium text-gray-100 space-y-4 max-w-3xl mx-auto mt-4">
+  <div class="grid grid-cols-3 gap-2">
+    <div>Fights:</div><div></div><div>{{ App\Models\FightViewLog::getViews($fight->id, 'all') ?? 0 }}</div>
 
-        <div></div>
-    </div>   
+    @if(isset($opponentsAd))
+    <div>{{ $opponentsAd->user->name ?? '' }}'s Clicks:</div><div></div><div>{{ $opponentsClicks ?? 0 }}</div>
+    @else
+    <div>Opponent's Clicks:</div><div></div><div>{{ $opponentsClicks ?? 0 }}</div>
+    @endif
+
+    <div>Your Clicks:</div><div></div><div>{{ $clicks ?? 0 }}</div>
+
+    <div>Your Record:</div><div></div>
+    <div>{{ $clicks ?? 0 }} - {{ $opponentsClicks ?? 0 }} - {{ $draws ?? 0 }}</div>
+
+    <div>Win Percentage:</div><div></div><div>{{ $winLoss ?? 0 }}%</div>
+
+    @if (Auth::user()->currentTeam->status == 'live')
+    <div>Daily Ranking:</div><div></div><div>{{ $ranking ?? 'n/a' }} place</div>
+    @else
+    <div>Daily Ranking:</div><div></div><div>n/a</div>
+    @endif
+
+    <div>Status:</div><div></div><div>{{ Auth::user()->currentTeam->status }}</div>
+  </div>
+
+  @if(!(!$opponentsClicks && !$clicks && !Auth::user()->currentTeam->views))
+  <div class="text-center pt-4">
+    <form action="/fight/reset" method="POST">
+      @csrf
+      <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? '' }}">
+      <x-button class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-md shadow-md transition">
+        Reset
+      </x-button>
+    </form>
+  </div>
+  @endif
+</div>
+  
 </div>
 <div>
    <p class="py-4  text-gray-500  leading-relaxed">

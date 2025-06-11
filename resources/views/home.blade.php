@@ -6,11 +6,14 @@
 
                 <div class="p-6 lg:p-8 bg-[#F7F7F7]  border-b border-gray-200 ">
 
-                    <h1 class="mt-2  text-4xl font-medium text-gray-900">
+<div class="bg-gray-800 shadow-xl rounded-xl p-6 mb-6 text-center">
+  <h2 class="text-2xl font-bold text-yellow-300 mb-2">👋 Welcome to the Sell Or Die Arena, {{ Auth::user()->name ?? 'Champion' }}!</h2>
+  <p class="text-gray-200 text-lg">
+    You’ve entered the big leagues. Track your stats, climb the rankings, and let your ads do the talking.
+    Remember—every vote, every click, every fight counts.
+  </p>
+</div>
 
-                        Welcome {{ Auth::user()->name }}!
-                    </h1>
-                    <br><br>
 
                     <div class="bg-gray-800 p-6 rounded-2xl shadow-xl max-w-3xl mx-auto mb-12">
   <h2 class="text-2xl font-bold text-yellow-300 mb-4">📋 Account Overview</h2>
@@ -37,27 +40,10 @@
 </div>
 
 
+<div class="bg-gray-800 shadow-xl rounded-xl p-6 mb-6 text-center">
+  <h2 class="text-2xl font-bold text-yellow-300 mb-2">🥊 Your Fights</h2>
+</div>
 
-
- <!--                    Jump into the fray, <a href="/teams/create" class="inline-flex items-center font-semibold text-[#04cef6]">create a new fight</a> and start getting visitors to your website immediately.</p>
-                    <br> -->
-
-
-                    <h1 class="mt-2  text-4xl font-medium text-gray-900">
-
-                        Your Fights
-                    </h1>
-                    <br><br>
-
-
-
-<!--                     <p> Remember, this is taragetted traffic, here's ain interesting bit of psychology when somebody has to pick betwen 2 cvhoices, he later identifies with that choice nad will stick to it no matter wat. B
-y clicking on an ad, you chose thatwebsite, adn you will be that much more recceptive when you get to the website </p> -->
-
-
-<!--  <h1 class="mt-2  text-4xl font-medium text-gray-900">
-    Your Fights
- </h1> -->
 
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mx-auto max-w-6xl p-4">
