@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use DB;
+use Auth;
 use App\Models\User;
 use App\Models\FightViewLog;
 use App\Models\RandomOpponents;
@@ -58,7 +59,13 @@ class Ads extends Model
      */
      public static function fromOpenFights()
      {
-        $fighters = User::where('credits', '>=',1)->get()->all();
+
+        //this prevents someone from seeing their own ad,
+        //however there must  be a logged in user to see the fight - I think
+        //and ads from the same person are shown against eeach other 
+        //that sounds like af eatgure, ad vs ad is ok cuz you can ssee which did better
+        $fighters = User::where('credits', '>=',1)->where('id','!=',Auth::user()->id)->get()->all();
+
 
         $possibleAds = [];
         foreach($fighters as $fighter){
@@ -85,8 +92,6 @@ class Ads extends Model
         }
 
 
-        //the only problem witiht his is it 
-        //someitmes has 2 ads from the same person
         $randomFightIds = array_rand($possibleAds,2);
         foreach ($randomFightIds as $randomFightId){
             $randomFight = Team::find($randomFightId);
@@ -118,7 +123,7 @@ class Ads extends Model
     public static function fromClosedFights()
     {
 
-        $fighters = User::where('credits', '>=',1)->get()->all();
+        $fighters = User::where('credits', '>=',1)->where('id','!=',Auth::user()->id)->get()->all();
 
         $possibleAds = [];
         foreach($fighters as $fighter){

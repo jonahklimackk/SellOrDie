@@ -169,7 +169,7 @@ style="max-height: 300px; overflow-y: auto;"
 <!--           <a href="/fights/show/{{ $fight->id }}" target="_blank" class="text-cyan-400 font-medium hover:underline">
             {{ $fight->name }}
         </a> -->
-        <a href="/fights/show/{{ $fight->id }}" target="_blank" class="text-cyan-400 font-medium hover:underline">
+        <a href="/new-fight/show/{{ $fight->id }}" target="_blank" class="text-cyan-400 font-medium hover:underline">
           <button class="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold px-4 py-2 rounded-lg shadow-md transition-transform transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-yellow-400">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2l4 -4" />

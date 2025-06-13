@@ -45,7 +45,6 @@
                     <div class="flex-1">
 
                        <h1 class="mt-2  text-4xl font-medium text-white dark:text-white">
-
                        </h1>
                    </div>
                    <div class="float-right">
@@ -82,7 +81,7 @@
 
                  <div
                  id="docs-card"
-                 onclick="window.open('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}','newwindow',200,100)"
+                 onclick="change('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}')"
                  class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
                  style="cursor: pointer;"
                  >

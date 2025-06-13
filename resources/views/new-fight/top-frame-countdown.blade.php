@@ -17,7 +17,7 @@
 // $setTimer = true;
 if ($setTimer)
 	$setTimer = "countdown()";
-$nowPlus30Seconds = new Carbon\Carbon('5 seconds');
+$nowPlus30Seconds = new Carbon\Carbon('7 seconds');
 $nowPlus30Seconds->setTimezone('America/New_York');
 ?>
 
@@ -43,7 +43,7 @@ $nowPlus30Seconds->setTimezone('America/New_York');
 			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
   // Display the result in the element with id="demo"
-			document.getElementById("demo").innerHTML = seconds + " s ";
+			document.getElementById("demo").innerHTML = seconds;
 
   // If the count down is finished, write some text
 			if (distance < 0) {
@@ -113,7 +113,7 @@ $nowPlus30Seconds->setTimezone('America/New_York');
 				<div>
 
 					<h1 class="mt-2  text-4xl font-medium text-white">
-						Thank you for voting! You earned a credit!						
+						Thank you for voting! You earned {{ $voteCredits }} credits!						
 					</h1>
 
 					<div class="flex justify-around mt-5">
