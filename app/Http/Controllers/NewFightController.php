@@ -36,6 +36,22 @@ class NewFightController extends Controller
     }
 
 
+    /**
+     * fight page home paage
+     */
+    public function newFightRedesign()
+    {
+        return view('new-fight.redesign-show-frames');
+    }
+
+
+    /**
+     * fight page home paage
+     */
+    public function newFightRedesign2()
+    {
+        return view('new-fight.redesign-show-frames2');
+    }
 
 
 
@@ -74,6 +90,62 @@ class NewFightController extends Controller
 
         }   
 
+
+        /**
+     * fight page bottom frame testong new design
+     */
+        public function newFightBottomFrameRedesign()
+        {
+            if (rand(0,1)) {
+                // dump('from a random closed fight');
+                $ads = Ads::fromClosedFights();
+            }
+            else {
+                // dump('from a random open fight');
+                $ads = Ads::fromOpenFights();
+            }
+
+        //get random fighters' affiliate link
+            $referralLink = $this->getReferralLink($ads);               
+
+        //create votes too
+            $ads = $this->makeKey($ads);
+
+
+
+
+            return view('new-fight.new-design-bottom-frame', compact('ads','referralLink'));
+
+        }   
+
+
+
+        /**
+     * fight page bottom frame testong new design
+     */
+        public function newFightBottomFrameRedesign2()
+        {
+            if (rand(0,1)) {
+                // dump('from a random closed fight');
+                $ads = Ads::fromClosedFights();
+            }
+            else {
+                // dump('from a random open fight');
+                $ads = Ads::fromOpenFights();
+            }
+
+        //get random fighters' affiliate link
+            $referralLink = $this->getReferralLink($ads);               
+
+        //create votes too
+            $ads = $this->makeKey($ads);
+
+            
+
+
+            return view('new-fight.new-design-bottom-frame2', compact('ads','referralLink'));
+
+        }   
 
 
 
@@ -153,7 +225,7 @@ class NewFightController extends Controller
 
 
 
-        return view('new-fight.bottom-frame', compact('ads','referralLink'));
+        return view('new-fight.new-design-bottom-frame2', compact('ads','referralLink'));
     }
 
 

@@ -21,38 +21,119 @@
     </style>
     @endif
 </head>
-<body class="bg-[#1F2937] text-white">
+<body class="bg-[#1F2937]">
+    <script>
+        function change(url)
+        {
+
+    // parent.top_frame.location="https://listjoe.com";
+            parent.location=url;
+        }
+    </script>
     <div align="center">
-        <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+<!--         <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
 
             <div class="flex justify-around">
 
-             <img src="/img/sellordie7.png" width="200" height="200">
-             <!-- </div> -->
-             <h1 class="mt-2  text-4xl font-medium text-white ">
+               <img src="/img/sellordie7.png" width="200" height="200">
+               <h1 class="mt-2  text-4xl font-medium text-white ">
                 Click The Ad That Interests You The Most
             </h1>
 
-            <div onclick="parent.location='/new-fight-redesign2'">        
-                <!-- <x-red-button>Next Fight</x-red-button> -->
-<!--                 <button type="submit"
-                class="inline-flex items-center justify-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-bold uppercase tracking-wide rounded-full shadow-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400">
-                👊 Next Fight
-            </button>
- -->
-            <button type="submit"
-  class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold uppercase tracking-wide rounded-full shadow-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 group">
-  
-  <span class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">🥊</span>
-  <span>Next Fight</span>
-</button>
-
+            <div onclick="parent.location='/new-fight'">        
+                <x-red-button>Next Fight</x-red-button>
+            </div>
         </div>
+
+    </div>
+-->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto px-4 py-6">
+
+    {{-- Fighter Card --}}
+    <div 
+    class="bg-white rounded-xl shadow-2xl ring-1 ring-gray-200 transition hover:shadow-yellow-500/40 flex flex-col h-full"
+    onclick="change('/new-fight/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}')"
+    style="cursor: pointer;"
+    >
+
+    <!-- Top content -->
+    <div class="p-6 flex flex-col sm:flex-row gap-6 items-start flex-grow">
+        <div class="flex-shrink-0">
+            <img src="{{ $ads[0]->user->profile_photo_url }}"
+            alt="{{ $fight->fightOwner->name ?? 'User' }}"
+            class="w-20 h-20 rounded-full object-cover shadow-md">
+        </div>
+
+        <div class="flex-grow">
+            <h2 class="text-5xl font-bold text-gray-800 mb-1">
+                {{ $ads[0]->headline }}
+            </h2>
+<!--             <p class="text-lg font-semibold text-gray-600">
+                {{ $fight->ad->headline ?? 'Amazing Headline That Wins Clicks!' }}
+            </p> -->
+            <p class="text-lg font-semibold text-gray-600">
+             {!!  nl2br($ads[0]->body) !!}
+         </p>
+
+    </div>
+</div>
+
+<!-- Footer pinned to bottom -->
+<div class="bg-gray-100 px-6 py-4 text-sm text-gray-700 flex justify-between items-center mt-auto">
+    <span>By: {{ $ads[0]->user->name ?? 'Unknown' }}</span>
+    <a href="#" target="_blank"
+    class="text-yellow-500 hover:text-yellow-600 font-semibold">👊 View Stats</a>
+</div>
+</div>
+
+
+{{-- Fighter Card --}}
+<div 
+class="bg-white rounded-xl shadow-2xl ring-1 ring-gray-200 transition hover:shadow-yellow-500/40 flex flex-col h-full"
+onclick="change('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}')"
+style="cursor: pointer;"
+>
+
+<!-- Top content -->
+<div class="p-6 flex flex-col sm:flex-row gap-6 items-start flex-grow">
+    <div class="flex-shrink-0">
+        <img src="{{ $ads[1]->user->profile_photo_url }}"
+        alt="{{ $fight->fightOwner->name ?? 'User' }}"
+        class="w-20 h-20 rounded-full object-cover shadow-md">
     </div>
 
+    <div class="flex-grow">
+        <h2 class="text-5xl font-bold text-gray-800 mb-1">
+         {{ $ads[1]->headline }}
+     </h2>
+
+<!--             <p class="text-lg font-semibold text-gray-600">
+                {{ $fight->ad->headline ?? 'Amazing Headline That Wins Clicks!' }}
+            </p> -->
+            <!-- <p class="text-sm text-gray-600 mt-2 leading-relaxed"> -->
+                 <p class="text-lg font-semibold text-gray-600">
+               {!!  nl2br($ads[1]->body) !!}
+           </p>
+
+           @if ($fight->ad->image ?? false)
+           <div class="mt-4">
+            <img src="{{ $fight->ad->image }}" alt="Ad Image" class="rounded-lg border border-gray-200">
+        </div>
+        @endif
+    </div>
+</div>
+
+<!-- Footer pinned to bottom -->
+<div class="bg-gray-100 px-6 py-4 text-sm text-gray-700 flex justify-between items-center mt-auto">
+    <span>By: {{ $ads[1]->user->name ?? 'Unknown' }}</span>
+    <a href="#" target="_blank"
+    class="text-yellow-500 hover:text-yellow-600 font-semibold">👊 View Stats</a>
 </div>
 </div>
+
+
+</div>
+
+
 </body>
 </html>
-
-

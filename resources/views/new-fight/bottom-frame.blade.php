@@ -9,6 +9,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+
 
     <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css'/>
 
@@ -57,7 +59,7 @@
                      <div
                      id="docs-card"
                      onclick="change('/new-fight/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}')"
-                     class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
+                     class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 ring-1 ring-gray-200 transition hover:shadow-yellow-500/40 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
                      style="cursor: pointer;"
                      >
                      @if(str_word_count($ads[0]->headline,0) == 1)
@@ -76,17 +78,19 @@
                             <div class="mt-20">
                              {!!  nl2br($ads[0]->body) !!}
                          </div>
-                     </div>
-                 </div>
 
-                 <div
-                 id="docs-card"
-                 onclick="change('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}')"
-                 class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
-                 style="cursor: pointer;"
-                 >
-                 @if(str_word_count($ads[1]->headline,0) == 1)
-                 <div class="relative flex-1 items-center lg:items-center">
+                     </div>  
+
+                </div>
+
+                <div
+                id="docs-card"
+                onclick="change('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}')"
+                class="flex flex-col items-start gap-6  rounded-lg bg-white text-black p-6 ring-1 ring-gray-200 transition hover:shadow-yellow-500/40 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] md:row-span-3 lg:p-10 lg:pb-10" 
+                style="cursor: pointer;"
+                >
+                @if(str_word_count($ads[1]->headline,0) == 1)
+                <div class="relative flex-1 items-center lg:items-center">
                     @else
                     <div class="relative flex-1 items-center gap-6 lg:items-center">
                         @endif
@@ -95,10 +99,10 @@
                         </div>            
                         <div class="mt-2">
                             <h1 class="text-5xl font-semibold text-black  mb-10">
-                            {{ nl2br($ads[1]->headline) }}
-                        </h1>
-                       </div>
-                       <div class="mt-2">
+                                {{ nl2br($ads[1]->headline) }}
+                            </h1>
+                        </div>
+                        <div class="mt-2">
                          {!!  nl2br($ads[1]->body) !!}
                      </div>
                  </div>

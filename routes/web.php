@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\NewFightController;
 use App\Http\Controllers\UpgradeController;
+use App\Http\Controllers\AiController;
 use App\Livewire\Mailings;
 
 
@@ -295,3 +296,18 @@ Route::get('new-fight/earn-credits-top-frame/{key}', [NewFightController::class,
 Route::get('/new-fight/already-judged-show-url-top-frame/',[NewFightController::class,'alreadyJudgedShowUrlTopFrame']);
 Route::get('/new-fight/earn/redeem/{key}',[NewFightController::class, 'afterCountdown']);
 
+
+Route::get('/new-fight-redesign', [NewFightController::class,'newFightRedesign']);
+Route::get('/new-fight-redesign-bottom-frame', [NewFightController::class,'newFightBottomFrameRedesign']);
+
+Route::get('/new-fight-redesign2', [NewFightController::class,'newFightRedesign2']);
+Route::get('/new-fight-redesign-bottom-frame2', [NewFightController::class,'newFightBottomFrameRedesign2']);
+
+
+Route::get('/ai/newfight', function () {
+    return view('ai-output.fight-redesign');
+});
+
+Route::get('/ai/fight', function () {
+    return view('fighter.marketing');
+});

@@ -27,32 +27,106 @@
 
             <div class="flex justify-around">
 
-             <img src="/img/sellordie7.png" width="200" height="200">
-             <!-- </div> -->
-             <h1 class="mt-2  text-4xl font-medium text-white ">
+               <img src="/img/sellordie7.png" width="200" height="200">
+               <!-- </div> -->
+               <h1 class="mt-2  text-4xl font-medium text-white ">
                 Click The Ad That Interests You The Most
             </h1>
 
-            <div onclick="parent.location='/new-fight-redesign2'">        
-                <!-- <x-red-button>Next Fight</x-red-button> -->
-<!--                 <button type="submit"
-                class="inline-flex items-center justify-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-bold uppercase tracking-wide rounded-full shadow-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400">
-                👊 Next Fight
-            </button>
- -->
-            <button type="submit"
-  class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold uppercase tracking-wide rounded-full shadow-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 group">
-  
-  <span class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">🥊</span>
-  <span>Next Fight</span>
-</button>
+            <div onclick="parent.location='/new-fight'">        
+                <x-red-button>Next Fight</x-red-button>
+            </div>
+        </div>
 
+    </div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto px-4 py-6">
+
+{{-- Fighter Card --}}
+<div class="bg-white rounded-xl shadow-2xl ring-1 ring-gray-200 transition hover:shadow-yellow-500/40 flex flex-col h-full">
+
+    <!-- Top content -->
+    <div class="p-6 flex flex-col sm:flex-row gap-6 items-start flex-grow">
+        <div class="flex-shrink-0">
+            <img src="http://sellordie.online/storage/profile-photos/uvhdCU53qg86uyI7mInGmnJxTCfMIJusTBNGcGO2.jpg"
+                 alt="{{ $fight->fightOwner->name ?? 'User' }}"
+                 class="w-20 h-20 rounded-full object-cover shadow-md">
+        </div>
+
+        <div class="flex-grow">
+            <h2 class="text-4xl font-bold text-gray-800 mb-1">
+                {{ $fight->name ?? 'Fight Title' }}
+            </h2>
+<!--             <p class="text-lg font-semibold text-gray-600">
+                {{ $fight->ad->headline ?? 'Amazing Headline That Wins Clicks!' }}
+            </p> -->
+            <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+                Body of the ad content goes here. Add as much text as needed. This should push the footer down if needed.
+                Body of the ad content goes here. Add as much text as needed. This should push the footer down if needed.
+                Body of the ad content goes here. Add as much text as needed. This should push the footer down if needed.
+                Body of the ad content goes here. Add as much text as needed. This should push the footer down if needed.
+                Body of the ad content goes here. Add as much text as needed. This should push the footer down if needed.
+                Body of the ad content goes here. Add as much text as needed. This should push the footer down if needed.
+            </p>
+
+            @if ($fight->ad->image ?? false)
+                <div class="mt-4">
+                    <img src="{{ $fight->ad->image }}" alt="Ad Image" class="rounded-lg border border-gray-200">
+                </div>
+            @endif
         </div>
     </div>
 
+    <!-- Footer pinned to bottom -->
+    <div class="bg-gray-100 px-6 py-4 text-sm text-gray-700 flex justify-between items-center mt-auto">
+        <span>By: {{ $fight->fightOwner->name ?? 'Unknown' }}</span>
+        <a href="#" target="_blank"
+           class="text-yellow-500 hover:text-yellow-600 font-semibold">👊 View Fight</a>
+    </div>
 </div>
+
+
+{{-- Fighter Card --}}
+<div class="bg-white rounded-xl shadow-2xl ring-1 ring-gray-200 transition hover:shadow-yellow-500/40 flex flex-col h-full">
+
+    <!-- Top content -->
+    <div class="p-6 flex flex-col sm:flex-row gap-6 items-start flex-grow">
+        <div class="flex-shrink-0">
+            <img src="http://sellordie.online/storage/profile-photos/uvhdCU53qg86uyI7mInGmnJxTCfMIJusTBNGcGO2.jpg"
+                 alt="{{ $fight->fightOwner->name ?? 'User' }}"
+                 class="w-20 h-20 rounded-full object-cover shadow-md">
+        </div>
+
+        <div class="flex-grow">
+            <h2 class="text-4xl font-bold text-gray-800 mb-1">
+                {{ $fight->name ?? 'Fight Title' }}
+            </h2>
+<!--             <p class="text-lg font-semibold text-gray-600">
+                {{ $fight->ad->headline ?? 'Amazing Headline That Wins Clicks!' }}
+            </p> -->
+            <p class="text-sm text-gray-600 mt-2 leading-relaxed">
+                Body of the ad content goes here. Add as much text as needed. This should push the footer down if needed.
+            </p>
+
+            @if ($fight->ad->image ?? false)
+                <div class="mt-4">
+                    <img src="{{ $fight->ad->image }}" alt="Ad Image" class="rounded-lg border border-gray-200">
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <!-- Footer pinned to bottom -->
+    <div class="bg-gray-100 px-6 py-4 text-sm text-gray-700 flex justify-between items-center mt-auto">
+        <span>By: {{ $fight->fightOwner->name ?? 'Unknown' }}</span>
+        <a href="#" target="_blank"
+           class="text-yellow-500 hover:text-yellow-600 font-semibold">👊 View Fight</a>
+    </div>
 </div>
+
+
+</div>
+
+
 </body>
 </html>
-
-

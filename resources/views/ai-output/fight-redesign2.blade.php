@@ -11,6 +11,20 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css'/>
+    <!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+<!-- Tailwind Config: extend your tailwind.config.js -->
+<!-- 
+theme: {
+  extend: {
+    fontFamily: {
+      sans: ['Inter', 'sans-serif'],
+      heading: ['Montserrat', 'sans-serif'],
+    }
+  }
+}
+-->
 
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -21,38 +35,29 @@
     </style>
     @endif
 </head>
-<body class="bg-[#1F2937] text-white">
-    <div align="center">
-        <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+<!-- Two Fight Cards Side by Side -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 py-8 font-sans">
 
-            <div class="flex justify-around">
-
-             <img src="/img/sellordie7.png" width="200" height="200">
-             <!-- </div> -->
-             <h1 class="mt-2  text-4xl font-medium text-white ">
-                Click The Ad That Interests You The Most
-            </h1>
-
-            <div onclick="parent.location='/new-fight-redesign2'">        
-                <!-- <x-red-button>Next Fight</x-red-button> -->
-<!--                 <button type="submit"
-                class="inline-flex items-center justify-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-bold uppercase tracking-wide rounded-full shadow-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400">
-                👊 Next Fight
-            </button>
- -->
-            <button type="submit"
-  class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold uppercase tracking-wide rounded-full shadow-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 group">
-  
-  <span class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">🥊</span>
-  <span>Next Fight</span>
-</button>
-
+    <!-- Fight Card 1 -->
+    <a href="#" class="block rounded-xl bg-white p-6 shadow-lg ring-2 ring-transparent hover:ring-yellow-400 transition-all duration-300 ease-in-out">
+        <div class="flex items-center space-x-4">
+            <img src="/img/boxingglove.png" alt="Fighter" class="w-20 h-20 object-cover rounded-full">
+            <h2 class="font-heading text-3xl font-bold text-gray-900">🔥 3-Step Secret System</h2>
         </div>
-    </div>
+        <p class="mt-4 text-sm text-gray-700 leading-relaxed">
+            Discover how I flipped $20 into $200 in under 48 hours using a dead-simple 3-step strategy. No fluff, no BS—just results.
+        </p>
+    </a>
+
+    <!-- Fight Card 2 -->
+    <a href="#" class="block rounded-xl bg-white p-6 shadow-lg ring-2 ring-transparent hover:ring-yellow-400 transition-all duration-300 ease-in-out">
+        <div class="flex items-center space-x-4">
+            <img src="/img/boxingglove.png" alt="Opponent" class="w-20 h-20 object-cover rounded-full">
+            <h2 class="font-heading text-3xl font-bold text-gray-900">💰 Random Opponent Challenge</h2>
+        </div>
+        <p class="mt-4 text-sm text-gray-700 leading-relaxed">
+            Can your ad beat this challenger? Click to view the headline, ad copy, and see if you can land the knockout blow.
+        </p>
+    </a>
 
 </div>
-</div>
-</body>
-</html>
-
-
