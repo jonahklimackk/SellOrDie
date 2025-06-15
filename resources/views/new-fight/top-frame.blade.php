@@ -23,6 +23,7 @@
 </head>
 <body class="bg-[#1F2937] text-white">
     <div align="center">
+
         <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
 
             <div class="flex justify-around">
@@ -32,6 +33,7 @@
              <h1 class="mt-2  text-4xl font-medium text-white ">
                 Click The Ad That Interests You The Most
             </h1>
+                         
 
             <div onclick="parent.location='/new-fight-redesign2'">        
                 <!-- <x-red-button>Next Fight</x-red-button> -->
@@ -40,13 +42,25 @@
                 👊 Next Fight
             </button>
  -->
-            <button type="submit"
+<!--             <button type="submit"
   class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold uppercase tracking-wide rounded-full shadow-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 group">
   
   <span class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">🥊</span>
   <span>Next Fight</span>
+</button> -->
+<button type="submit"
+  class="inline-flex items-center justify-center gap-2
+         px-6 py-3 bg-red-600 hover:bg-red-700
+         text-white font-bold uppercase tracking-wide
+         rounded-full shadow-lg transition-all duration-200 ease-in-out
+         focus:outline-none
+         ring-2 ring-offset-2 ring-yellow-400      <!-- always-on ring -->
+         group">
+  <span class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">
+    🥊
+  </span>
+  <span>Next Fight</span>
 </button>
-
         </div>
     </div>
 

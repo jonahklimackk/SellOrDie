@@ -304,10 +304,33 @@ Route::get('/new-fight-redesign2', [NewFightController::class,'newFightRedesign2
 Route::get('/new-fight-redesign-bottom-frame2', [NewFightController::class,'newFightBottomFrameRedesign2']);
 
 
+
+Route::get('/new-fight/challenge/{key}/{icon}', [NewFightController::class,'challengeTest']);
+
+
+
+
+
+
+
+
+// 
+// ai testeing stuff
+// 
+
+
 Route::get('/ai/newfight', function () {
     return view('ai-output.fight-redesign');
 });
 
-Route::get('/ai/fight', function () {
-    return view('fighter.marketing');
+Route::get('/ai/icons', function () {
+    return view('ai-output.challenge-icons');
+});
+
+
+Route::get('/ai/timer', function () {
+    return view('ai-output.timer');
+});
+Route::get('/ai/timer3', function () {
+    return view('ai-output.timer3');
 });

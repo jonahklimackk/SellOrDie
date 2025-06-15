@@ -33,8 +33,16 @@
                 You Already Judged This Fight
             </h1>
 
-            <div onclick="parent.location='/new-fight'">        
-                <x-red-button>Next Fight</x-red-button>
+                <div onclick="parent.location='/new-fight-redesign2'">        
+                    <!-- <x-red-button>Next Fight</x-red-button> -->
+
+                    <button type="submit"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold uppercase tracking-wide rounded-full shadow-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 group">
+
+                    <span class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">🥊</span>
+                    <span>Next Fight</span>
+                </button>
+
             </div>
         </div>
 

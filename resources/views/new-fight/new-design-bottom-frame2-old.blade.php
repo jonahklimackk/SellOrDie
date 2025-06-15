@@ -34,24 +34,27 @@
       parent.location=url;
     }
   </script>
-  
+  <div align="center">
     <div class="max-w-7xl mx-auto px-6 py-12">
 
 
-<!--       <div 
+      <div 
       class="grid grid-cols-1 sm:grid-cols-2 gap-40"
       style="
       background: #1F2937 url('/img/vs-gap.png') no-repeat center top / 10rem auto;
-      "> -->
-<div class="flex justify-center items-start space-x-12">
-  <!-- Left Card -->
-  <div class="flex-none w-[40rem]  bg-white rounded-xl shadow-2xl ring-2 ring-transparent 
-              hover:ring-yellow-400 hover:shadow-[0_0_25px_4px_rgba(234,179,8,0.7)]
-              transition-all flex flex-col"
-       onclick="change('/new-fight/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}')"
-       style="cursor:pointer;"
-  >
-    <!-- … your card content … -->   
+      ">
+      <!-- Card Component (repeated 10x) -->
+      <!-- START -->
+<!--         <div 
+        class="bg-white rounded-xl shadow-2xl ring-2 ring-gray-200 transition hover:shadow-yellow-500/40 flex flex-col h-full"
+        onclick="change('/new-fight/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}')"
+        style="cursor: pointer;"
+        > -->
+        <div 
+        class="bg-white rounded-xl shadow-2xl ring-2 ring-transparent hover:ring-yellow-400 hover:shadow-[0_0_25px_4px_rgba(234,179,8,0.7)] transition-all flex flex-col h-full"
+        onclick="change('/new-fight/vote/{{ $ads[0]->key }}/ad/{{ $ads[0]->id }}')"
+        style="cursor: pointer;"
+        >        
 
         <div class="p-5 flex items-start gap-4">
           <img src="{{ $ads[0]->user->profile_photo_url }}" alt="Money" class="w-20 h-20 rounded-full object-cover shadow-md float-left">
@@ -66,22 +69,12 @@
           <a href="#" class="text-yellow-500 hover:text-yellow-600 font-bold">👊 Stats</a>
         </div>
       </div>
-
-
-  <!-- VS Image -->
-  <div class="w-40 flex-shrink-0">
-    <img src="/img/vs-gap.png" alt="VS" class="w-full h-auto" />
-  </div>
-
-
-
-  <!-- Right Card -->
-  <div class="flex-none w-[40rem]  bg-white rounded-xl shadow-2xl ring-2 ring-transparent 
-              hover:ring-yellow-400 hover:shadow-[0_0_25px_4px_rgba(234,179,8,0.7)]
-              transition-all flex flex-col"
-       onclick="change('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}')"
-       style="cursor:pointer;"
-  >    
+      <!-- Repeat this format for the next 9 cards -->
+      <div 
+      class="bg-white rounded-xl shadow-2xl ring-2 ring-transparent hover:ring-yellow-400 hover:shadow-[0_0_25px_4px_rgba(234,179,8,0.7)] transition-all flex flex-col h-full"
+      onclick="change('/new-fight/vote/{{ $ads[1]->key }}/ad/{{ $ads[1]->id }}')"
+      style="cursor: pointer;"
+      >        
 
       <div class="p-5 flex items-start gap-4">
         <img src="{{ $ads[1]->user->profile_photo_url }}" alt="TikTok" class="w-20 h-20 rounded-full object-cover shadow-md float-left">
@@ -96,10 +89,13 @@
         <a href="#" class="text-yellow-500 hover:text-yellow-600 font-bold">👊 Stats</a>
       </div>
     </div>
+
+    <!-- Continue with the 8 other topics (YouTube, Email, SEO, etc.) -->
+    <!-- Replace icon src with: youtube.png, email.png, seo.png, writing.png, ads.png, sharing.png, etc. -->
+    <!-- Each card uses the same structure -->
   </div>
 </div>
-
-
+</div>
 <!-- <div align='center'>
         <h1 class="mt-2  text-xl font-medium text-gray-900 dark:text-white">
         <a href="{{ $referralLink }}">

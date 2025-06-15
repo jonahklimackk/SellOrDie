@@ -115,51 +115,44 @@ $nowPlus30Seconds->setTimezone('America/New_York');
 
 <script>
 
-	function showCheckmark() {
-		const container  = document.getElementById('checkmark-container');
-		const chk        = container.querySelector('.checkmark');
-		const creditsEl  = document.getElementById('credits');
-		const totalEl    = document.getElementById('total_credits');
+function showCheckmark() {
+  const container = document.getElementById('checkmark-container');
+  const creditsEl = document.getElementById('credits');
+  const oldChk    = container.querySelector('.checkmark');
+  const target    = parseInt(creditsEl.dataset.target, 10) || 0;
 
-    // parse out your earned‐this‐round and your existing total
-		const target     = parseInt(creditsEl.dataset.target, 10) || 0;
-		const baseTotal  = parseInt(totalEl.textContent,    10) || 0;
+  // 1) reveal
+  container.classList.remove('hidden');
 
-    // 1) reveal the pop-up
-		container.classList.remove('hidden');
+  // 2) swap in a fresh .checkmark to replay its CSS pop
+  const newChk = oldChk.cloneNode(true);
+  oldChk.parentNode.replaceChild(newChk, oldChk);
 
-    // 2) retrigger the checkmark pop
-		chk.classList.remove('animate');
-    void chk.offsetWidth;               // force reflow
-    chk.classList.add('animate');
+  // 3) reset counter
+  creditsEl.textContent = '0';
 
-    // 3) reset the small counter
-    creditsEl.textContent = '0';
+  // 4) count-up animation
+  let count = 0,
+      startDelay = 100,
+      endDelay   = 10;
+  (function tick() {
+    if (count < target) {
+      count++;
+      creditsEl.textContent = count;
+      const prog  = count / target;
+      const delay = startDelay + (endDelay - startDelay) * prog;
+      setTimeout(tick, delay);
+    }
+  })();
 
-    // 4) loop both counters together
-    let count = 0;
-    const startDelay = 50, endDelay = 5;
-    (function tick() {
-    	if (count < target) {
-    		count++;
-        creditsEl.textContent = count;           // earned-this-round
-        totalEl.textContent   = baseTotal + count; // grand total
+  // 5) auto-hide after 2s
+  // setTimeout(() => container.classList.add('hidden'), 2000);
+}
 
-        const prog  = count / target;
-        const delay = startDelay + (endDelay - startDelay) * prog;
-        setTimeout(tick, delay);
-      }
-    })();
-
-    // (optional) auto-hide the pop-up after 2s
-    // setTimeout(() => container.classList.add('hidden'), 2000);
-  }
-
-
-  function hideCheckmark() {
-  	document.getElementById('checkmark-container')
-  	.classList.add('hidden');
-  }
+function hideCheckmark() {
+	document.getElementById('checkmark-container')
+	.classList.add('hidden');
+}
 
 
 </script>
@@ -167,55 +160,21 @@ $nowPlus30Seconds->setTimezone('America/New_York');
 
 
 <script>
-	// function challenge(icon) {
-	// 	fetch('/new-fight/challenge/{{ $creditClick->key }}/'+icon)
-	// 	.then(response => {
-	// 		if (!response.ok) throw new Error(response.statusText);
-  //   return response.text();  // parse the body as plain text
-  // })
-	// 	.then(text => {
-	// 		console.log('Server says:', text);
-	// 		document.getElementById('challenge_message').textContent = text;
-	// 		document.getElementById('message').textContent = '';
-	// 	})
-	// 	.catch(err => {
-	// 		console.error('Fetch error:', err);
-	// 	});
-	// }
-
-
-function challenge(icon) {
-  fetch('/new-fight/challenge/{{ $creditClick->key }}/'+icon)
-    .then(response => {
-      if (!response.ok) throw new Error(response.statusText);
-      return response.json();           // ← parse JSON
-    })
-    .then(({ earned_credits, total_credits, response }) => {   // ← destructure your two ints
-      console.log('Credits:', earned_credits);
-      console.log('TotalCredits:', total_credits);
-      console.log('Response', response);
-      document.getElementById("challenge_message").textContent = response;
-
-      if (earned_credits) {
-      	  console.log('Credits is defined:', earned_credits);
-      	const creditsEl = document.getElementById('credits');
-			creditsEl.dataset.target = earned_credits;
-      creditsEl.textContent   = '0';  // reset visual
-			document.getElementById("message").textContent = '';
-			document.getElementById("demo").textContent = '';
-			document.getElementById("challenge_message").textContent = '';
-      showCheckmark();   
-
-    }
-
-
-    })
-    .catch(err => {
-      console.error('Fetch error:', err);
-    });
-}
-
-
+	function challenge(icon) {
+		fetch('/new-fight/challenge/{{ $creditClick->key }}/'+icon)
+		.then(response => {
+			if (!response.ok) throw new Error(response.statusText);
+    return response.text();  // parse the body as plain text
+  })
+		.then(text => {
+			console.log('Server says:', text);
+			document.getElementById('challenge_message').textContent = text;
+			document.getElementById('message').textContent = '';
+		})
+		.catch(err => {
+			console.error('Fetch error:', err);
+		});
+	}
 
 
 	function redeem() {
@@ -225,7 +184,7 @@ function challenge(icon) {
     return response.text();  // parse the body as plain text
   })
 		.then(text => {
-			const newCredits = parseInt(text, 10);
+			      const newCredits = parseInt(text, 10);
 			console.log('Server redeem says:', text);
 			document.getElementById("message").textContent = '';
 			document.getElementById("demo").textContent = '';
@@ -233,17 +192,12 @@ function challenge(icon) {
 			// document.getElementById("total_credits").innerHTML = "";
 
 			 // dynamically set the count-to value
-			const creditsEl = document.getElementById('credits');
-			creditsEl.dataset.target = newCredits;
+      const creditsEl = document.getElementById('credits');
+      creditsEl.dataset.target = newCredits;
       creditsEl.textContent   = '0';  // reset visual
 
-      if (text == "Please click the matching icon.") {
-      	document.getElementById("message").textContent = text;
-      	console.log('got it');
-      }
-      else
-      	showCheckmark();    
-    })
+			 showCheckmark();    
+		})
 		.catch(err => {
 			console.error('Fetch error:', err);
 		});
@@ -255,55 +209,55 @@ function challenge(icon) {
 
 
 <style>
-	.checkmark-animation {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: #1F2937; /* updated background color */
-		padding: 1rem 2rem;
-		border-radius: 0.5rem;
-		color: #fff;
-		font-family: 'Digital-7', monospace;
-		position: relative;
-		overflow: hidden;
-	}
+  .checkmark-animation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1F2937; /* updated background color */
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-family: 'Digital-7', monospace;
+    position: relative;
+    overflow: hidden;
+  }
 
-	.checkmark {
-		width: 1.5rem;
-		height: 1.5rem;
-		border-radius: 50%;
-		border: 3px solid #10B981;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-right: 0.75rem;
-		animation: pop 0.5s ease-out forwards;
-	}
+  .checkmark {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 3px solid #10B981;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    animation: pop 0.5s ease-out forwards;
+  }
 
-	.checkmark::before {
-		content: '✓';
-		font-size: 1rem;
-		opacity: 0;
-		transform: scale(0);
-		animation: mark 0.3s 0.5s ease-out forwards;
-	}
+  .checkmark::before {
+    content: '✓';
+    font-size: 1rem;
+    opacity: 0;
+    transform: scale(0);
+    animation: mark 0.3s 0.5s ease-out forwards;
+  }
 
-	@keyframes pop {
-		0%   { transform: scale(0); }
-		80%  { transform: scale(1.2); }
-		100% { transform: scale(1); }
-	}
+  @keyframes pop {
+    0%   { transform: scale(0); }
+    80%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
 
-	@keyframes mark {
-		to {
-			opacity: 1;
-			transform: scale(1);
-		}
-	}
+  @keyframes mark {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 
-	.credits-text {
-		font-size: 1.25rem;
-	}
+  .credits-text {
+    font-size: 1.25rem;
+  }
 </style>
 
 
@@ -378,9 +332,7 @@ function challenge(icon) {
 										<div class="checkmark"></div>
 										<div class="credits-text">
 											You just earned 
-											<span id="credits" data-target="20">0</span> credits!
-											<br> Total Credits: 
-											<span id="total_credits">{{ $credits }}</span>											 
+											<span id="credits" data-target="20">0</span> credits.
 										</div>
 									</div>
 								</div>
@@ -436,8 +388,8 @@ function challenge(icon) {
 	const target = parseInt(creditsEl.dataset.target, 10);
 
 	let count = 0;
-  const startDelay = 50;  // ms at count = 0
-  const endDelay   = 5;   // ms at count = target
+  const startDelay = 150;  // ms at count = 0
+  const endDelay   = 10;   // ms at count = target
 
   function tick() {
   	if (count < target) {
