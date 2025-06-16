@@ -93,9 +93,11 @@
 </div>
 <div>
    <p class="py-4  text-gray-500  leading-relaxed">
-    If you want to make your name as the best Fighter in the SellorDie <a hfef="/league">league</a>, you gotta
-    have a good weapon. Be sure that it packs the 1-2 punch to destroy your opponents!
-    Fights is how many times your ad weapon has been viewed. Or, how many times you used this particular weapon. Fights are the number of fights you've been. A fight consits of 2 fighters and 2 ad weapons.  When you invite someone to your fight and they accept, You'll have an url to doisplay your fight and it will be shown to other fithers as they earn credits surfing.
+If you’re serious about becoming the ultimate Fighter in the Sell or Die arena, you need a weapon that delivers a knockout every time. Your ad-weapon should land that perfect 1-2 punch to blow past the competition!
+
+In Sell or Die, a “Fight” is simply how many times your weapon’s been unleashed—either counted as views or as activations when you wield it. Each Fight pits two fighters and their chosen weapons head-to-head. Challenge an opponent, and once they accept, you’ll get a custom URL to showcase your matchup. As fellow fighters surf and earn credits, they’ll see your battle live in the leaderboard.
+
+Ready to prove you’ve got the fiercest ad-weapon in the ring? Gear up, lock in your Fight URL, and let the best ad win!
 </p> 
 </div>   
 

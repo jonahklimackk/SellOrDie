@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Auth;
 use stdClass;
+use Carbon\Carbon;
 use App\Models\Fight;
 use App\Models\Team;
 use App\Models\Ads;
 use App\Models\FightLog;
+use App\Models\CreditClicks;
 use App\Models\FightViewLog;
 use Illuminate\Http\Request;
 
@@ -64,9 +66,13 @@ class HomeController extends Controller
 		// dd($data);
 		$credits = Auth::user()->credits;
 
-		return view('home', compact('data','credits'));
+		$fightsJudged = CreditClicks::where('recipient_id',Auth::user()->id)->whereDate('updated_at',Carbon::today())->get()->count();
+
+		$creditsSurfed = CreditClicks::where('recipient_id',Auth::user()->id)->whereDate('updated_at',Carbon::today())->where('earned_credits',1)->get()->sum('credits');
 
 
+
+		return view('home', compact('data','credits','fightsJudged','creditsSurfed'));
 
 
 	}

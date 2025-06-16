@@ -21,19 +21,19 @@
     <tbody>
       <tr class="border-b border-gray-700">
         <th class="py-2 px-4 font-medium text-yellow-200">Membership</th>
-        <td class="py-2 px-4">Heavyweight</td>
+        <td class="py-2 px-4">{{ Auth::user()->status }}</td>
       </tr>
       <tr class="border-b border-gray-700">
         <th class="py-2 px-4 font-medium text-yellow-200">Total Credits</th>
-        <td class="py-2 px-4">1,250</td>
+        <td class="py-2 px-4">{{ Auth::user()->credits }}</td>
       </tr>
       <tr class="border-b border-gray-700">
         <th class="py-2 px-4 font-medium text-yellow-200">Credits Earned Today</th>
-        <td class="py-2 px-4">45</td>
+        <td class="py-2 px-4">{{ $creditsSurfed  }}</td>
       </tr>
       <tr>
         <th class="py-2 px-4 font-medium text-yellow-200">Fights Judged Today</th>
-        <td class="py-2 px-4">12</td>
+        <td class="py-2 px-4">{{ $fightsJudged  }}</td>
       </tr>
     </tbody>
   </table>

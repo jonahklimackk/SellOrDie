@@ -300,7 +300,7 @@ Route::get('/new-fight/earn/redeem/{key}',[NewFightController::class, 'afterCoun
 Route::get('/new-fight-redesign', [NewFightController::class,'newFightRedesign']);
 Route::get('/new-fight-redesign-bottom-frame', [NewFightController::class,'newFightBottomFrameRedesign']);
 
-Route::get('/new-fight-redesign2', [NewFightController::class,'newFightRedesign2']);
+Route::get('/new-fight-redesign2', [NewFightController::class,'newFightRedesign2'])->name('new-fight-redesign2');
 Route::get('/new-fight-redesign-bottom-frame2', [NewFightController::class,'newFightBottomFrameRedesign2']);
 
 
@@ -334,3 +334,8 @@ Route::get('/ai/timer', function () {
 Route::get('/ai/timer3', function () {
     return view('ai-output.timer3');
 });
+
+Route::get('/ai/oto', function () {
+    return view('ai-output.one-time-offer');
+});
+
