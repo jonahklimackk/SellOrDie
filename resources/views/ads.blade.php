@@ -51,55 +51,68 @@
 
        <div class="flex flex-wrap float-right justify-between">   
 
-<div class="bg-gray-800 shadow-2xl rounded-xl p-6 text-sm font-medium text-gray-100 space-y-4 max-w-3xl mx-auto mt-4">
-  <div class="grid grid-cols-3 gap-2">
-    <div>Fights:</div><div></div><div>{{ App\Models\FightViewLog::getViews($fight->id, 'all') ?? 0 }}</div>
+        <div class="bg-gray-800 shadow-2xl rounded-xl p-6 text-sm font-medium text-gray-100 space-y-4 max-w-3xl mx-auto mt-4">
+          <div class="grid grid-cols-3 gap-2">
+            <div>Fights:</div><div></div><div>{{ App\Models\FightViewLog::getViews($fight->id, 'all') ?? 0 }}</div>
 
-    @if(isset($opponentsAd))
-    <div>{{ $opponentsAd->user->name ?? '' }}'s Clicks:</div><div></div><div>{{ $opponentsClicks ?? 0 }}</div>
-    @else
-    <div>Opponent's Clicks:</div><div></div><div>{{ $opponentsClicks ?? 0 }}</div>
+            @if(isset($opponentsAd))
+            <div>{{ $opponentsAd->user->name ?? '' }}'s Clicks:</div><div></div><div>{{ $opponentsClicks ?? 0 }}</div>
+            @else
+            <div>Opponent's Clicks:</div><div></div><div>{{ $opponentsClicks ?? 0 }}</div>
+            @endif
+
+            <div>Your Clicks:</div><div></div><div>{{ $clicks ?? 0 }}</div>
+
+            <div>Your Record:</div><div></div>
+            <div>{{ $clicks ?? 0 }} - {{ $opponentsClicks ?? 0 }} - {{ $draws ?? 0 }}</div>
+
+            <div>Win Percentage:</div><div></div><div>{{ $winLoss ?? 0 }}%</div>
+
+            @if (Auth::user()->currentTeam->status == 'live')
+            <div>Daily Ranking:</div><div></div><div>{{ $ranking ?? 'n/a' }} place</div>
+            @else
+            <div>Daily Ranking:</div><div></div><div>n/a</div>
+            @endif
+
+            <div>Status:</div><div></div><div>{{ Auth::user()->currentTeam->status }}</div>
+        </div>
+
+        @if(!(!$opponentsClicks && !$clicks && !Auth::user()->currentTeam->views))
+        <div class="text-center pt-4">
+            <form action="/fight/reset" method="POST">
+              @csrf
+              <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? '' }}">
+              <x-button class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-md shadow-md transition">
+                Reset
+            </x-button>
+        </form>
+    </div>
     @endif
-
-    <div>Your Clicks:</div><div></div><div>{{ $clicks ?? 0 }}</div>
-
-    <div>Your Record:</div><div></div>
-    <div>{{ $clicks ?? 0 }} - {{ $opponentsClicks ?? 0 }} - {{ $draws ?? 0 }}</div>
-
-    <div>Win Percentage:</div><div></div><div>{{ $winLoss ?? 0 }}%</div>
-
-    @if (Auth::user()->currentTeam->status == 'live')
-    <div>Daily Ranking:</div><div></div><div>{{ $ranking ?? 'n/a' }} place</div>
-    @else
-    <div>Daily Ranking:</div><div></div><div>n/a</div>
-    @endif
-
-    <div>Status:</div><div></div><div>{{ Auth::user()->currentTeam->status }}</div>
-  </div>
-
-  @if(!(!$opponentsClicks && !$clicks && !Auth::user()->currentTeam->views))
-  <div class="text-center pt-4">
-    <form action="/fight/reset" method="POST">
-      @csrf
-      <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? '' }}">
-      <x-button class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-md shadow-md transition">
-        Reset
-      </x-button>
-    </form>
-  </div>
-  @endif
 </div>
-  
+
 </div>
 <div>
    <p class="py-4  text-gray-500  leading-relaxed">
-If you’re serious about becoming the ultimate Fighter in the Sell or Die arena, you need a weapon that delivers a knockout every time. Your ad-weapon should land that perfect 1-2 punch to blow past the competition!
+    If you’re serious about becoming the ultimate Fighter in the Sell or Die arena, you need a weapon that delivers a knockout every time. Your ad-weapon should land that perfect 1-2 punch to blow past the competition!
 
-In Sell or Die, a “Fight” is simply how many times your weapon’s been unleashed—either counted as views or as activations when you wield it. Each Fight pits two fighters and their chosen weapons head-to-head. Challenge an opponent, and once they accept, you’ll get a custom URL to showcase your matchup. As fellow fighters surf and earn credits, they’ll see your battle live in the leaderboard.
+    In Sell or Die, a “Fight” is simply how many times your weapon’s been unleashed—either counted as views or as activations when you wield it. Each Fight pits two fighters and their chosen weapons head-to-head. Challenge an opponent, and once they accept, you’ll get a custom URL to showcase your matchup. As fellow fighters surf and earn credits, they’ll see your battle live in the leaderboard.
 
-Ready to prove you’ve got the fiercest ad-weapon in the ring? Gear up, lock in your Fight URL, and let the best ad win!
-</p> 
-</div>   
+    Ready to prove you’ve got the fiercest ad-weapon in the ring? Gear up, lock in your Fight URL, and let the best ad win!
+<BR>
+  @if (Auth::user()->status === 'heavyweight')
+    <a href="#"
+       class=" bg-[#04cef6] hover:bg-[#039ac0] text-white font-semibold px-4 py-2 rounded transition">
+      Use AI to create the ad for you.
+    </a>
+  @else
+    <a href="#"
+       class=" bg-[#04cef6] hover:bg-[#039ac0] text-white font-semibold px-4 py-2 rounded transition">
+      Upgrade to Heavyweight – All you have to do is paste in your url and it'll know how to genereate a beautiful fighter card for you
+    </a>
+  @endif
+</div> 
+</p>
+
 
 <div class="mb-6"><font color="red"><b>{{ session('red_message') ?? ''}}</b></font></div>
 <div class="mb-6"><font color="green"><b>{{ session('green_message') ?? ''}}</b></font></div>
@@ -205,6 +218,8 @@ Ready to prove you’ve got the fiercest ad-weapon in the ring? Gear up, lock in
     -->
 
     <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+        @if (Auth::user()->status !='free')              
+
         <script>
           tinymce.init({
             selector: 'textarea',
@@ -212,9 +227,14 @@ Ready to prove you’ve got the fiercest ad-weapon in the ring? Gear up, lock in
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
     </script>
+    @endif
     <textarea name="body">
         {{ $ad->body ?? old('body' ?? '')}}
     </textarea>
+    
+
+
+
 
 
     <x-label /> Url

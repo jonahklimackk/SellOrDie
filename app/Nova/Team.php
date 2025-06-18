@@ -50,7 +50,10 @@ class Team extends Resource
         return [
             ID::make()->sortable(),
 
-            ID::make('user_id')->sortable(),
+            Number::make('user_ID')
+            ->sortable(),
+
+            // ID::make('user_id')->sortable(),
 
             // BelongsTo::make('User')
             // ->sortable(),
@@ -63,10 +66,10 @@ class Team extends Resource
             Text::make('status')
             ->sortable(),
 
-             Number::make('personal_team')
-             ->sortable(),
+            Number::make('personal_team')
+            ->sortable(),
 
-             Number::make('clicks')->sortable(),
+            Number::make('clicks')->sortable(),
 
             DateTime::make('created_at'),
             DateTime::make('updated_at')

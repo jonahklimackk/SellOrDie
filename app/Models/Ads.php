@@ -130,8 +130,10 @@ class Ads extends Model
             $fights = $fighter->allLiveFights();
 
             foreach ($fights as $fight){   
-                $adsCount = count($fight->allAds());                
+                $adsCount = count($fight->allAds()); 
+
                 if ($adsCount === 2) {     
+                    // dump('ads count is 2');
                     $possibleAds[$fight->id] = $fight->allAds();
                 }
                 else if ($adsCount === 1) {
@@ -139,13 +141,15 @@ class Ads extends Model
                     // dump($fight->name);
                 }
                 else if (! $adsCount) {
-                    // dump("this is a fight with no ads");
+                    dump("this is a fight with no ads");
 
                 }
                 else 
                     dump("this is a fight that has ".$adsCount." ads");
             }
         }
+
+        // dump($possibleAds);
 
         $randomFight = Team::where('id',array_rand($possibleAds))->get()->first();
         FightViewLog::logView($randomFight->id);

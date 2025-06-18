@@ -159,7 +159,7 @@ Route::middleware([
     Route::get('/ads/edit', [AdsController::class,'edit']);
     Route::post('/ads/create', [AdsController::class,'create']);
     Route::post('/ads/delete', [AdsController::class,'delete']);
-    Route::post('/ads/random-opponent', [AdsController::class,'setRandomOpponent']);    
+    Route::post('/ads/random-opponent', [AdsController::class,'setRandomOpponent']);
 });
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Jetstream;
 
+use Auth;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Ads;
@@ -18,14 +19,21 @@ class RemoveTeamMember implements RemovesTeamMembers
      */
     public function remove(User $user, Team $team, User $teamMember): void
     {
-        $ad = Ads::where('user_id',$user->id,)->where('team_id', $team->id)->get()->first();
-        $ad->delete();
+        // $ad = Ads::where('user_id',$user->id,)->where('team_id', $team->id)->get()->first();
+        // $ad->delete();
+        // $ads = Ads::where('team_id', $team->id)->get()->all();
+        // dd($ads);
+        $opponentsAd = Ads::where('team_id', $team->id)->where('user_id',$teamMember->id )->get()->first();
+        $opponentsAd->delete();
+        $team->status = "config";
+        $team->save();
 
         $this->authorize($user, $team, $teamMember);
 
         $this->ensureUserDoesNotOwnTeam($teamMember, $team);
 
         $team->removeUser($teamMember);
+
 
         TeamMemberRemoved::dispatch($team, $teamMember);
     }

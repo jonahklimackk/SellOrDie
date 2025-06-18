@@ -30,33 +30,52 @@ class AdsController extends Controller
 
 		//get all the dynamic fight pairings results - open fights
 		if ($ad) {
-		 $clicks = FightLog::where('clicked_ad_id', $ad->id)->get()->count();
-		 $opponentsClicks = FightLog::where('not_clicked_ad_id', $ad->id)->get()->count();
-	 }       
-	 else {
-		$clicks = 0;
-		$opponentsClicks = 0;        
-	}
+			$clicks = FightLog::where('clicked_ad_id', $ad->id)->get()->count();
+			$opponentsClicks = FightLog::where('not_clicked_ad_id', $ad->id)->get()->count();
+		}       
+		else {
+			$clicks = 0;
+			$opponentsClicks = 0;        
+		}
 
 	//get the draws & win loss %
-	$fight = Team::where('id', Auth::user()->currentTeam->id)->get()->first();
-	$draws = FightViewLog::getViews($fight->id, "all") - ($clicks + $opponentsClicks);
+		$fight = Team::where('id', Auth::user()->currentTeam->id)->get()->first();
+		$draws = FightViewLog::getViews($fight->id, "all") - ($clicks + $opponentsClicks);
 
 
-	if ($clicks || $opponentsClicks){  
-		$winLoss = ($clicks + (0.5*$draws)) / FightViewLog::getViews($fight->id,'all');
-		$winLoss *= 100;
-		$winLoss = number_format($winLoss, 2);
+		if ($clicks || $opponentsClicks){  
+			$winLoss = ($clicks + (0.5*$draws)) / FightViewLog::getViews($fight->id,'all');
+			$winLoss *= 100;
+			$winLoss = number_format($winLoss, 2);
+		}
+		else
+			$winLoss = 0;
+
+
+		$ranking = Fight::getRank($fight->id);
+
+		
+		// $showInviteButton = $ad ? true : false;
+		if ($ad && $opponentsAd)
+		{
+			$showInviteButton = false;
+			$showRandomButton = false;
+		}
+		else {
+
+			if (isset($ad) && !$ad->random_opponent)
+				$showRandomButton = true;
+			else
+				$showRandomButton = $opponentsAd ? true : false;
+			$showInviteButton = false;
+		}
+
+
+		return view('ads-new', compact('ad','opponentsAd','categories', 'clicks', 'opponentsClicks','draws','winLoss','ranking','fight'))->with([
+			'showInviteButton' => $showInviteButton,
+			'showRandomButton' => $showRandomButton
+		]);
 	}
-	else
-		$winLoss = 0;
-
-
-	$ranking = Fight::getRank($fight->id);
-
-
-	return view('ads', compact('ad','opponentsAd','categories', 'clicks', 'opponentsClicks','draws','winLoss','ranking','fight'));
-}
 
 
 
@@ -92,6 +111,8 @@ class AdsController extends Controller
 			return redirect('ads')->with('red_message', "This fight is already full.");
 
 
+
+
 		return redirect('ads')->with('green_message', 'Your Ad Weapon has been configured. You are ready for the fight!');
 	}
 
@@ -124,30 +145,38 @@ class AdsController extends Controller
 
 		//get all the dynamic fight pairings results - open fights
 		if ($ad) {
-		 $clicks = FightLog::where('clicked_ad_id', $ad->id)->get()->count();
-		 $opponentsClicks = FightLog::where('not_clicked_ad_id', $ad->id)->get()->count();
-	 }       
-	 else {
-		$clicks = 0;
-		$opponentsClicks = 0;  
-	}
+			$clicks = FightLog::where('clicked_ad_id', $ad->id)->get()->count();
+			$opponentsClicks = FightLog::where('not_clicked_ad_id', $ad->id)->get()->count();
+		}       
+		else {
+			$clicks = 0;
+			$opponentsClicks = 0;  
+		}
 	//get the draws & win loss %
-	$fight = Team::where('id', Auth::user()->currentTeam->id)->get()->first();
-	$draws = FightViewLog::getViews($fight->id, "all") - ($clicks + $opponentsClicks);
+		$fight = Team::where('id', Auth::user()->currentTeam->id)->get()->first();
+		$draws = FightViewLog::getViews($fight->id, "all") - ($clicks + $opponentsClicks);
 
 
-	if ($clicks || $opponentsClicks){
-		$winLoss = ($clicks + (0.5*$draws))/FightViewLog::getViews($fight->id,'all');
-		$winLoss = number_format($winLoss, 2) * 100;
-	}
-	else
-		$winLoss = 0;
+		if ($clicks || $opponentsClicks){
+			$winLoss = ($clicks + (0.5*$draws))/FightViewLog::getViews($fight->id,'all');
+			$winLoss = number_format($winLoss, 2) * 100;
+		}
+		else
+			$winLoss = 0;
 
+		$showInviteButton = false;
+		$showRandomButton = $opponentsAd ? true : false;
 
-	
+		$create = true;
+
 		//note: all the sstats show zero while editing your ad
-	return view('ads', compact('ad','categories','opponentsAd','clicks', 'opponentsClicks','winLoss','fight'))->with('edit', true);
-}
+		return view('ads-new', compact('ad','categories','opponentsAd','clicks', 'opponentsClicks','winLoss','fight'))->with([
+			'edit' => true,
+			'create' => true,
+			'showInviteButton' => $showInviteButton,
+			'showRandomButton' => $showRandomButton
+		]);
+	}
 
 
 
@@ -202,5 +231,6 @@ class AdsController extends Controller
 		$ad->save();
 
 		return redirect('ads')->with('green_message', 'You will have random opponents to your ad Weapon');
-	}    
+	}   
+ 
 }

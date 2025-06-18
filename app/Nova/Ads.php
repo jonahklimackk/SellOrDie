@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Trix;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -40,7 +41,6 @@ class Ads extends Resource
         'status',
         'category',
         'random_opponent',
-        'name'
     ];
 
     /**
@@ -55,20 +55,19 @@ class Ads extends Resource
 
             BelongsTo::make('User')
             ->sortable(),
-
-            Text::make('name')
-            ->sortable(),
-
             // Text::make('headline')
             // ->sortable(),
             // // ->rules('required', 'max:255'),
+
+            Number::make('team_id')
+            ->sortable(),
 
             Text::make('headline')->displayUsing(function ($text) {
                 if (strlen($text) > 30) {
                     return substr($text, 0, 30) . '...';
                 }
                 return $text;
-            }),
+            })->sortable(),
 
             Text::make('url')->displayUsing(function ($text) {
                 if (strlen($text) > 30) {

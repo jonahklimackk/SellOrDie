@@ -20,13 +20,49 @@ class HomeController extends Controller
 	 */
 	public function index()
 	{
+		$allFights = Team::where('status','live')->get()->all();
+		foreach ($allFights as $fight)
+		{
+			$adsCount = count($fight->allAds()); 
+			if($adsCount == 2)
+			{
+				// dump($fight->allAds());
+				$ads = $fight->allAds();
+				foreach ($ads as $ad){
+					if ($ad->user_id == Auth::user()->id) {
+					$fight->unowned = true;						
+						$fights[] = $fight; 
+					}
+
+				}
+
+			}
+			
+		}
 
 
-		$fights = Team::where('user_id', Auth::user()->id)->get()->all();
+		$fights = array_merge($fights, Team::where('user_id', Auth::user()->id)->get()->all());
+
+		// $fights = Team::where('user_id', Auth::user()->id)->get()->all()
+
+		//fightgs also blah blah where setc
+		//fight ads with this team id	
+
+		// $notOwnedFight = Team::where('id', 14)->first();       
+
+		// wrap the model in an array:
+		// $fights = array_merge($fights, [ $notOwnedFight ]);
+
+		// dd($fights);
 
 
 		
 		foreach ($fights as $fight){
+
+			if ($fight->unowned)
+				$data[$fight->id]['unowned'] = true;
+			else
+				$data[$fight->id]['unowned'] = false;
 
 			//get the 2 ads that make up a closed fight
 			$data[$fight->id]['ad'] = Ads::where('user_id', Auth::user()->id)->where('team_id', $fight->id)->get()->first();			

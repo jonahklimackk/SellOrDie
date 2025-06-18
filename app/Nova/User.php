@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class User extends Resource
@@ -52,9 +53,9 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            ID::make('sponsor_id'),
+            // ID::make('sponsor_id'),
 
-            ID::make('current_team_id'),
+            // ID::make('current_team_id'),
 
             Gravatar::make()->maxWidth(50),
 
@@ -79,6 +80,9 @@ class User extends Resource
             ->showWhenPeeking()
             ->sortable()
             ->rules('required', 'max:255'),
+
+            Number::make('credits')
+            ->sortable(),
 
             Text::make('status')
             ->showWhenPeeking()

@@ -1,3 +1,5 @@
+
+
 @component('mail::message')
 {{ __('You have been challenged to the ":team" fight!', ['team' => $invitation->team->name]) }}
 
