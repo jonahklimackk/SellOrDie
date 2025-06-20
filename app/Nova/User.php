@@ -59,6 +59,9 @@ class User extends Resource
 
             Gravatar::make()->maxWidth(50),
 
+            Number::make('current_team_id')
+            ->sortable(),
+
             Text::make('Name')
             ->showWhenPeeking()
             ->sortable()
