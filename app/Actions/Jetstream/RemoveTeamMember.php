@@ -19,18 +19,18 @@ class RemoveTeamMember implements RemovesTeamMembers
      */
     public function remove(User $user, Team $team, User $teamMember): void
     {
-        // $ad = Ads::where('user_id',$user->id,)->where('team_id', $team->id)->get()->first();
-        // $ad->delete();
-        // $ads = Ads::where('team_id', $team->id)->get()->all();
-        // dd($ads);
+        $ad = Ads::where('user_id',$user->id,)->where('team_id', $team->id)->get()->first();
+         if($ad)
+            $ad->delete();
         $opponentsAd = Ads::where('team_id', $team->id)->where('user_id',$teamMember->id )->get()->first();
-        $opponentsAd->delete();
+        if($opponentsAd)
+            $opponentsAd->delete();
         $team->status = "config";
         $team->save();
 
         $this->authorize($user, $team, $teamMember);
 
-        $this->ensureUserDoesNotOwnTeam($teamMember, $team);
+        // $this->ensureUserDoesNotOwnTeam($teamMember, $team);
 
         $team->removeUser($teamMember);
 

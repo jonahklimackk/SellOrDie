@@ -69,7 +69,9 @@
         @csrf
         <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id }}">
 
-        @if(!$ad || ($ad && !$ad->random_opponent))
+
+
+        @if(!$ad || ($ad && !$ad->random_opponent && !$opponentsAd))
         <button
         id="stats-toggle-btn"
         type="submit"

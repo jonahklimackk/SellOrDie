@@ -2,7 +2,7 @@
   <td
     align="center"
     style="
-      background-color: #111827;
+      background-color: #1F2937;
       padding: 24px 0;
       text-align: center;
     "
@@ -13,12 +13,12 @@
       style="display: inline-block;"
     >
       <img
-        src="{{ asset('logo.png') }}"
+        src="http://sellordie.online/img/sellordie7.png"
         alt="SellOrDie Logo"
-        width="48"
+        width="125"
         style="
           display: block;
-          height: 48px;
+          height: 125px;
           border: none;
           margin: 0 auto;
         "

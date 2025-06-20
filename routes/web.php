@@ -13,6 +13,13 @@ use App\Http\Controllers\NewFightController;
 use App\Http\Controllers\UpgradeController;
 use App\Http\Controllers\AiController;
 use App\Livewire\Mailings;
+use App\Http\Controllers\TeamInvitationController;
+
+
+// override the “accept invitation” route
+Route::get('/teams/invitations/{invitation}/accept', [TeamInvitationController::class, 'accept'])
+    ->middleware(['web','auth'])
+    ->name('invitations.accept');
 
 
 
