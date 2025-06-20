@@ -11,6 +11,7 @@ use App\Actions\Jetstream\RemoveTeamMember;
 use App\Actions\Jetstream\UpdateTeamName;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
+use App\Actions\Jetstream\CustomInviteTeamMember;
 
 class JetstreamServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,8 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Jetstream::inviteTeamMembersUsing(CustomInviteTeamMember::class);
+
         $this->configurePermissions();
 
         Jetstream::createTeamsUsing(CreateTeam::class);

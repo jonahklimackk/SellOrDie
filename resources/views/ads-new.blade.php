@@ -55,82 +55,130 @@
 
     </div>
 
-    <!-- Stats Panel with centered button on top -->
-    <div class="w-full md:w-1/3 relative">
-      <!-- Button positioned above the card -->
+    <!-- in your <head> somewhere -->
+      <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<!--           <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <x-red-button>Start Fight</x-red-button>
-          </div>
-        -->
-        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          @if((isset($ad) && isset($opponentsAd) || (isset($ad->random_opponent) && $ad->random_opponent)) && Auth::user()->currentTeam->status != 'live')
-          <form action="/fight/start/" method="POST">
-           <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? ''}}">
-           @csrf
-           <button type="submit"
-           class="inline-flex items-center justify-center gap-2
-           px-6 py-3 bg-red-600 hover:bg-red-700
-           text-white font-bold uppercase tracking-wide
-           rounded-full shadow-lg transition-all duration-200 ease-in-out
-           focus:outline-none
-           ring-2 ring-offset-2 ring-yellow-400      <!-- always-on ring -->
-           group">
-           <span class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">
-            🥊
-          </span>
-          <span>Start Fight</span>
-        </button>
+      <div class="w-full md:w-1/3 relative">
+        <form
+        id="stats-toggle-form"
+        data-live="{{ Auth::user()->currentTeam->status === 'live' ? 'true' : 'false' }}"
+        action="{{ url('/fight/start') }}"
+        method="POST"
+        class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        >
+        @csrf
+        <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id }}">
 
-      </form> 
+        @if(!$ad || ($ad && !$ad->random_opponent))
+        <button
+        id="stats-toggle-btn"
+        type="submit"
+        disabled
+        class="inline-flex items-center justify-center gap-2
+        px-6 py-3 bg-red-600 hover:bg-red-700
+        text-white font-bold uppercase tracking-wide
+        rounded-full shadow-lg transition duration-200 ease-in-out
+        focus:outline-none ring-2 ring-offset-2 ring-yellow-400 group
 
-      @elseif(Auth::user()->currentTeam->status == 'live')
-      <form action="/fight/stop/" method="POST">
-       <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? ''}}">
-       @csrf
-       <button type="submit"
-       class="inline-flex items-center justify-center gap-2
-       px-6 py-3 bg-red-600 hover:bg-red-700
-       text-white font-bold uppercase tracking-wide
-       rounded-full shadow-lg transition-all duration-200 ease-in-out
-       focus:outline-none
-       ring-2 ring-offset-2 ring-yellow-400      <!-- always-on ring -->
-       group">
-       <span class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">
+        disabled:bg-red-400
+        disabled:hover:bg-red-400
+        disabled:opacity-50
+        disabled:cursor-not-allowed
+        "
+        >
+        <span
+        id="stats-toggle-icon"
+        class="text-xl transform transition-transform duration-300
+        group-hover:animate-bounce disabled:group-hover:animate-none"
+        >
         🥊
       </span>
-      <span>Fight Is Live!</span>
-    </button>
-  </form> 
+      <span id="stats-toggle-label">
+        {{ Auth::user()->currentTeam->status === 'live' ? 'Fight Is Live!' : 'Start Fight' }}
+      </span>
+    </button>        
+
+    @else
+    <button
+    id="stats-toggle-btn"
+    type="submit"
+    class="inline-flex items-center justify-center gap-2
+    px-6 py-3 bg-red-600 hover:bg-red-700
+    text-white font-bold uppercase tracking-wide
+    rounded-full shadow-lg transition duration-200 ease-in-out
+    focus:outline-none ring-2 ring-offset-2 ring-yellow-400 group"
+    >
+    <span id="stats-toggle-icon" class="text-xl transform transition-transform duration-300 group-hover:animate-bounce">
+      🥊
+    </span>
+    <span id="stats-toggle-label">
+      {{ Auth::user()->currentTeam->status === 'live' ? 'Fight Is Live!' : 'Start Fight' }}
+    </span>
+  </button>
+  @endif
 
 
-  @else
-  <button
-  type="submit"
-  disabled
-  class="
-  inline-flex items-center justify-center gap-2
-  px-6 py-3
-  bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:hover:bg-red-400
-  text-white font-bold uppercase tracking-wide
-  rounded-full shadow-lg disabled:shadow-none
-  transition-all duration-200 ease-in-out
-  focus:outline-none
-  ring-2 ring-offset-2 ring-yellow-400 disabled:ring-0
-  disabled:opacity-60 disabled:cursor-not-allowed
-  group
-  "
-  >
-  <span
-  class="text-xl transform transition-transform duration-300
-  group-hover:animate-bounce disabled:group-hover:animate-none"
-  >
-  🥊
-</span>
-<span>Start Fight</span>
-</button>
-@endif 
-</div>
+</form>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form        = document.getElementById('stats-toggle-form');
+    const btn         = document.getElementById('stats-toggle-btn');
+    const icon        = document.getElementById('stats-toggle-icon');
+    const label       = document.getElementById('stats-toggle-label');
+    const statusLabel = document.getElementById('stats-status');
+    const token       = document.querySelector('meta[name="csrf-token"]').content;
+
+  // initialize
+    let live = form.dataset.live === 'true';
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.classList.add('opacity-50','cursor-not-allowed');
+    statusLabel.textContent = ''; // clear previous message
+
+    try {
+      const res  = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': token },
+        body: new FormData(form)
+      });
+      if (!res.ok) throw new Error(res.statusText);
+
+      const { live: newLive, message } = await res.json();
+
+      // update live flag & data attribute
+      live = !!newLive;
+      form.dataset.live = live;
+
+      // store message in data-attribute (optional)
+      form.dataset.message = message;
+
+      // swap form action URL
+      form.action = live
+      ? "{{ url('/fight/stop') }}"
+      : "{{ url('/fight/start') }}";
+
+      // update button text & icon
+      label.textContent = live ? 'Fight Is Live!' : 'Start Fight';
+      icon.textContent  = live ? '🔥' : '🥊';
+
+      // show the server message
+      statusLabel.textContent = message;
+
+    } catch (err) {
+      console.error('AJAX error:', err);
+      statusLabel.textContent = 'An error occurred.';
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove('opacity-50','cursor-not-allowed');
+    }
+  });
+  });
+</script>
+
 
 <div class="bg-gray-800 shadow-2xl rounded-xl p-6 pt-12 text-sm font-medium text-gray-100 space-y-4">
   <h2 class="text-2xl font-bold text-yellow-300 mb-2">
@@ -157,7 +205,7 @@
     <div class="whitespace-nowrap">Daily Ranking:</div><div></div><div>n/a</div>
     @endif
 
-    <div class="whitespace-nowrap">Status:</div><div></div><div>{{ Auth::user()->currentTeam->status }}</div>
+    <div class="whitespace-nowrap">Status:</div><div></div><div id="stats-status">{{ Auth::user()->currentTeam->status }}</div>
 
 
   </div>
@@ -167,7 +215,7 @@
     <form action="/fight/reset" method="POST">
       @csrf
       <input type="hidden" name="fight_id" value="{{ Auth::user()->currentTeam->id ?? '' }}">
-      <x-button class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-md shadow-md transition">
+      <x-button class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold px-5 py-2 rounded-lg shadow-md transition">
         Reset
       </x-button>
     </form>
@@ -180,9 +228,9 @@
 <!-- Action Buttons -->
 <div class="flex flex-wrap gap-20 mb-8 justify-between">
 
-  <h2 class="text-2xl font-bold text-yellow-300 mb-4">
+<!--   <h2 class="text-2xl font-bold text-yellow-300 mb-4">
   {{ url()->previous() }}
-</h2>
+</h2> -->
 
 
 
@@ -196,41 +244,41 @@
 </h2> -->
 @unless(strstr(url()->current(),"edit") || strstr(url()->previous(),"teams/create") || !$ad)  
 
-  <form action="/ads/edit" method="GET">
-    <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
-      Edit Ad
-    </button>
-  </form>
+<form action="/ads/edit" method="GET">
+  <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
+    Edit Ad
+  </button>
+</form>
 
 
 @if(isset($ad) && !isset($opponentsAd))
-  <form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
-    <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
-      Invite Opponent
-    </button>
-  </form>
-  @endif
+<form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
+  <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
+    Invite Opponent
+  </button>
+</form>
+@endif
 
 @if(isset($ad) && !isset($opponentsAd) && !$ad->random_opponent)
-  <form action="/ads/random-opponent/" method="POST">
-   <input type="hidden" name="id" value="{{ $ad->id ?? ''}}">
-   @csrf
-   <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
-    Random Opponent 
-  </button>
+<form action="/ads/random-opponent/" method="POST">
+ <input type="hidden" name="id" value="{{ $ad->id ?? ''}}">
+ @csrf
+ <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
+  Random Opponent 
+</button>
 </form> 
 @endif
 
 @if(isset($ad) && isset($opponentsAd))
-  <form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
-    <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
-      @if($fight->user_id == Auth::user()->id)
-      Remove Opponent
-      @else
-      Leave Fight
-      @endif
-    </button>
-  </form>
+<form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
+  <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
+    @if($fight->user_id == Auth::user()->id)
+    Remove Opponent
+    @else
+    Leave Fight
+    @endif
+  </button>
+</form>
 @endif
 
 @endunless
@@ -253,89 +301,105 @@
 
 
 
-<!-- <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"> -->
-  <div class="max-w-7xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-    <div class="px-6 py-4">
+<div class="max-w-7xl mx-auto bg-[#1F2937]  rounded-xl shadow-lg overflow-hidden">
+  <div class="px-6 py-4">
 
-      <!-- Ad fields form (hidden submit) -->
-      <form method="POST" action="/ads/create" id="ad-data-form">
-        @csrf
-        <div class="grid grid-cols-1 gap-6">
-          <p class="text-white font-semibold">Headline</p>
-          <x-input
-          name="headline"
-          placeholder="Your Headline Here"
-          value="{{ $ad->headline ?? old('headline') ?? '' }}"
-          />
+    <!-- Ad fields form (hidden submit) -->
+    <form method="POST" action="/ads/create" id="ad-data-form">
+      @csrf
+      <div class="grid grid-cols-1 gap-6">
+        <p class="text-yellow-300 font-semibold">Headline</p>
+        <x-input
+        name="headline"
+        placeholder="Your Headline Here"
+        value="{{ $ad->headline ?? old('headline') ?? '' }}"
+        />
 
-          <p class="text-white font-semibold">Category</p>
+        <p class="text-yellow-300 font-semibold">Select Category</p>
+        <div class="relative inline-block w-full max-w-sm">
           <select
+          id="category"
           name="category"
-          class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+          class="
+          block w-full bg-gray-800 text-gray-100 border-yellow-100
+          rounded-lg shadow-md
+          border-transparent
+          focus:border-yellow-400 focus:ring focus:ring-yellow-300 focus:ring-opacity-50
+          px-4 py-2
+          appearance-none
+          "
           >
-          <option>Select Category</option>
           @foreach($categories as $category)
           <option
+          value="{{ $category->category }}"
+          class="bg-gray-700 text-gray-100"
           {{ (!is_null($ad) && $ad->category == $category->category) ? 'selected' : '' }}
           >
           {{ $category->category }}
         </option>
         @endforeach
       </select>
-
-      @if(Auth::user()->status != 'free')
-      <script>
-        tinymce.init({
-          selector: 'textarea',
-          plugins:
-          'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-          toolbar:
-          'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-        });
-      </script>
-      @endif
-      <textarea
-      name="body"
-      class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-      rows="50"
-      >{{ $ad->body ?? old('body') }}</textarea>
-
-      <p class="text-white font-semibold">URL</p>
-      <x-input
-      name="url"
-      placeholder="Your URL Here"
-      value="{{ $ad->url ?? old('url') ?? '' }}"
-      />
-
-      <input type="hidden" name="id" value="{{ $ad->id ?? '' }}" />
+      <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+        <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06-.02L10 10.67l3.71-3.48a.75.75 0 111.04 1.08l-4.24 4a.75.75 0 01-1.04 0l-4.24-4a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+        </svg>
+      </div>
     </div>
-  </form>
 
-  <!-- Buttons side-by-side -->
-  <div class="mt-6 flex items-center space-x-4">
-    <!-- Submit -->
-    <form method="POST" action="/ads/create" class="flex-shrink-0">
-      @csrf
-      <input type="hidden" name="id" value="{{ $ad->id ?? '' }}" />
-      <button
-      type="submit"
-      form="ad-data-form"
-      class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition"
-      >
-      Submit Your Ad
-    </button>
-  </form>
 
-  <!-- Delete -->
-  <form method="POST" action="/ads/delete" class="flex-shrink-0">
+    @if(Auth::user()->status != 'free')
+    <script>
+      tinymce.init({
+        selector: 'textarea',
+        plugins:
+        'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar:
+        'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+      });
+    </script>
+    @endif
+    <textarea
+    name="body"
+    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+    rows="25"
+    >{{ $ad->body ?? old('body') }}</textarea>
+
+    <p class="text-yellow-300 font-semibold">URL</p>
+    <x-input
+    name="url"
+    placeholder="Your URL Here"
+    value="{{ $ad->url ?? old('url') ?? '' }}"
+    />
+
+    <input type="hidden" name="id" value="{{ $ad->id ?? '' }}" />
+  </div>
+</form>
+
+<!-- Buttons side-by-side -->
+<div class="mt-6 flex items-center space-x-4">
+  <!-- Submit -->
+  <form method="POST" action="/ads/create" class="flex-shrink-0">
     @csrf
     <input type="hidden" name="id" value="{{ $ad->id ?? '' }}" />
     <button
     type="submit"
-    class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-medium transition"
+    form="ad-data-form"
+    class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition"
     >
-    Delete Ad
+    Submit Your Ad
   </button>
+</form>
+
+<!-- Delete -->
+<form method="POST" action="/ads/delete" class="flex-shrink-0">
+  @csrf
+  <input type="hidden" name="id" value="{{ $ad->id ?? '' }}" />
+  <button
+  type="submit"
+  class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-medium transition"
+  >
+  Delete Ad
+</button>
 </form>
 </div>
 

@@ -14,25 +14,27 @@ class DeleteTeam implements DeletesTeams
     public function delete(Team $team)
     {
 
-        //make sure there's a team left
+        // //make sure there's a team left
 
-        if (Auth::user()->allTeams()->count() > 1)
-        {
+        // if (Auth::user()->allTeams()->count() > 1)
+        // {
 
-            $team->purge();
+        //     $team->purge();
 
 
-            //switch to a diffferent team
-            $availableTeam = Team::where('user_id',Auth::user()->id)->where('id','!=',$team->id)->get()->first();
-            Auth::user()->current_team_id = $availableTeam->id;
-            Auth::user()->save();
+        //     //switch to a diffferent team
+        //     $availableTeam = Team::where('user_id',Auth::user()->id)->where('id','!=',$team->id)->get()->first();
+        //     Auth::user()->current_team_id = $availableTeam->id;
+        //     Auth::user()->save();
 
-        }
-        else
-        {
-            dd("you must have at least one team");
-            // return redirect('/teams/42')->with('You must leave at least one team');
-        }
+        // }
+        // else
+        // {
+        //     dd("you must have at least one team");
+        //     // return redirect('/teams/42')->with('You must leave at least one team');
+        // }
+
+        $team->purge();
 
 
         

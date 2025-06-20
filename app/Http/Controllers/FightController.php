@@ -189,8 +189,11 @@ class FightController extends Controller
 		$fight->status = 'live';
 		$fight->save();
 
-
-		return redirect("/ads")->with('message', 'Your fight is now live!');
+		return response()->json([
+			'live'   => true,
+			'message'=> 'live',
+		]);
+		// return redirect("/ads")->with('message', 'Your fight is now live!');
 	}
 
 
@@ -205,7 +208,12 @@ class FightController extends Controller
 		$fight->save();
 
 
-		return redirect("/ads")->with('message', 'Your fight is now back in config');
+
+		return response()->json([
+			'live'   => false,
+			'message'=> 'config',
+		]);
+		// return redirect("/ads")->with('message', 'Your fight is now back in config');
 	}
 
 
@@ -363,4 +371,4 @@ class FightController extends Controller
 
 
 
-	}
+}

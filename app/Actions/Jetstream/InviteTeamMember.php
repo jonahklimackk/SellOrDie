@@ -16,6 +16,7 @@ use Laravel\Jetstream\Jetstream;
 // use Laravel\Jetstream\Mail\TeamInvitation;
 use App\Mail\TeamInvitation;
 use Laravel\Jetstream\Rules\Role;
+use Illuminate\Validation\ValidationException;
 
 class InviteTeamMember implements InvitesTeamMembers
 {
@@ -24,6 +25,16 @@ class InviteTeamMember implements InvitesTeamMembers
      */
     public function invite(User $user, Team $team, string $email, ?string $role = null): void
     {
+
+        // 1️⃣ Block if there’s already any pending invitation
+        if ($team->teamInvitations()->exists()) {
+            throw ValidationException::withMessages([
+                'email' => ['You already have one pending invitation. Please wait until it’s accepted or revoked before sending another.'],
+            ]);
+        }
+        // Use the passed role, or fall back to your default:
+        $role = $role ?? 'editor';
+
         Gate::forUser($user)->authorize('addTeamMember', $team);
 
         $this->validate($team, $email, $role);

@@ -31,7 +31,7 @@ class HomeController extends Controller
 				foreach ($ads as $ad){
 					if ($ad->user_id == Auth::user()->id) {
 					$fight->unowned = true;						
-						$fights[] = $fight; 
+						$unOwnedFights[] = $fight; 
 					}
 
 				}
@@ -41,20 +41,10 @@ class HomeController extends Controller
 		}
 
 
-		$fights = array_merge($fights, Team::where('user_id', Auth::user()->id)->get()->all());
-
-		// $fights = Team::where('user_id', Auth::user()->id)->get()->all()
-
-		//fightgs also blah blah where setc
-		//fight ads with this team id	
-
-		// $notOwnedFight = Team::where('id', 14)->first();       
-
-		// wrap the model in an array:
-		// $fights = array_merge($fights, [ $notOwnedFight ]);
-
-		// dd($fights);
-
+		if (isset($unOwnedFights))
+			$fights = array_merge($unOwnedFights, Team::where('user_id', Auth::user()->id)->get()->all());
+		else
+			$fights = Team::where('user_id', Auth::user()->id)->get()->all();
 
 		
 		foreach ($fights as $fight){

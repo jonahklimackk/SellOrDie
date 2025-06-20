@@ -6,6 +6,7 @@ namespace App\Models;
 use Auth;
 use Cookie;
 use App\Models\Membership;
+use Illuminate\Contracts\Auth\MustVerifyEmail;   
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,7 +19,7 @@ use App\Models\Fight;
 use App\Models\Team;
 use App\Models\Mailings;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
 
