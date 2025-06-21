@@ -1,1 +1,0 @@
-You already judged this fight. Check out the losers's ad while you're here  or <a href="/fights" target="new">view the next fight</a>

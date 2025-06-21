@@ -29,9 +29,9 @@ class NewFightController extends Controller
     /**
      * fight page home paage
      */
-    public function newFightRedesign2()
+    public function fights()
     {
-        return view('new-fight.redesign-show-frames2');
+        return view('new-fight.show-frames');
     }
 
 
@@ -49,7 +49,7 @@ class NewFightController extends Controller
     /**
      * fight page bottom frame testong new design
      */
-    public function newFightBottomFrameRedesign2()
+    public function newFightBottomFrame()
     {
         if (rand(0,1)) {
                 // dump('from a random closed fight');
@@ -66,10 +66,7 @@ class NewFightController extends Controller
         //create votes too
         $ads = $this->makeKey($ads);
 
-
-
-
-        return view('new-fight.new-design-bottom-frame2', compact('ads','referralLink'));
+        return view('new-fight.bottom-frame', compact('ads','referralLink'));
 
     }   
 

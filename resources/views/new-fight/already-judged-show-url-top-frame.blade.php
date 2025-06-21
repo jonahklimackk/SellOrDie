@@ -33,7 +33,7 @@
                 You Already Judged This Fight
             </h1>
 
-                <div onclick="parent.location='/new-fight-redesign2'">        
+                <div onclick="parent.location='/fights'">        
                     <!-- <x-red-button>Next Fight</x-red-button> -->
 
                 <button type="submit"

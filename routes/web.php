@@ -73,34 +73,6 @@ Route::get('/members/aff/stats', [AffiliateTrackingController::class, 'stats']);
 
 
 
-
-
-
-/*
- * Click for Credits
- * do I even use these?
- *
- */
-//no need for sender username, it's all stored in creditClicks table
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
-    Route::get('earn/redeem/{key}',[EarnCreditsController::class, 'afterCountdown']);
-    Route::get('frames/earn-credits-top-frame/{key}', [EarnCreditsController::class,"showTopFrameBeforeCountdown"]);
-    // Route::get('record/earn/{key}/view', [EarnCreditsController::class,'mailingRecordView']);
-    Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
-});
-
-
-
-
-
-
-
-
 /*
  * The New Fight Redesign
  *
@@ -109,9 +81,9 @@ Route::middleware([
 
 // New Fight with frames testing
 
-Route::get('/new-fight-redesign2', [NewFightController::class,'newFightRedesign2'])->name('new-fight-redesign2');
+Route::get('/fights', [NewFightController::class,'fights'])->name('fights');
 Route::get('/new-fight-top-frame', [NewFightController::class,'newFightTopFrame']);
-Route::get('/new-fight-redesign-bottom-frame2', [NewFightController::class,'newFightBottomFrameRedesign2']);
+Route::get('/new-fight-bottom-frame', [NewFightController::class,'newFightBottomFrame']);
 
 
 //handling votes and earning credits
