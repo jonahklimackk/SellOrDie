@@ -346,3 +346,14 @@ Route::get('/ai/oto', function () {
     return view('ai-output.one-time-offer');
 });
 
+
+
+Route::get('/test-verify', function() {
+    // Log in as user #1 (or whichever ID exists)
+    auth()->loginUsingId(1);
+
+    // Fire off the notification
+    auth()->user()->sendEmailVerificationNotification();
+
+    return 'Dispatched—check storage/logs/laravel.log';
+});

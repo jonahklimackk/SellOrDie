@@ -36,11 +36,21 @@ return [
     | max credits
     |--------------------------------------------------------------------------
     |
+    | the lwoer upper range of credits given per vote
+    |
+    */
+    'lower_credits_bound' => 20,
+    'upper_credits_bound' => 60,
+
+    /*
+    |--------------------------------------------------------------------------
+    | max credits
+    |--------------------------------------------------------------------------
+    |
     | the lwoer upper range of credits given per action
     |
     */
-    'lower_credits_bound' => 5,
-    'upper_credits_bound' => 20,
+    'cost_display_ad' => 50,    
 
 
 

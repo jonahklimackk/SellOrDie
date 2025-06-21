@@ -18,6 +18,7 @@ use App\Models\Ads;
 use App\Models\Fight;
 use App\Models\Team;
 use App\Models\Mailings;
+use App\Notifications\CustomVerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -64,6 +65,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+    /**
+     * Override the default email-verification notification.
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \App\Notifications\CustomVerifyEmail(  /* no $notifiable */ ));
+    }
 
     /**
      * Get the attributes that should be cast.

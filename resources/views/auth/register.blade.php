@@ -4,85 +4,138 @@ $campaignName= Cookie::get('campaign');
 
 $campaign = App\Models\Campaigns::where('affiliate_id',App\Models\User::getSponsor()->id)->where('value', $campaignName)->get()->first();
 ?>
-
 <x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-             <img src="/img/sellordie7.png" width="200" height="200">
-        </x-slot>
+  <div class="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      {{-- Card --}}
+      <div class="bg-gray-800 rounded-2xl shadow-2xl p-6">
+        {{-- Logo --}}
+        <div class="flex justify-center mb-6">
+          <img src="/img/sellordie7.png" alt="SellOrDie Logo" width="200" height="200" />
+        </div>
 
-        <x-validation-errors class="mb-4" />
+        {{-- Validation Errors --}}
+        <x-validation-errors class="mb-4 text-red-400" />
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+        {{-- Registration Form --}}
+        <form method="POST" action="{{ route('register') }}" class="space-y-6">
+          @csrf
 
-            <div>
-                <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+          {{-- Name --}}
+          <div>
+            <label for="name" class="block text-yellow-300 font-semibold mb-1">{{ __('Name') }}</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value="{{ old('name') }}"
+              required
+              autofocus
+              autocomplete="name"
+              class="w-full px-4 py-2 bg-gray-700 text-gray-100 rounded-lg border-transparent focus:border-yellow-400 focus:ring focus:ring-yellow-300 focus:ring-opacity-50"
+            />
+          </div>
+
+          {{-- Username --}}
+          <div>
+            <label for="username" class="block text-yellow-300 font-semibold mb-1">{{ __('Username') }}</label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              value="{{ old('username') }}"
+              required
+              autocomplete="username"
+              class="w-full px-4 py-2 bg-gray-700 text-gray-100 rounded-lg border-transparent focus:border-yellow-400 focus:ring focus:ring-yellow-300 focus:ring-opacity-50"
+            />
+          </div>
+
+          {{-- Email --}}
+          <div>
+            <label for="email" class="block text-yellow-300 font-semibold mb-1">{{ __('Email') }}</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value="{{ old('email') }}"
+              required
+              autocomplete="username"
+              class="w-full px-4 py-2 bg-gray-700 text-gray-100 rounded-lg border-transparent focus:border-yellow-400 focus:ring focus:ring-yellow-300 focus:ring-opacity-50"
+            />
+          </div>
+
+          {{-- Password --}}
+          <div>
+            <label for="password" class="block text-yellow-300 font-semibold mb-1">{{ __('Password') }}</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autocomplete="new-password"
+              class="w-full px-4 py-2 bg-gray-700 text-gray-100 rounded-lg border-transparent focus:border-yellow-400 focus:ring focus:ring-yellow-300 focus:ring-opacity-50"
+            />
+          </div>
+
+          {{-- Confirm Password --}}
+          <div>
+            <label for="password_confirmation" class="block text-yellow-300 font-semibold mb-1">{{ __('Confirm Password') }}</label>
+            <input
+              id="password_confirmation"
+              name="password_confirmation"
+              type="password"
+              required
+              autocomplete="new-password"
+              class="w-full px-4 py-2 bg-gray-700 text-gray-100 rounded-lg border-transparent focus:border-yellow-400 focus:ring focus:ring-yellow-300 focus:ring-opacity-50"
+            />
+          </div>
+
+          {{-- Sponsor Info (read-only) --}}
+          <div class="bg-gray-700 rounded-lg p-4 space-y-2 text-gray-300 text-sm">
+            <div>{{ __('Your Sponsor') }}: {{ App\Models\User::getSponsor()->name }}</div>
+            <div>{{ __('Sponsor Username') }}: {{ App\Models\User::getSponsor()->username }}</div>
+            <div>{{ __('Sponsor ID') }}: {{ App\Models\User::getSponsor()->id }}</div>
+          </div>
+          <input type="hidden" name="sponsor_id" value="{{ App\Models\User::getSponsor()->id }}"/>
+          <input type="hidden" name="campaign_id" value="{{ optional($campaign)->id }}"/>
+
+          {{-- Terms & Privacy --}}
+          @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+            <div class="flex items-start">
+              <input
+                id="terms"
+                name="terms"
+                type="checkbox"
+                required
+                class="h-4 w-4 text-yellow-500 bg-gray-700 border-gray-600 rounded focus:ring-yellow-300 mt-1"
+              />
+              <label for="terms" class="ml-2 text-gray-300 text-sm">
+                {!! __('I agree to the :terms_of_service and :privacy_policy', [
+                  'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-yellow-300 hover:text-yellow-200">'.__('Terms of Service').'</a>',
+                  'privacy_policy'  => '<a target="_blank" href="'.route('policy.show').'" class="underline text-yellow-300 hover:text-yellow-200">'.__('Privacy Policy').'</a>',
+                ]) !!}
+              </label>
             </div>
+          @endif
 
-            <div>
-                <x-label for="username" value="{{ __('Username') }}" />
-                <x-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
-            </div>            
-            <div class="mt-4">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            </div>
+          {{-- Actions --}}
+          <div class="flex items-center justify-between">
+            <a
+              href="{{ route('login') }}"
+              class="text-sm text-yellow-300 hover:text-yellow-200 underline focus:outline-none focus:ring-2 focus:ring-yellow-300"
+            >
+              {{ __('Already registered?') }}
+            </a>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
- 
-                 <div class='mt-7'>
-                <x-label for="sponsor_name" value="Your Sponsor: {{ App\Models\User::getSponsor()->name }} " />
-
-                    <x-label for="sponsor_username" value="Your Sponsor Username: {{ App\Models\User::getSponsor()->username }} " />
-
-                        <x-label for="sponsor_username" value="Your Sponsor Id: {{ App\Models\User::getSponsor()->id }} " />
-
-                            <x-input id="sponsor_id" class="block mt-1 w-full" type="hidden" name="sponsor_id" value="{{ App\Models\User::getSponsor()->id }}" required autofocus autocomplete="sponsor_id" />
-
-
-
-                                <!-- <x-label for="sponsor_username" value="Campaign Id: {{ $campaign->id }} " /> -->
-
-                                    <x-input id="campaign_id" class="block mt-1 w-full" type="hidden" name="campaign_id" value="{{ $campaign->id}}" required autofocus autocomplete="campaign_id" />
-                                        
-                                    </div>
-
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-            <div class="mt-4">
-                <x-label for="terms">
-                    <div class="flex items-center">
-                        <x-checkbox name="terms" id="terms" required />
-
-                        <div class="ms-2">
-                            {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                            'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">'.__('Terms of Service').'</a>',
-                            'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">'.__('Privacy Policy').'</a>',
-                            ]) !!}
-                        </div>
-                    </div>
-                </x-label>
-            </div>
-            @endif
-
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
-
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
-            </div>
+            <button
+              type="submit"
+              class="inline-flex justify-center px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
+            >
+              {{ __('Register') }}
+            </button>
+          </div>
         </form>
-    </x-authentication-card>
+      </div>
+    </div>
+  </div>
 </x-guest-layout>

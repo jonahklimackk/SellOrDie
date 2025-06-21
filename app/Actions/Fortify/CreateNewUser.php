@@ -48,17 +48,17 @@ class CreateNewUser implements CreatesNewUsers
 
             $user->credits = config('sellordie.signup_bonus');
             $user->save();
-            Mail::to($user)->send(new WelcomeEmail($user));
+            // Mail::to($user)->send(new WelcomeEmail($user));
 
 
-            $sponsor = User::fetchSponsor($user);
-            $sponsor->credits += config('sellordie.referral_bonus');
-            $sponsor->save();
-            Mail::to($sponsor)->send(new ReferralNotice($user, $sponsor));
+            // $sponsor = User::fetchSponsor($user);
+            // $sponsor->credits += config('sellordie.referral_bonus');
+            // $sponsor->save();
+            // Mail::to($sponsor)->send(new ReferralNotice($user, $sponsor));
 
 
-            $admin = User::find(config('sellordie.admin_id'));
-            Mail::to($admin)->send(new ReferralNotice($user, $sponsor));
+            // $admin = User::find(config('sellordie.admin_id'));
+            // Mail::to($admin)->send(new ReferralNotice($user, $sponsor));
 
 
 
