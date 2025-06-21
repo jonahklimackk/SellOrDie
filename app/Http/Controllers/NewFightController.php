@@ -26,26 +26,6 @@ class NewFightController extends Controller
 {
 
 
-
-
-    /**
-     * fight page home paage
-     */
-    public function newFight()
-    {
-        return view('new-fight.show-frames');
-    }
-
-
-    /**
-     * fight page home paage
-     */
-    public function newFightRedesign()
-    {
-        return view('new-fight.redesign-show-frames');
-    }
-
-
     /**
      * fight page home paage
      */
@@ -66,87 +46,32 @@ class NewFightController extends Controller
     }   
 
 
-        /**
-     * fight page bottom frame
-     */
-        public function newFightBottomFrame()
-        {
-            if (rand(0,1)) {
-                // dump('from a random closed fight');
-                $ads = Ads::fromClosedFights();
-            }
-            else {
-                // dump('from a random open fight');
-                $ads = Ads::fromOpenFights();
-            }
-
-        //get random fighters' affiliate link
-            $referralLink = $this->getReferralLink($ads);               
-
-        //create votes too
-            $ads = $this->makeKey($ads);
-
-
-            return view('new-fight.bottom-frame', compact('ads','referralLink'));
-
-        }   
-
-
-        /**
+    /**
      * fight page bottom frame testong new design
      */
-        public function newFightBottomFrameRedesign()
-        {
-            if (rand(0,1)) {
+    public function newFightBottomFrameRedesign2()
+    {
+        if (rand(0,1)) {
                 // dump('from a random closed fight');
-                $ads = Ads::fromClosedFights();
-            }
-            else {
+            $ads = Ads::fromClosedFights();
+        }
+        else {
                 // dump('from a random open fight');
-                $ads = Ads::fromOpenFights();
-            }
+            $ads = Ads::fromOpenFights();
+        }
 
         //get random fighters' affiliate link
-            $referralLink = $this->getReferralLink($ads);               
+        $referralLink = $this->getReferralLink($ads);               
 
         //create votes too
-            $ads = $this->makeKey($ads);
+        $ads = $this->makeKey($ads);
 
 
 
 
-            return view('new-fight.new-design-bottom-frame', compact('ads','referralLink'));
+        return view('new-fight.new-design-bottom-frame2', compact('ads','referralLink'));
 
-        }   
-
-
-
-        /**
-     * fight page bottom frame testong new design
-     */
-        public function newFightBottomFrameRedesign2()
-        {
-            if (rand(0,1)) {
-                // dump('from a random closed fight');
-                $ads = Ads::fromClosedFights();
-            }
-            else {
-                // dump('from a random open fight');
-                $ads = Ads::fromOpenFights();
-            }
-
-        //get random fighters' affiliate link
-            $referralLink = $this->getReferralLink($ads);               
-
-        //create votes too
-            $ads = $this->makeKey($ads);
-
-            
-
-
-            return view('new-fight.new-design-bottom-frame2', compact('ads','referralLink'));
-
-        }   
+    }   
 
 
 
@@ -170,11 +95,11 @@ class NewFightController extends Controller
     {
 
 
-     $fight = Team::find($fightId);
+       $fight = Team::find($fightId);
 
-     FightViewLog::logView($fight->id);
+       FightViewLog::logView($fight->id);
 
-     if(is_null($fight))
+       if(is_null($fight))
         return "error: no fight exists here";
 
     $ads = Ads::where('team_id', $fight->id)->get()->all();
@@ -320,11 +245,18 @@ public function vote($key, $clickedAdId)
     //     dump('not loggedd in , or poential new users who clicked ads');
     // }
         //same system as listjoe
+    // $lower = config('lower_credits_bound');
+    // $upper = config('upper_credits_bound');
+
+    $lower = config('sellordie.lower_credits_bound');
+    $upper = config('sellordie.upper_credits_bound');
+
+
     $creditClick = CreditClicks::create([
         'key' => $key,
         'recipient_id' => Auth::user()->id,
         'sender_id' => $clickedAd->user->id,
-        'credits' => rand(20,60),
+        'credits' => rand($lower, $upper),
         'challenge_icon' => rand(1,4),
         'earned_credits' => false,
         'ip' => ENV("REMOTE_ADDR"),
@@ -617,6 +549,63 @@ public function showTopFrameBeforeCountdown(string $key)
 
 // return view('fight', compact('ads','referralLink'));
         return view('new-fight.new-fight-bottom-frame', compact('ads','referralLink'));
+    }
+
+
+    /**
+     * Make the fight live
+     */
+    public function start(Request $request)
+    {
+        $fight = Team::find($request->fight_id);
+        $fight->status = 'live';
+        $fight->save();
+
+        return response()->json([
+            'live'   => true,
+            'message'=> 'live',
+        ]);
+        // return redirect("/ads")->with('message', 'Your fight is now live!');
+    }
+
+
+
+    /**
+     * stop the fijght
+     */
+    public function stop(Request $request)
+    {
+        $fight = Team::find($request->fight_id);
+        $fight->status = 'config';
+        $fight->save();
+
+
+
+        return response()->json([
+            'live'   => false,
+            'message'=> 'config',
+        ]);
+        // return redirect("/ads")->with('message', 'Your fight is now back in config');
+    }
+
+
+
+
+
+
+    /**
+     * reset th stats
+     */
+    public function reset(Request $request)
+    {
+
+        FightViewLog::where('fight_id', $request->fight_id)->delete();
+
+        $fightLog = FightLog::where('clicked_ad_fight_id', $request->fight_id)->delete();
+        $fightLog = FightLog::where('not_clicked_ad_fight_id', $request->fight_id)->delete();
+
+
+        return redirect("/ads")->with('message', 'You have reset your stats.');
     }
 
 

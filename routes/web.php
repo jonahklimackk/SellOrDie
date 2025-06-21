@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdsController;
-use App\Http\Controllers\FightController;
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\SendMailingController;
 use App\Http\Controllers\EarnCreditsController;
@@ -18,8 +17,8 @@ use App\Http\Controllers\TeamInvitationController;
 
 // override the “accept invitation” route
 Route::get('/teams/invitations/{invitation}/accept', [TeamInvitationController::class, 'accept'])
-    ->middleware(['web','auth'])
-    ->name('invitations.accept');
+->middleware(['web','auth'])
+->name('invitations.accept');
 
 
 
@@ -76,35 +75,10 @@ Route::get('/members/aff/stats', [AffiliateTrackingController::class, 'stats']);
 
 
 
-/*
- * Handle Fights
- * 
- */
-
-//outside visitos can view fights but can't vote
-Route::get('/fights', [FightController::class,'index'])->name('fights');
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-
-    Route::get('/fights/vote/{key}/ad/{clickedAdId}',[FightController::class,'vote']);
-    Route::get('/frames/already-judged-show-url-top-frame/',[FightController::class,'alreadyJudgedShowUrlTopFrame']);
-    Route::get('/fights/show/{fightId}', [FightController::class,'showSpecific']);
-    Route::post('/fight/start', [FightController::class,'start']);
-    Route::post('/fight/stop', [FightController::class,'stop']);
-    Route::post('/fight/reset', [FightController::class,'reset']);
-});
-
-//debugging
-Route::get('/fights-with-3', [FightController::class,'fightsWith3']);
-
-
 
 /*
  * Click for Credits
+ * do I even use these?
  *
  */
 //no need for sender username, it's all stored in creditClicks table
@@ -119,6 +93,46 @@ Route::middleware([
     // Route::get('record/earn/{key}/view', [EarnCreditsController::class,'mailingRecordView']);
     Route::get('earn/{key}/', [EarnCreditsController::class, 'clickedCreditsMail']);
 });
+
+
+
+
+
+
+
+
+/*
+ * The New Fight Redesign
+ *
+ */
+
+
+// New Fight with frames testing
+
+Route::get('/new-fight-redesign2', [NewFightController::class,'newFightRedesign2'])->name('new-fight-redesign2');
+Route::get('/new-fight-top-frame', [NewFightController::class,'newFightTopFrame']);
+Route::get('/new-fight-redesign-bottom-frame2', [NewFightController::class,'newFightBottomFrameRedesign2']);
+
+
+//handling votes and earning credits
+Route::get('/new-fight/vote/{key}/ad/{clickedAdId}',[NewFightController::class,'vote']);
+Route::get('new-fight/earn-credits-top-frame/{key}', [NewFightController::class,"showTopFrameBeforeCountdown"]);
+Route::get('/new-fight/already-judged-show-url-top-frame/',[NewFightController::class,'alreadyJudgedShowUrlTopFrame']);
+Route::get('/new-fight/earn/redeem/{key}',[NewFightController::class, 'afterCountdown']);
+Route::get('/new-fight/challenge/{key}/{icon}', [NewFightController::class,'challengeTest']);
+
+//starting/stopping a fight
+Route::post('/fight/start', [NewFightController::class,'start']);
+Route::post('/fight/stop', [NewFightController::class,'stop']);
+Route::post('/fight/reset', [NewFightController::class,'reset']);
+
+
+//show a specific fight
+Route::get('/new-fight/show/{fightId}', [NewFightController::class,'newFightSpecific']);
+Route::get('/new-fight-specific-bottom-frame/{fightId}', [NewFightController::class,'newFightSpecificBottomFrame']);
+
+
+
 
 
 
@@ -205,6 +219,10 @@ Route::middleware([
  *
  */
 
+
+
+
+
 Route::get('/league-period',[TestController::class,'showLeagueStatsInPeriod']);
 Route::get('/show/creditmail',[TestController::class,'showCreditMail']);
 Route::get('/test/aff', [TestController::class, 'showAffCookies']);
@@ -288,33 +306,6 @@ Route::get('/time', function () {
     echo "Today is " . date("Y/m/d") . "<br>";
     echo "The time is " . date("h:i:sa");;
 });
-
-
-
-Route::get('/new-fight/show/{fightId}', [NewFightController::class,'newFightSpecific']);
-Route::get('/new-fight-specific-bottom-frame/{fightId}', [NewFightController::class,'newFightSpecificBottomFrame']);
-
-// New Fight with frames testing
-Route::get('/new-fight', [NewFightController::class,'newFight'])->name('new-fight');
-Route::get('/new-fight-top-frame', [NewFightController::class,'newFightTopFrame']);
-Route::get('/new-fight-bottom-frame', [NewFightController::class,'newFightBottomFrame']);
-Route::get('/new-fight/vote/{key}/ad/{clickedAdId}',[NewFightController::class,'vote']);
-Route::get('new-fight/earn-credits-top-frame/{key}', [NewFightController::class,"showTopFrameBeforeCountdown"]);
-Route::get('/new-fight/already-judged-show-url-top-frame/',[NewFightController::class,'alreadyJudgedShowUrlTopFrame']);
-Route::get('/new-fight/earn/redeem/{key}',[NewFightController::class, 'afterCountdown']);
-
-
-Route::get('/new-fight-redesign', [NewFightController::class,'newFightRedesign']);
-Route::get('/new-fight-redesign-bottom-frame', [NewFightController::class,'newFightBottomFrameRedesign']);
-
-Route::get('/new-fight-redesign2', [NewFightController::class,'newFightRedesign2'])->name('new-fight-redesign2');
-Route::get('/new-fight-redesign-bottom-frame2', [NewFightController::class,'newFightBottomFrameRedesign2']);
-
-
-
-Route::get('/new-fight/challenge/{key}/{icon}', [NewFightController::class,'challengeTest']);
-
-
 
 
 

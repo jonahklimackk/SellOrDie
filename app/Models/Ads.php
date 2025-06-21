@@ -64,7 +64,8 @@ class Ads extends Model
         //however there must  be a logged in user to see the fight - I think
         //and ads from the same person are shown against eeach other 
         //that sounds like af eatgure, ad vs ad is ok cuz you can ssee which did better
-        $fighters = User::where('credits', '>=',config('cost_display_ad'))->where('id','!=',Auth::user()->id)->get()->all();
+   
+        $fighters = User::where('credits', '>=', config('sellordie.cost_display_ad'))->where('id','!=',Auth::user()->id)->get()->all();
 
 
         $possibleAds = [];
