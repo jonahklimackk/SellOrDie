@@ -35,7 +35,42 @@ return [
     |
     */
 
+
+
+
+
+
+
+
     'mailers' => [
+
+
+
+        //kaskas - contabo - THIS IS THE SLOW ONE
+        'smtp1' => [
+            'transport' => 'smtp',
+            // 'url' => 'smtp://pmta.listjoe.com',  
+            'host' => 'server1.listjoe.com',
+            'port' => env('MAIL_PORT', 587),
+            'encryption' => 'tls',
+            'username' => 'smtp@listjoe.com',
+            'password' => 'Hak$Tz)5)MI7bvSC',
+            'timeout' => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+        ], 
+        //zeeshan - ovh cloud - THE FAST ONE
+        'smtp2' => [
+            'transport' => 'smtp',
+            // 'url' => 'smtp://pmta.listjoe.com',
+            'host' => 'server3.listjoe.com',
+            'port' => env('MAIL_PORT', '587'),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'username' => 'smtp@listjoe.com',
+            'password' => 'Hak$Tz)5)MI7bvSC',
+            'timeout' => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+        ],   
+
 
         'smtp' => [
             'transport' => 'smtp',

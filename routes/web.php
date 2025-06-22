@@ -115,25 +115,25 @@ Route::get('/new-fight-specific-bottom-frame/{fightId}', [NewFightController::cl
  * Mailing-ads
  */
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/send/mailing/{mailingId}', [SendMailingController::class,'index']);
-    Route::post('/mailing/store', [SendMailingController::class,'store']);
-    Route::post('/mailing/update', [SendMailingController::class,'update']);
-    Route::post('/mailing/delete', [SendMailingController::class,'destroy']);
-    Route::post('/mailing/queue', [SendMailingController::class,'queue']);
-    Route::get('/mailing/history', [SendMailingController::class,'history']);
-    Route::get('/mailing/new', [SendMailingController::class,'showNew']);    
-});
+// Route::middleware([
+//     'auth:sanctum',
+//     config('jetstream.auth_session'),
+//     'verified',
+// ])->group(function () {
+//     Route::get('/send/mailing/{mailingId}', [SendMailingController::class,'index']);
+//     Route::post('/mailing/store', [SendMailingController::class,'store']);
+//     Route::post('/mailing/update', [SendMailingController::class,'update']);
+//     Route::post('/mailing/delete', [SendMailingController::class,'destroy']);
+//     Route::post('/mailing/queue', [SendMailingController::class,'queue']);
+//     Route::get('/mailing/history', [SendMailingController::class,'history']);
+//     Route::get('/mailing/new', [SendMailingController::class,'showNew']);    
+// });
 
-/*
- * Sends Mailings
- *
- */
-Route::get('/process/next-mailing/{from}/{to}/{sort}',[SendMailingController::class, 'processMailing']);
+// /*
+//  * Sends Mailings
+//  *
+//  */
+// Route::get('/process/next-mailing/{from}/{to}/{sort}',[SendMailingController::class, 'processMailing']);
 
 
 

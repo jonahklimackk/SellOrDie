@@ -44,7 +44,7 @@ class TeamInvitation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Team Invitation',
+            subject: 'You\'ve been challenged to a Fight!',
         );
     }
 

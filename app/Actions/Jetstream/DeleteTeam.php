@@ -2,42 +2,37 @@
 
 namespace App\Actions\Jetstream;
 
-use Auth;
 use App\Models\Team;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\Contracts\DeletesTeams;
 
 class DeleteTeam implements DeletesTeams
 {
-    /**
-     * Delete the given team.
-     */
-    public function delete(Team $team)
+    public function delete(Team $team): void
     {
+        $user = Auth::user();
 
-        // //make sure there's a team left
+        // find any other team (owned or member)
+        $allTeams = $user->ownedTeams()->get()
+                         ->merge($user->teams()->get());
 
-        // if (Auth::user()->allTeams()->count() > 1)
-        // {
+        $fallback = $allTeams->first(fn(Team $t) => $t->id !== $team->id);
 
-        //     $team->purge();
+        if (! $fallback) {
+            throw ValidationException::withMessages([
+                'team' => 'You must have at least one team. Create another team before deleting this one.',
+            ]);
+        }
 
+        // **only** check if *this* is the current team
+        if ($user->current_team_id === $team->id) {
+            $user->forceFill([
+                'current_team_id' => $fallback->id,
+            ])->save();
+        }
 
-        //     //switch to a diffferent team
-        //     $availableTeam = Team::where('user_id',Auth::user()->id)->where('id','!=',$team->id)->get()->first();
-        //     Auth::user()->current_team_id = $availableTeam->id;
-        //     Auth::user()->save();
-
-        // }
-        // else
-        // {
-        //     dd("you must have at least one team");
-        //     // return redirect('/teams/42')->with('You must leave at least one team');
-        // }
-
+        // finally, purge the team
         $team->purge();
-
-
-        
-
     }
 }

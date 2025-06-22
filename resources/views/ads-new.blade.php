@@ -253,6 +253,14 @@
 </form>
 
 
+@php
+    // Collection of pending-invite emails - there should alwasy only be one
+    $pendingEmails = $fight->teamInvitations->pluck('email');
+     $members = $fight->users->pluck('email');
+@endphp
+
+
+@unless(count($pendingEmails) || count($members))
 @if(isset($ad) && !isset($opponentsAd))
 <form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
   <button class="px-5 py-2 bg-[#04cef6] hover:bg-[#039ac0] text-white rounded font-medium transition">
@@ -270,6 +278,8 @@
 </button>
 </form> 
 @endif
+<!-- <div class="mb-6"><p class="text-xl font-bold text-yellow-300 mb-4">Waiting for the fighter to accept the invitation and enter their ad.</b></p></div>  -->
+@endunless
 
 @if(isset($ad) && isset($opponentsAd))
 <form action="/teams/{{ Auth::user()->currentTeam->id}}" action="get">
@@ -282,6 +292,7 @@
   </button>
 </form>
 @endif
+
 
 @endunless
 

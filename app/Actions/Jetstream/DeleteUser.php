@@ -2,6 +2,8 @@
 
 namespace App\Actions\Jetstream;
 
+use Auth;
+use App\Models\Ads;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +30,15 @@ class DeleteUser implements DeletesUsers
             $user->tokens->each->delete();
             $user->delete();
         });
+
+        //delete the ads attached to these teams
+        //or just delete all the ads
+        $ads = Ads::where('user_id', Auth::user()->id)->get()->all();
+        foreach ($ads as $ad){
+            dump('hi');
+            $ad->delete();
+        }
+
     }
 
     /**
@@ -35,10 +46,12 @@ class DeleteUser implements DeletesUsers
      */
     protected function deleteTeams(User $user): void
     {
+        // detach pivot memberships
         $user->teams()->detach();
 
+        // unconditionally purge every team the user owns
         $user->ownedTeams->each(function (Team $team) {
-            $this->deletesTeams->delete($team);
+            $team->purge();
         });
     }
 }
