@@ -229,6 +229,20 @@ class AffiliateTracker
 		]);
 	}
 
+	/**
+	* Credits the confirmation with this campaign
+	*
+	* @return void
+	*/
+	public static function recordConfirm(int $campaignId)
+	{
+            $campaign = Campaigns::where('id', $campaignId)->get()->first();
+            $campaign->confirms++;
+            $campaign->update(['confirms', $campaign->confirms]);
+            $campaign->save();
+	}
+
+
 
 	/**
 	* Credits the join with this campaign
@@ -257,5 +271,7 @@ class AffiliateTracker
             $campaign->update(['sales', $campaign->sales]);
             $campaign->save();
 	}
+
+
 
 }

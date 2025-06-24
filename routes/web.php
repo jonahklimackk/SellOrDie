@@ -51,9 +51,18 @@ Route::middleware([
  *
  */
 
+// https://sellordie.online/upgrade/lightweight/monthly/{CHECKOUT_SESSION_ID}
+// https://sellordie.online/upgrade/lightweight/yearly/{CHECKOUT_SESSION_ID}
+// https://sellordie.online/upgrade/heavyweight/monthly/{CHECKOUT_SESSION_ID}
+// https://sellordie.online/upgrade/heavyweight/yearly/{CHECKOUT_SESSION_ID}
+
 Route::get('/upgrade', [UpgradeController::class,'show']);
 Route::get('/upgrade/monthly/thankyou', [UpgradeController::class,'monthlyThankYou']);
 Route::get('/upgrade/yearly/thankyou', [UpgradeController::class,'YearlyThankYou']);
+
+Route::get('/upgrade/version1', function () {
+    return view('/upgrade.version1');
+});
 
 
 
@@ -320,3 +329,4 @@ Route::get('/test-verify', function() {
 
     return 'Dispatched—check storage/logs/laravel.log';
 });
+

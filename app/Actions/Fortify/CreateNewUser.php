@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use Mail;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use App\Helpers\AffiliateTracker;
 use Laravel\Jetstream\Jetstream;
+use App\Mail\WelcomeNewUser;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -35,20 +37,22 @@ class CreateNewUser implements CreatesNewUsers
 
             AffiliateTracker::recordJoin($input['campaign_id'] );
 
-
             return tap(User::create([
                 'name' => $input['name'],
-                 'username' => $input['username'],
+                'username' => $input['username'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
                 'sponsor_id' => $input['sponsor_id'],
             ]), function (User $user) {
-                $this->createTeam($user);
-            });
 
-            $user->credits = config('sellordie.signup_bonus');
-            $user->save();
-            // Mail::to($user)->send(new WelcomeEmail($user));
+                $user->credits = config('sellordie.signup_bonus');
+                $user->save();
+
+                Mail::to($user->email)->send(new WelcomeNewUser($user));
+                $this->createTeam($user);
+
+                // $user->sendEmailVerificationNotification();
+
 
 
             // $sponsor = User::fetchSponsor($user);
@@ -60,6 +64,7 @@ class CreateNewUser implements CreatesNewUsers
             // $admin = User::find(config('sellordie.admin_id'));
             // Mail::to($admin)->send(new ReferralNotice($user, $sponsor));
 
+            });
 
 
         });

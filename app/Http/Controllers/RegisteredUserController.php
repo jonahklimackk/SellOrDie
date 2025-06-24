@@ -24,10 +24,10 @@ class RegisteredUserController extends FortifyController
         $user = Auth::user();
 
         // 3) Fire Registered event so the default listener runs
-        event(new Registered($user));
+        // event(new Registered($user));
 
         // 4) (Optional) Force-send your custom notification
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
         return $response;
     }

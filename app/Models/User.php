@@ -66,6 +66,30 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_url',
     ];
 
+    
+    /**
+     * Make sure we only ever send the email‐verification ONCE per request.
+     *
+     * @var bool
+     */
+    // protected $alreadySentEmailVerification = false;
+
+    /**
+     * Override the built-in method so that, even if it's called multiple times,
+     * only the first call will actually dispatch the notification.
+     */
+    // public function sendEmailVerificationNotification()
+    // {
+    //     if ($this->alreadySentEmailVerification) {
+    //         return;
+    //     }
+
+    //     $this->alreadySentEmailVerification = true;
+
+    //     // call the normal framework behavior
+    //     parent::sendEmailVerificationNotification();
+    // }    
+
 
     /**
      * Override the default email-verification notification.
@@ -170,7 +194,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
     /**
-     * Figure out who the sponsor is at time of registration or fucking die
+     * Figure out who the sponsor is at time of registration 
      *
      * @return boolean
      */
@@ -181,5 +205,24 @@ class User extends Authenticatable implements MustVerifyEmail
         return isset($sponsor) ? $sponsor : die('no sponsor id contact support immediately');
     }
 
+    /**
+     * Get the user's sponsor after they join and they are in the database
+     * fixes values of null or 0 or missing user
+     * sets them to admin account
+     *
+     * @return integer
+     */
+    public static function fetchSponsor($user)    
+    {
+        //finds all cases of bad sponsor id
+        if($user->sponsor_id === 0 || 
+            is_null($user->sponsor_id) || 
+            is_null(User::where('id', $user->sponsor_id)->get()->first())){
+            $user->sponsor_id = config('sellordie.admin_id');            
+        }
+
+        return User::where('id',$user->sponsor_id)->get()->first();
+
+    }
 
 }

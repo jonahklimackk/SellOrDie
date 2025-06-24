@@ -19,9 +19,35 @@ class UpgradeController extends Controller
 
 
     /**
-     * thank you page for monthly
+     * thank you page for lightweight monthly
      */
-    public function monthlyThankYou()
+    public function lightweightMonthly()
+    {
+        //give credits, change membership in usrs table
+
+        // $this->somecommonthing($var)
+
+        return "thank you monthly";
+
+    }
+
+
+
+    /**
+     * thank you page for lightweight yearly
+     */
+    public function lightweightYearly()
+    {
+
+        return "thank you yearly";
+
+    }
+
+
+    /**
+     * thank you page for heavyweioght monthly
+     */
+    public function heavyweightMonthly()
     {
         //give credits, change membership in usrs table
 
@@ -32,12 +58,12 @@ class UpgradeController extends Controller
 
 
     /**
-     * thank you page for yearly
+     * thank you page for heavyweight yearly
      */
-    public function yearlyThankYou()
+    public function heavyweightYearly()
     {
 
         return "thank you yearly";
 
-    }
+    }    
 }

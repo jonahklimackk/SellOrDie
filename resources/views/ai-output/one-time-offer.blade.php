@@ -33,6 +33,121 @@
     </a>
   </section>
 
+
+  <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow-lg">
+  <thead class="bg-gray-800">
+    <tr>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">Feature</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">Amateur</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">Lightweight</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">Heavyweight</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">Benefit</th>
+    </tr>
+  </thead>
+  <tbody class="bg-[#1f1c27] divide-y divide-gray-700">
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">ad weapon</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">text only</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">full html wysiwyg</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">ai generated ads</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        capture the voters eye with a beautiful, rich, full html ad... it will automatically generate an ad weapon for you
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">cost to display ad weapon</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">50</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">30</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">20</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        it lasts forever when you pay less for displaying your fights
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">credits for voting</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">20-60</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">25-75</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">30-90</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        your fight displayed 1.5 to 2 more times with paid membership
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">Max # of fights</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">3</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">5</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">unlimited</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        multiple fights for all of your programs, multi-way advertising
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">login ads?</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">no</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">yes</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">yes</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        login ads work, but you have to be heavyweight to get it
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">banner ad on surf page</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">yes</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">yes</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">yes</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        let the voters/visitors focus on your ad weapons
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">priority support</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">no</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">no</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">yes</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        get replies to your inquiries within hours
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">bonus credits</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">0</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">50</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">100</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        set it on autopilot—bonus credits delivered to your site every day
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">in random opponent your ads get picked:</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">third</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">second</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">first</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        get your ads seen in priority, paid members first!
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">test ads by running fights with 2 of your ads</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">no</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">no</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">yes</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        know which of your ads work and roll out the winners
+      </td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-white">pick only free members as opponents – free, ugly ad, easy win</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">no</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">no</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">yes</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+        so you can get the easy win and all the traffic and sales
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
   <!-- Benefits Section -->
   <section class="bg-gray-800 py-16 px-4">
     <div class="max-w-4xl mx-auto">

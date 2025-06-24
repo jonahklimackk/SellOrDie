@@ -30,4 +30,11 @@ class Campaigns extends Model
 	protected $guarded = ['id'];
 
 
+
+	public function affiliate()
+	{
+		return $this->belongsTo(User::class);
+	}
+
+
 }
