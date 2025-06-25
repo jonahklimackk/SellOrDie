@@ -13,6 +13,10 @@ use App\Http\Controllers\UpgradeController;
 use App\Http\Controllers\AiController;
 use App\Livewire\Mailings;
 use App\Http\Controllers\TeamInvitationController;
+use App\Http\Controllers\AffiliateController;
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\OrderController;
+
 
 
 // override the “accept invitation” route
@@ -56,9 +60,25 @@ Route::middleware([
 // https://sellordie.online/upgrade/heavyweight/monthly/{CHECKOUT_SESSION_ID}
 // https://sellordie.online/upgrade/heavyweight/yearly/{CHECKOUT_SESSION_ID}
 
-Route::get('/upgrade', [UpgradeController::class,'show']);
-Route::get('/upgrade/monthly/thankyou', [UpgradeController::class,'monthlyThankYou']);
-Route::get('/upgrade/yearly/thankyou', [UpgradeController::class,'YearlyThankYou']);
+// Route::get('/upgrade', [UpgradeController::class,'show']);
+// Route::get('/upgrade/monthly/thankyou', [UpgradeController::class,'monthlyThankYou']);
+// Route::get('/upgrade/yearly/thankyou', [UpgradeController::class,'YearlyThankYou']);
+
+
+
+
+Route::get('/checkout/lightweight-monthly/success', [OrderController::class, 'lightweightMonthly'])
+     ->name('checkout.success.lightweight_monthly');
+
+Route::get('/checkout/lightweight-yearly/success', [OrderController::class, 'lightweightYearly'])
+     ->name('checkout.success.lightweight_yearly');
+
+Route::get('/checkout/heavyweight-monthly/success', [OrderController::class, 'heavyweightMonthly'])
+     ->name('checkout.success.heavyweight_monthly');
+
+Route::get('/checkout/heavyweight-yearly/success', [OrderController::class, 'heavyweightYearly'])
+     ->name('checkout.success.heavyweight_yearly');
+
 
 Route::get('/upgrade/version1', function () {
     return view('/upgrade.version1');
@@ -66,16 +86,40 @@ Route::get('/upgrade/version1', function () {
 
 
 
+
+
+/*
+ * Affiliate Tracking / Affiliate Program
+ * chatgpt version
+ *
+ */
+
+// your existing home
+Route::get('/', [LandingPageController::class, 'index'])->name('home');
+
+// affiliate landing
+Route::get('aff', [AffiliateController::class, 'landing'])
+     ->name('affiliate.landing');
+
+// the tracker
+Route::get('aff/{username}/{campaign?}', [AffiliateController::class, 'track'])
+     ->where('username', '[A-Za-z0-9_\-]+')
+     ->name('affiliate.track');
+
+Route::get('/affiliate/dashboard', [AffiliateController::class, 'dashboard'])
+     ->middleware('auth')
+     ->name('affiliate.dashboard');
+
 /*
  * Affiliate Tracking / Affiliate Program
  * http://klickdream.com/aff/username/campaign
  *
  */
 
-Route::get('/', [AffiliateTrackingController::class,'index']);
-Route::get('/aff/{username}', [AffiliateTrackingController::class,'aff']);
-Route::get('/aff/{username}/{campaign}', [AffiliateTrackingController::class,'affAndCampaign']);
-Route::get('/members/aff/stats', [AffiliateTrackingController::class, 'stats']);
+// Route::get('/', [AffiliateTrackingController::class,'index']);
+// Route::get('/aff/{username}', [AffiliateTrackingController::class,'aff']);
+// Route::get('/aff/{username}/{campaign}', [AffiliateTrackingController::class,'affAndCampaign']);
+// Route::get('/members/aff/stats', [AffiliateTrackingController::class, 'stats']);
 // Route::get('members/downline', [GrowYourDownlineController::class, 'downline']);
 // Route::get('members/reftools', [GrowYourDownlineController::class, 'reftools']); 
 // Route::get('members/downline/level/{lv}', [GrowYourDownlineController::class, 'showDownlineLv']);

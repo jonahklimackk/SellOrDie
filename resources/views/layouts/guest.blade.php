@@ -16,6 +16,7 @@
 
         <!-- Styles -->
         @livewireStyles
+       
     </head>
         <body class="bg-[#1F2937] text-white text-center p-8">
         <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
