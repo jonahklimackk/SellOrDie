@@ -13,10 +13,7 @@ class AffiliateSale extends Model
      * Mass‐assignable attributes.
      */
     protected $fillable = [
-        'referrer_id',
-        'buyer_id',
-        'campaign',
-        'amount',
+        'referrer_id', 'buyer_id', 'campaign', 'product', 'amount',
     ];
 
     /**

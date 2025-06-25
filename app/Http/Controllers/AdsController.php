@@ -13,9 +13,27 @@ use App\Models\Ads;
 use App\Models\TeamUser;
 use App\Models\Categories;
 use Illuminate\Http\Request;
+use App\Events\AdViewed;
+use App\Events\AdVoted;
 
 class AdsController extends Controller
 {
+
+    public function awardCredits()
+    {
+        // Your existing logic to record the view...
+        
+        // 1) Dispatch the event (will trigger CreditService under the hood)
+        event(new AdVoted(Auth::user()));
+
+        // 2) Return the ad view
+        // return view('ads.show', compact('ad'));
+        return 'success!';
+    }
+
+
+
+
 	/**
 	 * Display a listing of the resource.
 	 */

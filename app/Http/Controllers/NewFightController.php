@@ -10,6 +10,7 @@ use Redirect;
 use Response;
 use App\Models\FightViewLog;
 use App\Models\User;
+use App\Models\Credit;
 use App\Models\Mailings;
 use App\Models\Ads;
 use App\Models\Fight;
@@ -20,6 +21,8 @@ use App\Models\TeamUser;
 use App\Models\RandomOpponents;
 use App\Models\CreditClicks;
 use Illuminate\Http\Request;
+use App\Events\AdVoted;
+use App\Services\CreditService;
 
 
 class NewFightController extends Controller
@@ -320,14 +323,21 @@ public function vote($key, $clickedAdId)
             $recipient->credits += $creditClick->credits;
             $recipient->save();
 
+            $earned = CreditService::awardBaseAndMatrix(
+                Auth::id(),
+                'vote',
+                'voted on fight'
+            );
+
+
             $creditClick->earned_credits = true;
             $creditClick->clicks++;
             $creditClick->ip = env("REMOTE_ADDR");
             $creditClick->save();
 
             return response()->json([
-                'earned_credits'    => $creditClick->credits,
-                'total_credits' => $recipient->credits,
+                'earned_credits'    => $earned,
+                'total_credits' =>  Credit::where('user_id', Auth::id())->sum('amount')
             ]);
 
             // return "You just earned  ".$creditClick->credits." credits. \n  Total Credits: ".Auth::user()->credits;       
@@ -354,40 +364,40 @@ public function vote($key, $clickedAdId)
 
 
 
-/**
+        /**
     * Show the credits frame to earn credits
     * javscript timer countdown
     *
     * @return View    */
-public function showTopFrameBeforeCountdown(string $key)
+        public function showTopFrameBeforeCountdown(string $key)
 
-{ 
-    $now = New Carbon();
-    $setTimer = false;
+        { 
+            $now = New Carbon();
+            $setTimer = false;
 
-    $creditClick = CreditClicks::where('key', $key)->get()->first();
-    $sender = User::where('id',$creditClick->sender_id)->get()->first();
+            $creditClick = CreditClicks::where('key', $key)->get()->first();
+            $sender = User::where('id',$creditClick->sender_id)->get()->first();
 
 
-    if (is_null($creditClick)) {
-        $message = "We can't find this credit link.";
-    }
-    else if ($now->timestamp - $creditClick->created_at->timestamp >= 1209600) {
-        $message = 'Your credit click link has expired';
-        $creditClick->clicks++;
-        $creditClick->save(); 
-    }
+            if (is_null($creditClick)) {
+                $message = "We can't find this credit link.";
+            }
+            else if ($now->timestamp - $creditClick->created_at->timestamp >= 1209600) {
+                $message = 'Your credit click link has expired';
+                $creditClick->clicks++;
+                $creditClick->save(); 
+            }
 
-    else if ($creditClick->earned_credits == true){
-        $message = 'You already earned '.$creditClick->credits.' credits for this credit link';      
-        $creditClick->clicks++;
-        $creditClick->save();  
-    }
-    else{
-        $setTimer = true;
+            else if ($creditClick->earned_credits == true){
+                $message = 'You already earned '.$creditClick->credits.' credits for this credit link';      
+                $creditClick->clicks++;
+                $creditClick->save();  
+            }
+            else{
+                $setTimer = true;
         // $message = "Wait for the timer to count down and you'll earn lots of credits!";
-        $message = '';
-    }
+                $message = '';
+            }
 
 
     // $voteCredits = rand(5,20);
@@ -395,21 +405,22 @@ public function showTopFrameBeforeCountdown(string $key)
     // Auth::user()->credits += $voteCredits;
     // Auth::user()->save();
 
-    $credits = Auth::user()->credits;
+            // $credits = Auth::user()->credits;
+            $credits = Credit::where('user_id', Auth::id())->sum('amount');
 
-    if ($creditClick->challenge_icon == 1)
-        $challengeIconImage = "/img/challenge/boxing_gloves.png";
-    else if ($creditClick->challenge_icon == 2)
-        $challengeIconImage = "/img/challenge/trophy.png";
-    else if ($creditClick->challenge_icon == 3)
-        $challengeIconImage = "/img/challenge/boxing_ring.png";
-    else if ($creditClick->challenge_icon == 4)
-        $challengeIconImage = "/img/challenge/explosion.png";    
+            if ($creditClick->challenge_icon == 1)
+                $challengeIconImage = "/img/challenge/boxing_gloves.png";
+            else if ($creditClick->challenge_icon == 2)
+                $challengeIconImage = "/img/challenge/trophy.png";
+            else if ($creditClick->challenge_icon == 3)
+                $challengeIconImage = "/img/challenge/boxing_ring.png";
+            else if ($creditClick->challenge_icon == 4)
+                $challengeIconImage = "/img/challenge/explosion.png";    
 
-    return View('new-fight.top-frame-countdown',compact('creditClick','message','setTimer','sender','credits','challengeIconImage'));
+            return View('new-fight.top-frame-countdown',compact('creditClick','message','setTimer','sender','credits','challengeIconImage'));
 
 
-}
+        }
 
 
 
@@ -426,7 +437,7 @@ public function showTopFrameBeforeCountdown(string $key)
 
 
 
-    /**
+        /**
     * This gets called after the countdown
     * to crediti the user also we have to
     * check fraudulent clicks and see if it expired
@@ -438,34 +449,34 @@ public function showTopFrameBeforeCountdown(string $key)
     * @param string $key
     * @return string
     */
-    public function afterCountdown(string $key)
-    {
+        public function afterCountdown(string $key)
+        {
 
 
-        $creditClick = CreditClicks::where('key',$key)->get()->first();
+            $creditClick = CreditClicks::where('key',$key)->get()->first();
 
-        $creditClick->timer_countdown = true;
-        $creditClick->save();
+            $creditClick->timer_countdown = true;
+            $creditClick->save();
 
         //here we'll check if the response to the image was correct
 
-        if ($creditClick->challenge_correct && !$creditClick->earned_credits)
-        {
+            if ($creditClick->challenge_correct && !$creditClick->earned_credits)
+            {
             //give creditgs
-            $recipient = User::where('id', $creditClick->recipient_id)->get()->first();
-            $recipient->credits += $creditClick->credits;
-            $recipient->save();
+                $recipient = User::where('id', $creditClick->recipient_id)->get()->first();
+                $recipient->credits += $creditClick->credits;
+                $recipient->save();
 
-            $creditClick->earned_credits = true;
-            $creditClick->clicks++;
-            $creditClick->ip = env("REMOTE_ADDR");
-            $creditClick->save();
+                $creditClick->earned_credits = true;
+                $creditClick->clicks++;
+                $creditClick->ip = env("REMOTE_ADDR");
+                $creditClick->save();
 
             // return "You just earned  ".$creditClick->credits." credits. <br> Total Credits: ".Auth::user()->credits;  
-            return $creditClick->credits;      
-        }
-        else
-            return "Please click the matching icon.";
+                return $creditClick->credits;      
+            }
+            else
+                return "Please click the matching icon.";
 
         // else { //it never gets to here but just in case
         //     $creditClick->clicks++;
@@ -474,7 +485,7 @@ public function showTopFrameBeforeCountdown(string $key)
         // }         
 
 
-    }
+        }
 
 
 
@@ -484,69 +495,69 @@ public function showTopFrameBeforeCountdown(string $key)
 
 
 
-    /**
+        /**
      * show aspecific fight given id
      *  open and closed?
      * when clicking on ad 0n leagues page
      */
-    public function showSpecific($fightId)
-    {
-        $fight = Team::find($fightId);
+        public function showSpecific($fightId)
+        {
+            $fight = Team::find($fightId);
 
-        FightViewLog::logView($fight->id);
+            FightViewLog::logView($fight->id);
 
-        if(is_null($fight))
-            return "error: no fight exists here";
+            if(is_null($fight))
+                return "error: no fight exists here";
 
-        $ads = Ads::where('team_id', $fight->id)->get()->all();
-
-
-        foreach ($ads as $ad) {   
-            dump('ad id '.$ad->id);    
-            dump('ad team id '.$ad->team_id);
-        }
+            $ads = Ads::where('team_id', $fight->id)->get()->all();
 
 
+            foreach ($ads as $ad) {   
+                dump('ad id '.$ad->id);    
+                dump('ad team id '.$ad->team_id);
+            }
 
-        if (count($ads) > 2)
-            return "error: fight is full";
+
+
+            if (count($ads) > 2)
+                return "error: fight is full";
         //1 ad? show a specific open fight
-        else if (count($ads) === 1 ) {
+            else if (count($ads) === 1 ) {
 
             // dump("open fight");
             //prevents ads from same person against itself
-            do{
+                do{
                 //need anothere ad from an open fight
                 //fetch 2 random open ads and pick of those
-                $twoRandomOpenAds = Ads::fromOpenFights();
-                $rand = rand(0,1);
+                    $twoRandomOpenAds = Ads::fromOpenFights();
+                    $rand = rand(0,1);
 
                 // $ads[0] is already set
-                $ads[1] = $twoRandomOpenAds[$rand];   
+                    $ads[1] = $twoRandomOpenAds[$rand];   
 
                 // dump($ads);   
 
-                foreach ($ads as $ad) {   
-                    dump('ad id '.$ad->id);    
-                    dump('ad team id '.$ad->team_id);
-                }
-            } while ($ads[0] == $ads[1]);
-        }
+                    foreach ($ads as $ad) {   
+                        dump('ad id '.$ad->id);    
+                        dump('ad team id '.$ad->team_id);
+                    }
+                } while ($ads[0] == $ads[1]);
+            }
 
         //else then it's a closed fight with 2 ads already set
 
         //get random fighters' affiliate link
-        $referralLink = $this->getReferralLink($ads);               
+            $referralLink = $this->getReferralLink($ads);               
 
 
-        $ads = $this->makeKey($ads);
+            $ads = $this->makeKey($ads);
 
-        foreach ($ads as $ad)       
-            dump($ad->id);
+            foreach ($ads as $ad)       
+                dump($ad->id);
 
 // return view('fight', compact('ads','referralLink'));
-        return view('new-fight.new-fight-bottom-frame', compact('ads','referralLink'));
-    }
+            return view('new-fight.new-fight-bottom-frame', compact('ads','referralLink'));
+        }
 
 
     /**

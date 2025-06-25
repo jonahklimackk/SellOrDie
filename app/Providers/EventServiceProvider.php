@@ -22,7 +22,22 @@ class EventServiceProvider extends ServiceProvider
         ],
         Verified::class => [
             AfterEmailVerified::class,
-        ],        
+        ],
+
+    // Your custom events
+    \App\Events\AdVoted::class       => [\App\Listeners\AwardCreditsOnVote::class],
+    \App\Events\AdViewed::class      => [\App\Listeners\AwardCreditsOnViewed::class],
+
+    // Laravel’s built-in auth events
+    \Illuminate\Auth\Events\Registered::class => [
+        \App\Listeners\AwardCreditsOnReferral::class,
+    ],
+    \Illuminate\Auth\Events\Login::class      => [
+        \App\Listeners\AwardCreditsOnLogin::class,
+    ],
+
+
+                
     ];
 
     /**

@@ -1,10 +1,13 @@
 <?php
 
+// app/Http/Controllers/OrderController.php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 use App\Models\AffiliateSale;
 use App\Services\AffiliateService;
 use Stripe\Stripe;
@@ -13,71 +16,76 @@ use Stripe\Checkout\Session as StripeSession;
 class OrderController extends Controller
 {
     /**
-     * Central logic for recording an affiliate-credited sale.
+     * Record both the Order and the AffiliateSale (if applicable).
      */
     protected function recordSale(Request $request, string $product)
     {
-        // 1) Grab the session ID that Stripe appended
-        $sessionId = $request->query('checkout_session_id');
-        if (! $sessionId) {
-            abort(400, 'Missing checkout_session_id');
-        }
+        $sessionId = $request->query('checkout_session_id')
+                   ?? abort(400, 'Missing checkout_session_id');
 
-        // 2) Verify session with Stripe
         Stripe::setApiKey(config('services.stripe.secret'));
-        try {
-            $session = StripeSession::retrieve($sessionId);
-        } catch (\Exception $e) {
-            abort(400, 'Invalid Stripe session');
-        }
+        $session = StripeSession::retrieve($sessionId);
 
-        // 3) Identify the buyer
-        $buyer = Auth::user();
-        if (! $buyer) {
-            abort(403, 'You must be logged in to complete this purchase.');
-        }
+        $buyer = Auth::user() 
+              ?? abort(403, 'You must be logged in to complete this purchase.');
 
-        // 4) Pull affiliate cookies
+        $amount = $session->amount_total / 100;
+
+        // 1) Persist the order
+        Order::create([
+            'buyer_id'          => $buyer->id,
+            'stripe_session_id' => $sessionId,
+            'product'           => $product,
+            'amount'            => $amount,
+        ]);
+
+        // 2) Credit the affiliate
         $referrerId = Cookie::get('referrer_id');
         $campaign   = Cookie::get('affiliate_campaign');
 
-        // 5) Record the sale & credit the affiliate if present
         if ($referrerId) {
             AffiliateSale::create([
                 'referrer_id' => $referrerId,
                 'buyer_id'    => $buyer->id,
                 'campaign'    => $campaign,
-                'amount'      => $session->amount_total / 100,
+                'product'     => $product,
+                'amount'      => $amount,
             ]);
 
-            // optional: handle your direct-payout logic
-            AffiliateService::handleSale($buyer, $session->amount_total / 100);
+            AffiliateService::handleSale($buyer, $amount);
         }
 
-        // 6) Show a thank-you page
-        return view('orders.success', [
-            'session' => $session,
-            'product' => $product,
-        ]);
+        return view('orders.success', compact('session', 'product'));
     }
 
-    public function lightweightMonthly(Request $request)
+    public function lightweightMonthly(Request $r)   { return $this->recordSale($r, 'Lightweight Monthly'); }
+    public function lightweightYearly(Request $r)    { return $this->recordSale($r, 'Lightweight Yearly'); }
+    public function heavyweightMonthly(Request $r)   { return $this->recordSale($r, 'Heavyweight Monthly'); }
+    public function heavyweightYearly(Request $r)    { return $this->recordSale($r, 'Heavyweight Yearly'); }
+
+    /**
+     * Show the authenticated user their own orders.
+     */
+    public function myOrders()
     {
-        return $this->recordSale($request, 'Lightweight Monthly');
+        $orders = Order::where('buyer_id', Auth::id())
+                       ->latest()
+                       ->get();
+
+        return view('orders.index', compact('orders'));
     }
 
-    public function lightweightYearly(Request $request)
+    /**
+     * Show the affiliate all sales they’ve referred.
+     */
+    public function affiliateSales()
     {
-        return $this->recordSale($request, 'Lightweight Yearly');
-    }
+        $sales = AffiliateSale::with('buyer')
+            ->where('referrer_id', Auth::id())
+            ->latest()
+            ->get();
 
-    public function heavyweightMonthly(Request $request)
-    {
-        return $this->recordSale($request, 'Heavyweight Monthly');
-    }
-
-    public function heavyweightYearly(Request $request)
-    {
-        return $this->recordSale($request, 'Heavyweight Yearly');
+        return view('affiliate.sales', compact('sales'));
     }
 }
+

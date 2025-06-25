@@ -68,21 +68,27 @@ Route::middleware([
 
 
 Route::get('/checkout/lightweight-monthly/success', [OrderController::class, 'lightweightMonthly'])
-     ->name('checkout.success.lightweight_monthly');
+->name('checkout.success.lightweight_monthly');
 
 Route::get('/checkout/lightweight-yearly/success', [OrderController::class, 'lightweightYearly'])
-     ->name('checkout.success.lightweight_yearly');
+->name('checkout.success.lightweight_yearly');
 
 Route::get('/checkout/heavyweight-monthly/success', [OrderController::class, 'heavyweightMonthly'])
-     ->name('checkout.success.heavyweight_monthly');
+->name('checkout.success.heavyweight_monthly');
 
 Route::get('/checkout/heavyweight-yearly/success', [OrderController::class, 'heavyweightYearly'])
-     ->name('checkout.success.heavyweight_yearly');
+->name('checkout.success.heavyweight_yearly');
 
 
-Route::get('/upgrade/version1', function () {
+Route::get('/upgrade', function () {
     return view('/upgrade.version1');
 });
+
+
+
+
+
+
 
 
 
@@ -99,16 +105,38 @@ Route::get('/', [LandingPageController::class, 'index'])->name('home');
 
 // affiliate landing
 Route::get('aff', [AffiliateController::class, 'landing'])
-     ->name('affiliate.landing');
+->name('affiliate.landing');
 
 // the tracker
 Route::get('aff/{username}/{campaign?}', [AffiliateController::class, 'track'])
-     ->where('username', '[A-Za-z0-9_\-]+')
-     ->name('affiliate.track');
+->where('username', '[A-Za-z0-9_\-]+')
+->name('affiliate.track');
 
 Route::get('/affiliate/dashboard', [AffiliateController::class, 'dashboard'])
-     ->middleware('auth')
-     ->name('affiliate.dashboard');
+->middleware('auth')
+->name('affiliate.dashboard');
+
+
+Route::middleware('auth')->group(function () {
+    // user’s own orders
+    Route::get('/orders', [OrderController::class, 'myOrders'])
+    ->name('orders.index');
+
+    // affiliate’s referral sales
+    Route::get('/affiliate/sales', [OrderController::class, 'affiliateSales'])
+    ->name('affiliate.sales');
+});
+
+
+Route::middleware('auth')->get('/credits', [App\Http\Controllers\CreditController::class, 'overview'])
+->name('credits.overview');
+
+
+
+Route::get('/credit-adview', [AdsController::class, 'awardCredits']);
+
+
+
 
 /*
  * Affiliate Tracking / Affiliate Program

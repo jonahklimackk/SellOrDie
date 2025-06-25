@@ -42,6 +42,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'username',
         'sponsor_id',
+        'status',
         'current_team_id'
     ];
 
@@ -65,6 +66,23 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+
+    /**
+     * Normalize status names if needed:
+     */
+    public function getMembershipTierAttribute()
+    {
+        // if your status values differ, map them here
+        $map = [
+            'free'         => 'amateur',
+            'lightweight'  => 'lightweight',
+            'heavyweight'  => 'heavyweight',
+        ];
+
+        return $map[$this->status] ?? 'amateur';
+    }
 
     
     /**
