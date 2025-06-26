@@ -364,13 +364,13 @@
     </ul>
     <!-- Stripe Payment Links -->
     <a
-      href="https://buy.stripe.com/4gMeVdaJ7bv6cND5zG6kg00"
+      href="http://localhost:8000/subscribe/lightweight_monthly"
       class="monthly mt-auto bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl text-center hover:bg-yellow-300 transition"
     >
       Subscribe $27/mo
     </a>
     <a
-      href="https://buy.stripe.com/28EfZh7wVczadRH0fm6kg01"
+      href="http://localhost:8000/subscribe/lightweight_yearly"
       class="yearly hidden mt-auto bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl text-center hover:bg-yellow-300 transition"
     >
       Subscribe $197/yr
@@ -395,13 +395,13 @@
     </ul>
     <!-- Stripe Payment Links -->
     <a
-      href="https://buy.stripe.com/eVqeVd3gFeHi00Rfag6kg03"
+      href="http://localhost:8000/subscribe/heavyweight_monthly"
       class="monthly mt-auto bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl text-center hover:bg-yellow-300 transition"
     >
       Subscribe $47/mo
     </a>
     <a
-      href="https://buy.stripe.com/4gMeVdbNbgPq6pf4vC6kg04"
+      href="http://localhost:8000/subscribe/heavyweight_yearly"
       class="yearly hidden mt-auto bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl text-center hover:bg-yellow-300 transition"
     >
       Subscribe $297/yr

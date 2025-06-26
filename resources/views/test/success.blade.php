@@ -1,0 +1,7 @@
+success
+
+<?php
+
+dump($session);
+
+?>

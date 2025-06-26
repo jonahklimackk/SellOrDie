@@ -16,7 +16,8 @@ use App\Http\Controllers\TeamInvitationController;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\OrderController;
-
+use App\Http\Controllers\TestOrderController;
+use App\Http\Controllers\SubscriptionController;
 
 
 // override the “accept invitation” route
@@ -81,11 +82,14 @@ Route::get('/checkout/heavyweight-yearly/success', [OrderController::class, 'hea
 
 
 Route::get('/upgrade', function () {
-    return view('/upgrade.version1');
+    return view('/upgrade.index');
 });
 
 
+Route::get('/test-checkout', [TestOrderController::class, 'createSession']);
 
+Route::get('/test/success',  [TestOrderController::class, 'success'])->name('test.success');
+Route::get('/test/cancel',   [TestOrderController::class, 'cancel'])->name('test.cancel');
 
 
 
@@ -136,6 +140,47 @@ Route::middleware('auth')->get('/credits', [App\Http\Controllers\CreditControlle
 Route::get('/credit-adview', [AdsController::class, 'awardCredits']);
 
 
+
+/*
+ * Cashier Billing Subscriptions
+ * 
+ *
+ */
+
+
+// Subscription checkout starter
+Route::get('/subscribe/{planKey}',    [OrderController::class, 'subscribe'])
+     ->name('subscriptions.checkout');
+
+// Subscription success / cancel callbacks
+Route::get('/subscribe/{planKey}/success', [OrderController::class, 'subscriptionSuccess'])
+     ->name('subscriptions.success');
+Route::get('/subscribe/cancel', [OrderController::class, 'subscriptionCancel'])
+     ->name('subscriptions.cancel');
+
+
+Route::get('/test-subscription', function () {
+    return view('test.test-subscribe');
+
+});
+
+
+// Route::middleware(['auth'])->group(function () {
+
+//     Route::get('subscribe/success', [SubscriptionController::class, 'success'])
+//          ->name('subscriptions.success');
+
+//     Route::get('subscribe/cancel', [SubscriptionController::class, 'cancel'])
+//          ->name('subscriptions.cancel');
+
+//     // Replace {planKey} with one of your four config keys:
+//     // lightweight_monthly, lightweight_yearly, heavyweight_monthly, heavyweight_yearly
+//     Route::get('subscribe/{planKey}', [SubscriptionController::class, 'checkout'])
+//          ->name('subscriptions.checkout');
+
+//     Route::post('billing/portal', [SubscriptionController::class, 'portal'])
+//          ->name('billing.portal');
+//      });
 
 
 /*

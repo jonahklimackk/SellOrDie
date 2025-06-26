@@ -19,6 +19,7 @@ use App\Models\Fight;
 use App\Models\Team;
 use App\Models\Mailings;
 use App\Notifications\CustomVerifyEmail;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -30,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasTeams;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use Billable;
 
     /**
      * The attributes that are mass assignable.
