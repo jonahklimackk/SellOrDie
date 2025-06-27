@@ -82,7 +82,16 @@ Route::get('/checkout/heavyweight-yearly/success', [OrderController::class, 'hea
 
 
 Route::get('/upgrade', function () {
-    return view('/upgrade.index');
+    $plans = config('spark.billables.user.plans');
+
+
+    // foreach($plans as $plan)
+    // {
+    //     dump($plan);
+    // }
+    // exit;
+
+    return view('/upgrade.index', compact('plans'));
 });
 
 
@@ -150,13 +159,13 @@ Route::get('/credit-adview', [AdsController::class, 'awardCredits']);
 
 // Subscription checkout starter
 Route::get('/subscribe/{planKey}',    [OrderController::class, 'subscribe'])
-     ->name('subscriptions.checkout');
+->name('subscriptions.checkout');
 
 // Subscription success / cancel callbacks
 Route::get('/subscribe/{planKey}/success', [OrderController::class, 'subscriptionSuccess'])
-     ->name('subscriptions.success');
+->name('subscriptions.success');
 Route::get('/subscribe/cancel', [OrderController::class, 'subscriptionCancel'])
-     ->name('subscriptions.cancel');
+->name('subscriptions.cancel');
 
 
 Route::get('/test-subscription', function () {
@@ -447,3 +456,14 @@ Route::get('/test-verify', function() {
     return 'Dispatched—check storage/logs/laravel.log';
 });
 
+
+Route::get('/test-listener', function() {
+
+    // assume your Billable is User and you have a subscription
+    $user         = App\Models\User::first();
+    $subscription = $user->subscriptions()->first();
+
+    // dispatch the event (this will invoke your listener directly)
+    event(new \Spark\Events\SubscriptionCreated($user, $subscription));
+
+});

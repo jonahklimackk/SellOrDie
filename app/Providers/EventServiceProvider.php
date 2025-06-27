@@ -36,6 +36,24 @@ class EventServiceProvider extends ServiceProvider
         \App\Listeners\AwardCreditsOnLogin::class,
     ],
 
+    \Spark\Events\SubscriptionCreated::class => [
+        \App\Listeners\TrackAffiliateCommission::class,
+        // any other subscriber logic...
+    ],
+
+    // \Spark\Events\PaymentSucceeded::class     => [
+    //     \App\Listeners\RecordCampaignOrder::class,
+    //     // e.g. update a “CampaignOrder” model, fire webhooks, etc.
+    // ],
+
+    // \Spark\Events\SubscriptionUpdated::class  => [
+    //     \App\Listeners\MaybeAdjustAffiliatePayout::class,
+    // ],
+
+    // \Spark\Events\SubscriptionCancelled::class=> [
+    //     \App\Listeners\RevokePendingCommissions::class,
+    // ],
+
 
                 
     ];

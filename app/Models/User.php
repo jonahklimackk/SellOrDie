@@ -19,19 +19,20 @@ use App\Models\Fight;
 use App\Models\Team;
 use App\Models\Mailings;
 use App\Notifications\CustomVerifyEmail;
-use Laravel\Cashier\Billable;
+// use Laravel\Cashier\Billable;
+use Spark\Billable;  
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
+    use Billable;
     use HasFactory;
     use HasProfilePhoto;
     use HasTeams;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use Billable;
 
     /**
      * The attributes that are mass assignable.

@@ -18,7 +18,7 @@ use Laravel\Cashier\Subscription; // <-- if you need to refer to Cashier models
 class OrderController extends Controller
 {
     /**
-     * Record both the Order and the AffiliateSale (if applicable).
+     * Record both the Or AffiliateSale (if applicable).
      */
     protected function recordSale(Request $request, string $product)
     {

@@ -6,6 +6,7 @@
   <title>Upgrade to Heavyweight</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://js.stripe.com/v3"></script>
+    @vite(['resources/css/app.css'])
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     /* Container & sizing */
@@ -364,13 +365,13 @@
     </ul>
     <!-- Stripe Payment Links -->
     <a
-      href="http://localhost:8000/subscribe/lightweight_monthly"
+      href="http://localhost:8000/billing?message=Choose+Lightweight"
       class="monthly mt-auto bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl text-center hover:bg-yellow-300 transition"
     >
       Subscribe $27/mo
     </a>
     <a
-      href="http://localhost:8000/subscribe/lightweight_yearly"
+      href="http://localhost:8000/billing?message=Choose+Lightweight"
       class="yearly hidden mt-auto bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl text-center hover:bg-yellow-300 transition"
     >
       Subscribe $197/yr
@@ -395,13 +396,13 @@
     </ul>
     <!-- Stripe Payment Links -->
     <a
-      href="http://localhost:8000/subscribe/heavyweight_monthly"
+      href="http://localhost:8000/billing?message=Choose+Heavyweight"
       class="monthly mt-auto bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl text-center hover:bg-yellow-300 transition"
     >
       Subscribe $47/mo
     </a>
     <a
-      href="http://localhost:8000/subscribe/heavyweight_yearly"
+      href="http://localhost:8000/billing?message=Choose+Heavyweight"
       class="yearly hidden mt-auto bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl text-center hover:bg-yellow-300 transition"
     >
       Subscribe $297/yr
@@ -497,5 +498,7 @@
       }
     });
   </script>
+
+
 </body>
 </html>

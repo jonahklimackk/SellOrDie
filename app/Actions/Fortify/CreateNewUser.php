@@ -63,7 +63,7 @@ class CreateNewUser implements CreatesNewUsers
                     ]);
 
                     // 4) Assign the new user a matrix slot too, if you want:
-                    // \App\Services\AffiliateService::assignMatrixPosition($user);
+                    \App\Services\AffiliateService::assignMatrixPosition($user);
                 }
 
 
