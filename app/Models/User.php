@@ -22,6 +22,7 @@ use App\Notifications\CustomVerifyEmail;
 // use Laravel\Cashier\Billable;
 use Spark\Billable;  
 use App\Models\MatrixPosition;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -273,10 +274,10 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Users this person has referred.
      */
-public function referrals()
-{
-    return $this->hasMany(User::class, 'referrer_id')->orderBy('id');
-}
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referrer_id')->orderBy('id');
+    }
     /**
      * Affiliate sales where this user is the referrer.
      */
@@ -344,4 +345,71 @@ public function matrixPositions()
         return $this->hasOne(User::class, 'referrer_id')->where('side','right');
     }    
 
+// app/Models/User.php
+
+
+
+  /**
+     * Return the downline as a nested array, limited to 7 levels deep.
+     *
+     * @return array
+     */
+  public function getDownlineTree(): array
+  {
+    $rows = DB::select("
+        WITH RECURSIVE downline AS (
+                -- Level 1
+                SELECT id, referrer_id, 1 AS lvl
+                FROM users
+                WHERE referrer_id = :rootId
+
+                UNION ALL
+
+                -- Levels 2–7
+                SELECT u.id, u.referrer_id, d.lvl + 1 AS lvl
+                FROM users u
+                JOIN downline d ON u.referrer_id = d.id
+                WHERE d.lvl < 7
+                )
+        SELECT
+        u.id,
+        u.name,
+        u.email,
+        u.profile_photo_path AS photo_path,
+        d.referrer_id,
+        d.lvl
+        FROM downline d
+        JOIN users u ON u.id = d.id
+        ", ['rootId' => $this->id]);
+
+  
+        // Build flat map of id → node
+    $map = [];
+    foreach ($rows as $r) {
+        $map[$r->id] = [
+            'id'         => $r->id,
+            'name'       => $r->name,
+            'email'      => $r->email,
+            'photo_path' => $r->photo_path,
+            'parent_id'  => $r->referrer_id,
+            'lvl'        => $r->lvl,
+            'children'   => [],
+        ];
+    }
+
+        // Nest into a tree
+    $tree = [];
+    foreach ($map as $id => &$node) {
+        if ($node['parent_id'] === $this->id) {
+            $tree[] = &$node;
+        } elseif (isset($map[$node['parent_id']])) {
+            $map[$node['parent_id']]['children'][] = &$node;
+        }
+    }
+
+    return $tree;
 }
+}
+
+
+

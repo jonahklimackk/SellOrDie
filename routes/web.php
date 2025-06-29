@@ -28,14 +28,16 @@ use App\Http\Livewire\FullDownline;
 
 
 
+Route::middleware('auth')->get('/downline/tree', [DownlineController::class, 'showTree']);
 
 Route::get('/downline', [App\Http\Controllers\DownlineController::class, 'index'])
      ->middleware('auth')
      ->name('downline.index');
 
-
-
-
+Route::get('/downline/{level}', [DownlineController::class, 'showLevel'])
+     ->middleware('auth')
+     ->where('level', '[1-7]')
+     ->name('downline.showLevel');
 
 
 
