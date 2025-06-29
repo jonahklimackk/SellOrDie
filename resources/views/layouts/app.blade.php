@@ -20,6 +20,7 @@
 
     <!-- Styles -->
     @livewireStyles
+    @stack('styles')
 
 
 
@@ -54,6 +55,73 @@
 
                 <script src="https://cdn.tiny.cloud/1/hdpfz7m2vgiig2zohze2n23vfx0meivy7flc54tvj7biqkm3/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     
+
+    <style>
+
+/*this also highlights them */
+/*        .binary-tree > li > .binary-node__children > li > .binary-node__content {
+  border: 2px solid #FBBF24;
+}*/
+        .binary-tree, .binary-tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.binary-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.binary-node__content {
+  background: #1F2937;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+  min-width: 10rem;
+  text-align: center;
+}
+
+/*this is what highlights them */
+/*.binary-node.personal > .binary-node__content {
+  border: 2px solid #FBBF24;
+}*/
+
+.binary-node__children {
+  display: flex;
+  flex-wrap: wrap;        /* allow multiple rows */
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.binary-node__children::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  height: 1rem;
+  border-left: 2px solid #4B5563;
+}
+
+/* connectors for each child */
+.binary-node__children > li::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 0; height: 0;
+  border-top: 2px solid #4B5563;
+}
+.binary-node__children > li:first-child::before {
+  left: 25%;
+}
+.binary-node__children > li:last-child::before {
+  left: 75%;
+}
+
+</style>
 </head>
 <body class=" bg-gray-900 font-sans antialiased" onload="toggleVisibilityEdit();toggleVisibilityNew();">
     <x-banner />

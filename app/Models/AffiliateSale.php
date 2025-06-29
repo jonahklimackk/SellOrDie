@@ -7,27 +7,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AffiliateSale extends Model
 {
-    // The table name is inferred as 'affiliate_sales'
-
-    /**
-     * Mass‐assignable attributes.
-     */
     protected $fillable = [
-        'referrer_id', 'buyer_id', 'campaign', 'product', 'amount',
+        'referrer_id',
+        'buyer_id',
+        'campaign',
+        'product',
+        'amount',
+        'commission',
     ];
 
-    /**
-     * The user who earned the sale commission.
-     */
-    public function referrer(): BelongsTo
+    public function referrer()
     {
         return $this->belongsTo(User::class, 'referrer_id');
     }
 
-    /**
-     * The user who made the purchase.
-     */
-    public function buyer(): BelongsTo
+    public function buyer()
     {
         return $this->belongsTo(User::class, 'buyer_id');
     }

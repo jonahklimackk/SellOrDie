@@ -21,6 +21,7 @@ use App\Models\Mailings;
 use App\Notifications\CustomVerifyEmail;
 // use Laravel\Cashier\Billable;
 use Spark\Billable;  
+use App\Models\MatrixPosition;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -70,6 +71,19 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_url',
     ];
 
+    /**
+     * Public entrypoint: build the full binary downline tree.
+     *
+     * @return array|null
+     */
+    public function getBinaryTree(): ?array
+    {
+        $pos = $this->matrixPosition;
+        return $pos
+        ? $this->buildBinaryNode($pos)
+        : null;
+    }
+
 
 
     /**
@@ -117,8 +131,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new \App\Notifications\CustomVerifyEmail(  /* no $notifiable */ ));
-    }
+    $this->notify(new \App\Notifications\CustomVerifyEmail(  /* no $notifiable */ ));
+}
 
     /**
      * Get the attributes that should be cast.
@@ -245,5 +259,89 @@ class User extends Authenticatable implements MustVerifyEmail
         return User::where('id',$user->sponsor_id)->get()->first();
 
     }
+
+        /**
+     * The user who referred (sponsored) this user.
+     */
+        public function referrer()
+        {
+            return $this->belongsTo(User::class, 'referrer_id');
+        }
+
+
+
+    /**
+     * Users this person has referred.
+     */
+public function referrals()
+{
+    return $this->hasMany(User::class, 'referrer_id')->orderBy('id');
+}
+    /**
+     * Affiliate sales where this user is the referrer.
+     */
+    public function affiliateSales()
+    {
+        return $this->hasMany(AffiliateSale::class, 'referrer_id');
+    }    
+
+/**
+ * Get all matrix positions owned by this user.
+ */
+public function matrixPositions()
+{
+    return $this->hasMany(MatrixPosition::class, 'user_id');
+}
+
+    /**
+     * One-to-one to the user's own matrix position.
+     */
+    public function matrixPosition()
+    {
+        return $this->hasOne(MatrixPosition::class);
+    }
+
+    /**
+     * Get the users this user has personally referred (level-1 downline).
+     */
+    public function personalReferrals()
+    {
+        return $this->hasMany(self::class, 'referrer_id');
+    }
+
+    /**
+     * Recursively build one node of the tree.
+     *
+     * @param  MatrixPosition  $pos
+     * @return array
+     */
+    protected function buildBinaryNode(MatrixPosition $pos): array
+    {
+        $user     = $pos->user;
+        $children = $pos->children()->orderBy('position_index')->get();
+
+        $leftPos  = $children->firstWhere('position_index', 1);
+        $rightPos = $children->firstWhere('position_index', 2);
+
+        return [
+            'user_id'    => $user->id,
+            'name'       => $user->name,
+            'email'      => $user->email,
+            'isPersonal' => $user->referrer_id === auth()->id(),
+            'depth'      => $pos->depth,
+            'left'       => $leftPos  ? $this->buildBinaryNode($leftPos)  : null,
+            'right'      => $rightPos ? $this->buildBinaryNode($rightPos) : null,
+        ];
+    }    
+
+    public function leftReferral()
+    {
+        return $this->hasOne(User::class, 'referrer_id')->where('side','left');
+    }
+
+    public function rightReferral()
+    {
+        return $this->hasOne(User::class, 'referrer_id')->where('side','right');
+    }    
 
 }

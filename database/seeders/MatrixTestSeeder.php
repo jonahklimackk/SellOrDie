@@ -3,60 +3,89 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\MatrixPosition;
+use App\Models\AffiliateSale;
 use App\Services\AffiliateService;
-use App\Services\CreditService;
+use App\Services\MatrixService;
 
-class MatrixTestSeeder extends Seeder
+class MatrixAffiliateSeeder extends Seeder
 {
     /**
-     * Seed users, assign them in a forced-binary matrix, and award test credits.
+     * Run the matrix + affiliate seeder.
      */
     public function run()
     {
-        $this->command->info('🚀 Starting MatrixTestSeeder');
+        // 1) Create a top-level affiliate
+        $root = User::factory()->create([
+            'name'        => 'Affiliate Root',
+            'email'       => 'affiliate@example.com',
+            'password'    => Hash::make('password'),
+            'referrer_id' => null,
+        ]);
 
-        // 1) Create (or update) a root user and position
-        $root = User::updateOrCreate(
-            ['email' => 'root@example.com'],
-            [
-                'name'     => 'Root User',
-                'username' => 'root',
-                'password' => bcrypt('password'),
-            ]
-        );
-        MatrixPosition::firstOrCreate(
-            ['user_id' => $root->id],
-            ['parent_id' => null, 'position_index' => 1, 'depth' => 0]
-        );
-        $this->command->info("✔ Root user #{$root->id} positioned at root");
+        // Create their personal team
+        $this->createPersonalTeam($root);
 
-        // 2) Create additional test users and assign matrix positions
-        $testUsers = [];
-        for ($i = 1; $i <= 10; $i++) {
-            $user = User::updateOrCreate(
-                ['email' => "test{$i}@example.com"],
-                [
-                    'name'     => "Test User {$i}",
-                    'username' => "testuser{$i}",
-                    'password' => bcrypt('password'),
-                ]
-            );
-            $testUsers[] = $user;
-            AffiliateService::assignMatrixPosition($user);
-            $pos = MatrixPosition::where('user_id', $user->id)->first();
-            $this->command->info("• Positioned Test User #{$user->id} under parent #{$pos->parent_id}, slot {$pos->position_index}");
+        // 2) Recursively build a 2-wide matrix, 3 levels deep
+        $this->createDownline($root, $levels = 3, $childrenPerParent = 2);
+    }
+
+    /**
+     * @param  \App\Models\User  $user
+     */
+    protected function createPersonalTeam(User $user)
+    {
+        // Assumes you’re using Jetstream/Spark’s default Team model
+        $team = $user->ownedTeams()->create([
+            'name'          => "{$user->name}'s Personal Team",
+            'personal_team' => true,
+        ]);
+
+        // Set as current team
+        $user->forceFill(['current_team_id' => $team->id])->save();
+    }
+
+    /**
+     * @param  \App\Models\User  $parent
+     * @param  int               $levels            How many levels of depth to generate
+     * @param  int               $childrenPerParent Number of direct referrals per user
+     */
+    protected function createDownline(User $parent, int $levels, int $childrenPerParent)
+    {
+        if ($levels <= 0) {
+            return;
         }
 
-        // 3) Simulate actions and award credits for the first few users
-        foreach (array_slice($testUsers, 0, 3) as $user) {
-            CreditService::awardBaseAndMatrix($user->id, 'ad_view', "Seeded ad view for user #{$user->id}");
-            $this->command->info("• Awarded ad_view credits for User #{$user->id}");
-            CreditService::awardBaseAndMatrix($user->id, 'vote', "Seeded vote for user #{$user->id}");
-            $this->command->info("• Awarded vote credits for User #{$user->id}");
-        }
+        for ($i = 1; $i <= $childrenPerParent; $i++) {
+            // a) Create the referred user
+            $user = User::factory()->create([
+                'name'        => "Level {$levels} – User #{$i}",
+                'email'       => "level{$levels}_user{$i}@example.com",
+                'password'    => Hash::make('password'),
+                'referrer_id' => $parent->id,
+            ]);
 
-        $this->command->info('✅ MatrixTestSeeder complete');
+            // Create their personal team
+            $this->createPersonalTeam($user);
+
+            // b) Simulate a purchase so your affiliate logic runs
+            $amount = rand(50, 200);
+            AffiliateSale::create([
+                'referrer_id' => $parent->id,
+                'buyer_id'    => $user->id,
+                'campaign'    => 'seeder_campaign',
+                'product'     => 'test_product',
+                'amount'      => $amount,
+            ]);
+            AffiliateService::handleSale($user, $amount);
+
+            // c) Simulate an ad view to exercise matrix spillover
+            $creditsForView = rand(20, 60);
+            MatrixService::processAdView($user, $creditsForView);
+
+            // d) Recurse
+            $this->createDownline($user, $levels - 1, $childrenPerParent);
+        }
     }
 }

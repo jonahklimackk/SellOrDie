@@ -95,11 +95,11 @@ class NewFightController extends Controller
     {
 
 
-       $fight = Team::find($fightId);
+     $fight = Team::find($fightId);
 
-       FightViewLog::logView($fight->id);
+     FightViewLog::logView($fight->id);
 
-       if(is_null($fight))
+     if(is_null($fight))
         return "error: no fight exists here";
 
     $ads = Ads::where('team_id', $fight->id)->get()->all();
@@ -285,13 +285,14 @@ public function vote($key, $clickedAdId)
         * */
     public function challengeTest(string $key, int $icon)
     {
-
+        \Log::info("in new fight at beginning");
         // dump($key);
         // dump($icon);
 
         $creditClick = CreditClicks::where('key', $key)->get()->first();
         // dump($creditClick);
         if ($icon == $creditClick->challenge_icon && !$creditClick->timer_countdown) {
+           \Log::info("in new fight first b lock");
 
             // if (!$creditClick->earned_credits) {
 
@@ -308,59 +309,67 @@ public function vote($key, $clickedAdId)
 
             // return "You just earned  ".$creditClick->credits." credits. <br> Total Credits: ".Auth::user()->credits; 
 
-            $creditClick->challenge_correct=  true;
-            $creditClick->save();
+                   $earned = CreditService::awardBaseAndMatrix(
+            Auth::id(),
+            'vote',
+            'voted on fight'
+        );
 
-            return response()->json([
-                'response'=> 'Answer Is Correct!'
-            ]);
+           $creditClick->challenge_correct=  true;
+           $creditClick->save();
+
+           return response()->json([
+            'response'=> 'Answer Is Correct!'
+        ]);
 
 
-        }    
-        else if ($icon == $creditClick->challenge_icon && $creditClick->timer_countdown && !$creditClick->earned_credits) {
+       }    
+       else if ($icon == $creditClick->challenge_icon && $creditClick->timer_countdown && !$creditClick->earned_credits) {
                        //give creditgs
-            $recipient = User::where('id', $creditClick->recipient_id)->get()->first();
-            $recipient->credits += $creditClick->credits;
-            $recipient->save();
+        $recipient = User::where('id', $creditClick->recipient_id)->get()->first();
+        $recipient->credits += $creditClick->credits;
+        $recipient->save();
 
-            $earned = CreditService::awardBaseAndMatrix(
-                Auth::id(),
-                'vote',
-                'voted on fight'
-            );
+        \Log::info("in new fight give c redit section");
+
+        $earned = CreditService::awardBaseAndMatrix(
+            Auth::id(),
+            'vote',
+            'voted on fight'
+        );
 
 
-            $creditClick->earned_credits = true;
-            $creditClick->clicks++;
-            $creditClick->ip = env("REMOTE_ADDR");
-            $creditClick->save();
+        $creditClick->earned_credits = true;
+        $creditClick->clicks++;
+        $creditClick->ip = env("REMOTE_ADDR");
+        $creditClick->save();
 
-            return response()->json([
-                'earned_credits'    => $earned,
-                'total_credits' =>  Credit::where('user_id', Auth::id())->sum('amount')
-            ]);
+        return response()->json([
+            'earned_credits'    => $earned,
+            'total_credits' =>  Credit::where('user_id', Auth::id())->sum('amount')
+        ]);
 
             // return "You just earned  ".$creditClick->credits." credits. \n  Total Credits: ".Auth::user()->credits;       
 
             // return Response::make($html, 200, [
             //     'Content-Type' => 'text/html'
             // ]);            
-        }
-        else if ($icon == $creditClick->challenge_icon && $creditClick->timer_countdown && $creditClick->earned_credits){
-            return response()->json([
-                'response'=> 'You already earned credits for this link.'
-            ]);           
-
-        }
-
-        else {
-            return response()->json([
-                'response'=> 'Answer is wrong.'
-            ]); 
-        }
-
+    }
+    else if ($icon == $creditClick->challenge_icon && $creditClick->timer_countdown && $creditClick->earned_credits){
+        return response()->json([
+            'response'=> 'You already earned credits for this link.'
+        ]);           
 
     }
+
+    else {
+        return response()->json([
+            'response'=> 'Answer is wrong.'
+        ]); 
+    }
+
+
+}
 
 
 
@@ -404,6 +413,9 @@ public function vote($key, $clickedAdId)
 
     // Auth::user()->credits += $voteCredits;
     // Auth::user()->save();
+
+            \Log::info("in new fight show top frame before countdown");
+
 
             // $credits = Auth::user()->credits;
             $credits = Credit::where('user_id', Auth::id())->sum('amount');

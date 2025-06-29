@@ -18,6 +18,36 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TestOrderController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\DownlineController;
+use App\Http\Controllers\MatrixController;
+use App\Http\Controllers\AffiliateStatsController;
+
+use App\Http\Controllers\FullDownlineController;
+
+use App\Http\Livewire\FullDownline;
+
+
+
+
+Route::get('/downline', [App\Http\Controllers\DownlineController::class, 'index'])
+     ->middleware('auth')
+     ->name('downline.index');
+
+
+
+
+
+
+
+
+// Route::get('/downline', function () {
+//     return view('full-downline2');
+// })->name('downline');
+
+Route::get('/full-downline', [FullDownlineController::class, 'index'])
+     ->middleware('auth')
+     ->name('full-downline');
+
 
 
 // override the “accept invitation” route
@@ -130,6 +160,11 @@ Route::get('/affiliate/dashboard', [AffiliateController::class, 'dashboard'])
 ->name('affiliate.dashboard');
 
 
+Route::middleware(['auth'])
+->get('/affiliate-stats', [AffiliateStatsController::class, 'index'])
+->name('affiliate.stats');
+
+
 Route::middleware('auth')->group(function () {
     // user’s own orders
     Route::get('/orders', [OrderController::class, 'myOrders'])
@@ -148,6 +183,79 @@ Route::middleware('auth')->get('/credits', [App\Http\Controllers\CreditControlle
 
 Route::get('/credit-adview', [AdsController::class, 'awardCredits']);
 
+
+// Route::get('/downline', [DownlineController::class, 'index'])
+//      ->name('downline')
+//      ->middleware('auth');
+
+
+
+Route::get('/matrix', [MatrixController::class, 'index'])
+->name('matrix')
+->middleware('auth');
+
+
+// Route::middleware(['auth:sanctum', 'verified'])
+// ->get('/downline', function () {
+//     return view('downline-tree');
+// })
+// ->name('downline');
+
+
+// File: routes/web.php
+Route::middleware(['auth:sanctum', 'verified'])
+->get('/downline-binary', function () {
+    return view('downline-binary');
+})
+->name('downline.binary');
+
+
+Route::middleware(['auth:sanctum', 'verified'])
+->get('/downline-matrix', function () {
+    return view('downline-matrix');
+})
+->name('downline.matrix');
+
+
+
+// Route::get('/full-downline', function () {
+//     return view('full-downline');
+// })->name('full-downline');
+
+
+Route::get('/matrix-example', function () {
+    return view('matrix-example');
+
+});
+
+use App\Livewire\DownlineBinaryHighlight;
+
+// Route::middleware(['auth'])->group(function(){
+//     Route::get('/downline-binary-highlight', DownlineBinaryHighlight::class)
+//          ->name('downline.binary-highlight');
+// });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/downline-binary-highlight', function () {
+        return view('downline-binary-highlight');
+    })->name('downline-binary-highlight');
+});
+
+
+// Route::middleware(['auth:sanctum','verified'])
+// ->get('/downline-binary-highlight', function () {
+//     return view('downline-binary-highlight');
+// })
+// ->name('downline.binary.highlight');    
+
+
+Route::middleware(['auth:sanctum', 'verified'])
+->get('/my-referrals', function () {
+        // eager-load if you like: ->with('personalReferrals')
+    $referrals = auth()->user()->personalReferrals()->get();
+    return view('personal-referrals', compact('referrals'));
+})
+->name('my.referrals');    
 
 
 /*

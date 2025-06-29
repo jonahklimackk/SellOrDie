@@ -25,21 +25,21 @@ class EventServiceProvider extends ServiceProvider
         ],
 
     // Your custom events
-    \App\Events\AdVoted::class       => [\App\Listeners\AwardCreditsOnVote::class],
-    \App\Events\AdViewed::class      => [\App\Listeners\AwardCreditsOnViewed::class],
+        \App\Events\AdVoted::class       => [\App\Listeners\AwardCreditsOnVote::class],
+        \App\Events\AdViewed::class      => [\App\Listeners\AwardCreditsOnViewed::class],
 
     // Laravel’s built-in auth events
-    \Illuminate\Auth\Events\Registered::class => [
-        \App\Listeners\AwardCreditsOnReferral::class,
-    ],
-    \Illuminate\Auth\Events\Login::class      => [
-        \App\Listeners\AwardCreditsOnLogin::class,
-    ],
+        \Illuminate\Auth\Events\Registered::class => [
+            \App\Listeners\AwardCreditsOnReferral::class,
+        ],
+        \Illuminate\Auth\Events\Login::class      => [
+            \App\Listeners\AwardCreditsOnLogin::class,
+        ],
 
-    \Spark\Events\SubscriptionCreated::class => [
-        \App\Listeners\TrackAffiliateCommission::class,
+        \Spark\Events\SubscriptionCreated::class => [
+            \App\Listeners\TrackAffiliateCommission::class,
         // any other subscriber logic...
-    ],
+        ],
 
     // \Spark\Events\PaymentSucceeded::class     => [
     //     \App\Listeners\RecordCampaignOrder::class,
@@ -54,8 +54,14 @@ class EventServiceProvider extends ServiceProvider
     //     \App\Listeners\RevokePendingCommissions::class,
     // ],
 
+        parent::boot();
 
-                
+        Event::listen(Registered::class, function ($event) {
+            $event->user->markEmailAsVerified();
+        });
+
+
+
     ];
 
     /**

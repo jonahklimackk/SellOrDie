@@ -32,16 +32,25 @@ return [
         // You can add more actions here…
     ],
 
+
     /*
     |--------------------------------------------------------------------------
-    | Matrix spill‐over bonus per level (unchanged)
+    | How many matrix levels to pay out
     |--------------------------------------------------------------------------
     */
-    'matrix_levels' => 3,
-    'matrix_bonus'  => [
-        1 => 5,
+    'matrix_levels' => 5,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bonus credits by level (1 = direct parent, 2 = grandparent, etc.)
+    |--------------------------------------------------------------------------
+    */
+    'matrix_bonus' => [
+        1 => 5,  // Level-1 upline gets +5 credits
         2 => 3,
-        3 => 1,
+        3 => 2,
+        4 => 1,
+        5 => 1,
     ],
 
 ];

@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('matrix_positions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('parent_id')->nullable()->constrained('matrix_positions')->onDelete('set null');
-    $table->unsignedTinyInteger('position_index'); // 1 or 2
-    $table->unsignedTinyInteger('depth');
+Schema::create('matrix_positions', function (Blueprint $table) {
+    $table->id();
+    $table->unsignedBigInteger('user_id');
+    $table->unsignedBigInteger('parent_id')->nullable();
+    $table->tinyInteger('position_index');
+    $table->smallInteger('depth');
     $table->timestamps();
+
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+    $table->foreign('parent_id')->references('id')->on('matrix_positions')->onDelete('cascade');
 });
     }
 
