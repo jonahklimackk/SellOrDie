@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Auth;
 use Cookie;
+use App\Models\Credit;
 use App\Models\Membership;
 use Illuminate\Contracts\Auth\MustVerifyEmail;   
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,7 @@ use App\Notifications\CustomVerifyEmail;
 use Spark\Billable;  
 use App\Models\MatrixPosition;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -408,6 +410,16 @@ public function matrixPositions()
     }
 
     return $tree;
+}
+
+/**
+ * All credit transactions for this user.
+ *
+ * @return \Illuminate\Database\Eloquent\Relations\HasMany
+ */
+public function credits(): HasMany
+{
+    return $this->hasMany(\App\Models\Credit::class);
 }
 }
 

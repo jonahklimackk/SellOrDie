@@ -3,54 +3,44 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Credit ranges per action and membership tier
-    |--------------------------------------------------------------------------
-    | For each action type, you can define:
-    |  • a fixed numeric value
-    |  • or an array of membership tiers, each with a min/max range
-    */
+    // … your existing actions …
     'actions' => [
-
-        // Voting: same for everyone
-        'ad_view' => 1,
-
-        // Login: same for everyone
-        'login' => 2,
-
-        // Referral: same for everyone
+        'ad_view'  => 1,
+        'login'    => 2,
         'referral' => 10,
-
-        // Ad view: varies by tier
-        'vote' => [
+        'vote'     => [
             'amateur'     => ['min' => 20,  'max' => 60],
             'lightweight' => ['min' => 40,  'max' => 80],
             'heavyweight' => ['min' => 60,  'max' => 120],
         ],
 
-        // You can add more actions here…
+        // ← add your signup action here:
+        'signup'   => 500, // fixed 50-credit bonus on signup
     ],
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | How many matrix levels to pay out
-    |--------------------------------------------------------------------------
-    */
-    'matrix_levels' => 5,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Bonus credits by level (1 = direct parent, 2 = grandparent, etc.)
-    |--------------------------------------------------------------------------
-    */
-    'matrix_bonus' => [
-        1 => 5,  // Level-1 upline gets +5 credits
-        2 => 3,
-        3 => 2,
-        4 => 1,
-        5 => 1,
+    // … your existing downline_vote config …
+    'downline_vote'        => 1,
+    'downline_vote_levels' => [
+        1 => 10,
+        2 => 7,
+        3 => 5,
+        4 => 3,
+        5 => 4,
+        6 => 2,
+        7 => 1,
     ],
 
+    // ← now add the downline_signup config:
+    'downline_signup'        => 10,  // base if no per-level
+    'downline_signup_levels' => [
+        1 => 500, // direct parent of new signup gets 20
+        2 => 300,
+        3 => 200,
+        4 => 150,
+        5 => 100,
+        6 => 50,
+        7 => 25,
+    ],
+
+    // … rest of your config …
 ];

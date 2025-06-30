@@ -1,9 +1,9 @@
 <?php
+// app/Events/AdVoted.php
 
 namespace App\Events;
 
 use App\Models\User;
-use App\Models\Ad;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -11,22 +11,16 @@ class AdVoted
 {
     use Dispatchable, SerializesModels;
 
-    /** @var \App\Models\User */
-    public User $user;
-
-    /** @var \App\Models\Ad */
-    // public Ad $ad;
+    public User $voter;
+    public int  $adId;
 
     /**
-     * Create a new event instance.
-     *
-     * @param  User  $user  The user who voted
-     * @param  Ad    $ad    The ad that was voted on
-     * @return void
+     * @param  User  $voter  The user who just voted
+     * @param  int   $adId   The ID of the ad they voted on
      */
-    public function __construct(User $user)
+    public function __construct(User $voter, int $adId)
     {
-        $this->user = $user;
-        // $this->ad   = $ad;
+        $this->voter = $voter;
+        $this->adId  = $adId;
     }
 }

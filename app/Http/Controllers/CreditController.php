@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/CreditController.php
 
 namespace App\Http\Controllers;
 
@@ -14,23 +13,29 @@ class CreditController extends Controller
         $userId = Auth::id();
 
         // 1) Total credits
-        $total = Credit::where('user_id', $userId)->sum('amount');
+        $total = Credit::where('user_id', $userId)
+                       ->sum('amount');
 
-        // 2) Spill-over credits (types ending in "_spillover")
-        $spillover = Credit::where('user_id', $userId)
-                            ->where('type', 'like', '%_spillover')
-                            ->sum('amount');
+        // 2) Downline credits (type = 'downline_vote')
+        $downline = Credit::where('user_id', $userId)
+                          ->where('type', 'downline_vote')
+                          ->sum('amount');
 
-        // 3) Base credits = total – spillover
-        $base = $total - $spillover;
+        // 3) Base credits = total – downline
+        $base = $total - $downline;
 
         // 4) Breakdown by type
         $byType = Credit::where('user_id', $userId)
-                        ->selectRaw("type, SUM(amount) as total")
+                        ->selectRaw('type, SUM(amount) as total')
                         ->groupBy('type')
                         ->orderBy('total', 'desc')
                         ->get();
 
-        return view('credits.overview', compact('total','base','spillover','byType'));
+        return view('credits.overview', compact(
+            'total',
+            'base',
+            'downline',
+            'byType'
+        ));
     }
 }

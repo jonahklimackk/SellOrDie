@@ -11,15 +11,17 @@
           <h3 class="text-lg font-medium text-gray-400">Total Credits</h3>
           <p class="text-4xl font-bold text-yellow-300">{{ $total }}</p>
         </div>
+
         {{-- Base --}}
         <div class="p-6 bg-gray-900 rounded-2xl shadow-2xl">
           <h3 class="text-lg font-medium text-gray-400">Your Credits</h3>
           <p class="text-4xl font-bold text-yellow-300">{{ $base }}</p>
         </div>
-        {{-- Spillover --}}
+
+        {{-- Downline --}}
         <div class="p-6 bg-gray-900 rounded-2xl shadow-2xl">
-          <h3 class="text-lg font-medium text-gray-400">Spill-over Credits</h3>
-          <p class="text-4xl font-bold text-yellow-300">{{ $spillover }}</p>
+          <h3 class="text-lg font-medium text-gray-400">Downline Credits</h3>
+          <p class="text-4xl font-bold text-yellow-300">{{ $downline }}</p>
         </div>
       </div>
 
@@ -36,11 +38,23 @@
             </thead>
             <tbody class="bg-gray-800 divide-y divide-gray-700">
               @foreach($byType as $row)
+                @php
+                  // detect downline types and build labels
+                  $isDownline = \Illuminate\Support\Str::startsWith($row->type, 'downline_');
+                  $label = $isDownline
+                    ? \Illuminate\Support\Str::of($row->type)
+                        ->replace('downline_', '')
+                        ->replace('_', ' ')
+                        ->title()
+                    : \Illuminate\Support\Str::of($row->type)
+                        ->replace('_', ' ')
+                        ->title();
+                @endphp
                 <tr>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ Str::of($row->type)->replace('_spillover','')->replace('_',' ')->title() }}
-                    @if(str_ends_with($row->type,'_spillover'))
-                      <span class="ml-1 text-xs text-gray-400">(spill-over)</span>
+                    {{ $label }}
+                    @if($isDownline)
+                      <span class="ml-1 text-xs text-gray-400">(downline)</span>
                     @endif
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right">

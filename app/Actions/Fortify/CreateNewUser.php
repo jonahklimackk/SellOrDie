@@ -13,6 +13,7 @@ use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 use App\Mail\WelcomeNewUser;
 use App\Services\AffiliateService;
+use App\Services\CreditService;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -48,13 +49,22 @@ class CreateNewUser implements CreatesNewUsers
         ]), function (User $user) {
             logger("CreateNewUser::user created – id={$user->id}");
 
-            // 1) Signup bonus
-            $user->credits = config('sellordie.signup_bonus');
-            $user->save();
-            logger("CreateNewUser::assigned signup bonus of {$user->credits} to user_id={$user->id}");
+             // 1) Persist the affiliate/referrer on the user record
+            if ($referrerId = \Cookie::get('referrer_id')) {
+                $user->referrer_id = $referrerId;
+                $user->save();
+            }
+
+           // 2) Reload the user so that $user->referrer() will work
+            $user->refresh();
+
+            // 3) Now fire off the signup credits (this will see a real referrer_id)
+            $earned = CreditService::handleAction($user, 'signup');
+
+            \Log::debug("CreateNewUser::assigned signup bonus of {$earned} to user_id={$user->id}");
 
             // 2) Welcome email
-            Mail::to($user->email)->send(new WelcomeNewUser($user));
+            // Mail::to($user->email)->send(new WelcomeNewUser($user));
             logger("CreateNewUser::sent WelcomeNewUser email to {$user->email}");
 
             // 3) Create personal team
@@ -74,8 +84,8 @@ class CreateNewUser implements CreatesNewUsers
                 logger("CreateNewUser::persisted affiliate info for user_id={$user->id}");
 
                 // Optionally assign to the binary matrix
-                AffiliateService::assignMatrixPosition($user);
-                logger("CreateNewUser::assigned matrix position to user_id={$user->id}");
+                // AffiliateService::assignMatrixPosition($user);
+                // logger("CreateNewUser::assigned matrix position to user_id={$user->id}");
             } else {
                 logger("CreateNewUser::no referrer_id cookie present, skipping affiliate persistence");
             }

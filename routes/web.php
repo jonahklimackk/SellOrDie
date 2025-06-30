@@ -22,33 +22,6 @@ use App\Http\Controllers\DownlineController;
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\AffiliateStatsController;
 
-use App\Http\Controllers\FullDownlineController;
-
-use App\Http\Livewire\FullDownline;
-
-
-
-Route::middleware('auth')->get('/downline/tree', [DownlineController::class, 'showTree']);
-
-Route::get('/downline', [App\Http\Controllers\DownlineController::class, 'index'])
-     ->middleware('auth')
-     ->name('downline.index');
-
-Route::get('/downline/{level}', [DownlineController::class, 'showLevel'])
-     ->middleware('auth')
-     ->where('level', '[1-7]')
-     ->name('downline.showLevel');
-
-
-
-
-// Route::get('/downline', function () {
-//     return view('full-downline2');
-// })->name('downline');
-
-Route::get('/full-downline', [FullDownlineController::class, 'index'])
-     ->middleware('auth')
-     ->name('full-downline');
 
 
 
@@ -59,13 +32,38 @@ Route::get('/teams/invitations/{invitation}/accept', [TeamInvitationController::
 
 
 
-// Route::get('/home', function () {
-//     return view('home');
-// })->name('home');
+/*
+ * Downline
+ *
+ */
+
+Route::middleware('auth')->get('/downline/tree', [DownlineController::class, 'showTree']);
+
+Route::get('/downline', [App\Http\Controllers\DownlineController::class, 'index'])
+->middleware('auth')
+->name('downline.index');
+
+Route::get('/downline/{level}', [DownlineController::class, 'showLevel'])
+->middleware('auth')
+->where('level', '[1-7]')
+->name('downline.showLevel');
 
 
 
+Route::middleware(['auth:sanctum', 'verified'])
+->get('/my-referrals', function () {
+        // eager-load if you like: ->with('personalReferrals')
+    $referrals = auth()->user()->personalReferrals()->get();
+    return view('personal-referrals', compact('referrals'));
+})
+->name('my.referrals');    
 
+
+
+/*
+ * Home stuff im not sure of 
+ *
+ */
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -73,7 +71,6 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('/home', [HomeController::class,'index'])->name('home');
-
 
     Route::get('/dashboard', function () {
         return redirect('/home');
@@ -97,9 +94,6 @@ Route::middleware([
 // Route::get('/upgrade/monthly/thankyou', [UpgradeController::class,'monthlyThankYou']);
 // Route::get('/upgrade/yearly/thankyou', [UpgradeController::class,'YearlyThankYou']);
 
-
-
-
 Route::get('/checkout/lightweight-monthly/success', [OrderController::class, 'lightweightMonthly'])
 ->name('checkout.success.lightweight_monthly');
 
@@ -115,13 +109,6 @@ Route::get('/checkout/heavyweight-yearly/success', [OrderController::class, 'hea
 
 Route::get('/upgrade', function () {
     $plans = config('spark.billables.user.plans');
-
-
-    // foreach($plans as $plan)
-    // {
-    //     dump($plan);
-    // }
-    // exit;
 
     return view('/upgrade.index', compact('plans'));
 });
@@ -178,18 +165,18 @@ Route::middleware('auth')->group(function () {
 });
 
 
+
+
+
+/*
+ * Credits
+ *
+ */
+
 Route::middleware('auth')->get('/credits', [App\Http\Controllers\CreditController::class, 'overview'])
 ->name('credits.overview');
 
-
-
 Route::get('/credit-adview', [AdsController::class, 'awardCredits']);
-
-
-// Route::get('/downline', [DownlineController::class, 'index'])
-//      ->name('downline')
-//      ->middleware('auth');
-
 
 
 Route::get('/matrix', [MatrixController::class, 'index'])
@@ -197,67 +184,20 @@ Route::get('/matrix', [MatrixController::class, 'index'])
 ->middleware('auth');
 
 
-// Route::middleware(['auth:sanctum', 'verified'])
-// ->get('/downline', function () {
-//     return view('downline-tree');
-// })
-// ->name('downline');
 
+use App\Services\CreditService;
+Route::get('/vote-fight', function () {
 
-// File: routes/web.php
-Route::middleware(['auth:sanctum', 'verified'])
-->get('/downline-binary', function () {
-    return view('downline-binary');
-})
-->name('downline.binary');
+    $user = Auth::user();
 
-
-Route::middleware(['auth:sanctum', 'verified'])
-->get('/downline-matrix', function () {
-    return view('downline-matrix');
-})
-->name('downline.matrix');
-
-
-
-// Route::get('/full-downline', function () {
-//     return view('full-downline');
-// })->name('full-downline');
-
-
-Route::get('/matrix-example', function () {
-    return view('matrix-example');
-
-});
-
-use App\Livewire\DownlineBinaryHighlight;
-
-// Route::middleware(['auth'])->group(function(){
-//     Route::get('/downline-binary-highlight', DownlineBinaryHighlight::class)
-//          ->name('downline.binary-highlight');
-// });
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/downline-binary-highlight', function () {
-        return view('downline-binary-highlight');
-    })->name('downline-binary-highlight');
+    CreditService::handleAction(
+        $user,
+        'vote',
+        ['ad_id' =>'']
+    );
 });
 
 
-// Route::middleware(['auth:sanctum','verified'])
-// ->get('/downline-binary-highlight', function () {
-//     return view('downline-binary-highlight');
-// })
-// ->name('downline.binary.highlight');    
-
-
-Route::middleware(['auth:sanctum', 'verified'])
-->get('/my-referrals', function () {
-        // eager-load if you like: ->with('personalReferrals')
-    $referrals = auth()->user()->personalReferrals()->get();
-    return view('personal-referrals', compact('referrals'));
-})
-->name('my.referrals');    
 
 
 /*

@@ -10,10 +10,9 @@ class AwardCreditsOnLogin
     public function handle(Login $event)
     {
         // award once per login
-        CreditService::awardBaseAndMatrix(
-            $event->user->id,
-            'login',
-            "Logged in"
+        CreditService::handleAction(
+            $event->user,
+            'login'
         );
     }
 }

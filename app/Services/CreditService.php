@@ -2,71 +2,104 @@
 
 namespace App\Services;
 
-use App\Models\Credit;
-use App\Models\MatrixPosition;
 use App\Models\User;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class CreditService
 {
-    public static function awardBaseAndMatrix(int $userId, string $type, string $description = ''): int
+    /**
+     * Award credits for an action to the actor—and, if configured,
+     * automatically climb and credit uplines.
+     *
+     * @param  User   $actor     The user who performed the action.
+     * @param  string $action    The action key, e.g. 'vote', 'login', etc.
+     * @param  array  $metadata  Any extra data (like ['ad_id'=>123]).
+     * @return int               The number of credits awarded to the actor.
+     */
+    public static function handleAction(User $actor, string $action, array $metadata = []): int
     {
-        $user = User::find($userId);
-        if (! $user) {
-            Log::error("CreditService: user {$userId} not found");
-            return 0;
-        }
+        Log::debug('[CreditService] handleAction start', compact('actor', 'action', 'metadata'));
 
-        $tier         = $user->membership_tier;
-        $actionConfig = Config::get("credits.actions.{$type}");
+        $actionsConfig = config('credits.actions', []);
 
-        // Determine base credits
-        $base = 0;
-        if (is_array($actionConfig)) {
-            $cfg  = $actionConfig[$tier] ?? $actionConfig['amateur'] ?? 0;
-            if (is_array($cfg) && isset($cfg['min'], $cfg['max'])) {
-                $base = random_int($cfg['min'], $cfg['max']);
-            } else {
-                $base = (int) $cfg;
-            }
-        } elseif (is_numeric($actionConfig)) {
-            $base = (int) $actionConfig;
-        }
+        // 1) Actor’s own credits
+        $amount = static::resolveActionAmount($actor, $action, $actionsConfig);
+        Log::debug('[CreditService] resolved actor amount', compact('amount'));
 
-        Log::info("CreditService: action={$type}, tier={$tier}, base={$base}");
-
-        // Create base credit
-        if ($base > 0) {
-            $credit = Credit::create([
-                'user_id'     => $userId,
-                'type'        => $type,
-                'amount'      => $base,
-                'description' => $description,
+        if ($amount > 0) {
+            $actor->credits()->create([
+                'amount'   => $amount,
+                'type'     => $action,
+                'metadata' => $metadata,
             ]);
-            Log::info("CreditService: created credit #{$credit->id}");
+            Log::debug('[CreditService] actor credit created', compact('amount'));
+        } else {
+            Log::debug('[CreditService] no actor credit to create (zero amount)');
         }
 
-        // Matrix spillover
-        $pos    = MatrixPosition::where('user_id', $userId)->first();
-        $levels = Config::get('credits.matrix_levels', 0);
+        // 2) Upline credits if downline config exists
+        $downlineKey = "downline_{$action}";
+        $levelsCfg   = config("credits.{$downlineKey}_levels", []);
 
-        for ($level = 1; $pos && $pos->parent && $level <= $levels; $level++) {
-            $pos   = $pos->parent;
-            $bonus = Config::get("credits.matrix_bonus.{$level}", 0);
+        \Log::debug('[CreditService] downline levels for signup', [
+            'key'      => "credits.downline_signup_levels",
+            'levelsCfg'=> config('credits.downline_signup_levels'),
+            ]);
 
-            if ($bonus > 0) {
-                $spill = "{$type}_spillover";
-                $credit = Credit::create([
-                    'user_id'     => $pos->user_id,
-                    'type'        => $spill,
-                    'amount'      => $bonus,
-                    'description' => "Level-{$level} bonus for {$type} by user #{$userId}",
-                ]);
-                Log::info("CreditService: spillover credit #{$credit->id} to user {$pos->user_id}");
+            if (! empty($levelsCfg)) {
+                $baseAmount = config("credits.{$downlineKey}", 0);
+                $current    = $actor;
+
+                foreach (range(1, count($levelsCfg)) as $level) {
+                    $referrer = $current->referrer;
+                    if (! $referrer) {
+                        Log::debug("[CreditService] no referrer at level {$level}, stopping uplines loop");
+                        break;
+                    }
+
+                    $points = Arr::get($levelsCfg, $level, $baseAmount);
+                    if ($points > 0) {
+                        $referrer->credits()->create([
+                            'amount'   => $points,
+                            'type'     => $downlineKey,
+                            'metadata' => array_merge($metadata, ['level' => $level]),
+                        ]);
+                        Log::debug("[CreditService] upline credit created", compact('level', 'points'));
+                    } else {
+                        Log::debug("[CreditService] skipping upline level {$level} (zero points)");
+                    }
+
+                    $current = $referrer;
+                }
+            }
+
+            Log::debug('[CreditService] handleAction end, actor awarded', compact('amount'));
+
+            return $amount;
+        }
+
+    /**
+     * Resolve how many credits an action is worth.
+     */
+    protected static function resolveActionAmount(User $user, string $action, array $actionsConfig): int
+    {
+        $cfg = Arr::get($actionsConfig, $action);
+
+        if (is_int($cfg)) {
+            return $cfg;
+        }
+
+        if (is_array($cfg)) {
+            $tier    = strtolower($user->membership_tier);
+            $tierCfg = Arr::get($cfg, $tier, []);
+            if (isset($tierCfg['min'], $tierCfg['max'])) {
+                $rand = rand($tierCfg['min'], $tierCfg['max']);
+                Log::debug('[CreditService] randomized tiered amount', compact('rand'));
+                return $rand;
             }
         }
 
-        return $base;
+        return 0;
     }
 }

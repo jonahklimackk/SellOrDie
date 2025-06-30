@@ -7,12 +7,26 @@ use App\Services\CreditService;
 
 class AwardCreditsOnVote
 {
-    public function handle(AdVoted $event)
+// e.g. in AwardDownlineVoteCredit listener:
+
+    public function handle(VoteCreated $event)
     {
-        CreditService::awardBaseAndMatrix(
-            $event->user->id,
+        /** @var \App\Services\CreditService $credits */
+        $credits = resolve(\App\Services\CreditService::class);
+
+    // 1) Award the voter’s own “vote” credits
+        $credits->handleAction(
+            $event->vote->user,
             'vote',
-            "Judged a fight."
+            ['ad_id' => $event->vote->ad_id]
+        );
+
+    // 2) Award uplines their downline-vote credits
+        $credits->handleAction(
+            $event->vote->user,
+            'downline_vote',
+            ['ad_id' => $event->vote->ad_id]
         );
     }
+
 }
