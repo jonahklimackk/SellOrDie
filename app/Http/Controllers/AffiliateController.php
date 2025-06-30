@@ -49,41 +49,50 @@ class AffiliateController extends Controller
         return redirect()->route('home');
     }
 
+    /**
+     * Affiliate Dashboard or Welcome page
+     */
+    public function dashboard()
+    {
+        return view('affiliate.dashboard');
+
+    }
+
 
     /**
      * 
      */
-    public function dashboard()
+    public function campaigns()
     {
         $referrerId = auth()->id();
 
         // 1) Clicks per campaign
         $clicks = AffiliateClick::where('referrer_id', $referrerId)
-            ->selectRaw('COALESCE(campaign, "") as campaign, COUNT(*) as total')
-            ->groupBy('campaign')
-            ->get();
+        ->selectRaw('COALESCE(campaign, "") as campaign, COUNT(*) as total')
+        ->groupBy('campaign')
+        ->get();
 
         // 2) Joins (referrals) per campaign
         $joins = Referral::where('referrer_id', $referrerId)
-            ->selectRaw('COALESCE(campaign, "") as campaign, COUNT(*) as total')
-            ->groupBy('campaign')
-            ->get();
+        ->selectRaw('COALESCE(campaign, "") as campaign, COUNT(*) as total')
+        ->groupBy('campaign')
+        ->get();
 
         // 3) Sales per campaign (+ revenue)
         $sales = AffiliateSale::where('referrer_id', $referrerId)
-            ->selectRaw('
-                COALESCE(campaign, "") as campaign,
-                COUNT(*) as total,
-                SUM(amount) as revenue
+        ->selectRaw('
+            COALESCE(campaign, "") as campaign,
+            COUNT(*) as total,
+            SUM(amount) as revenue
             ')
-            ->groupBy('campaign')
-            ->get();
+        ->groupBy('campaign')
+        ->get();
 
         // 4) Collect all unique campaigns
         $allCampaigns = $clicks->pluck('campaign')
-            ->merge($joins->pluck('campaign'))
-            ->merge($sales->pluck('campaign'))
-            ->unique();
+        ->merge($joins->pluck('campaign'))
+        ->merge($sales->pluck('campaign'))
+        ->unique();
 
         // 5) Build a unified metrics array
         $metrics = $allCampaigns->map(function($campaign) use ($clicks, $joins, $sales) {
@@ -96,6 +105,18 @@ class AffiliateController extends Controller
             ];
         });
 
-        return view('affiliate.dashboard', compact('metrics'));
+        return view('affiliate.campaigns', compact('metrics'));
+    }
+
+
+
+    /**
+     * 
+     */
+    public function marketingTools()
+    {
+        return view('affiliate.marketing-tools');
+
     }
 }
+

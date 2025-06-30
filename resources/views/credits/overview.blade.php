@@ -1,7 +1,5 @@
 <x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-yellow-300">Your Credits</h2>
-  </x-slot>
+
 
   <div class="py-12 bg-[#1f1c27] min-h-screen text-white">
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">

@@ -1,11 +1,17 @@
 <x-app-layout>
-  <x-slot name="header">
-    <h2 class="text-xl font-bold text-yellow-300">Your Referral Sales</h2>
-  </x-slot>
 
-  <div class="py-8 bg-[#1f1c27] min-h-screen text-white">
+
+  <div class="py-8 bg-[#1f1c27] min-h-screen text-white">\    
+      <x-affiliate.submenu /> 
     <div class="max-w-4xl mx-auto bg-gray-900 p-6 rounded-2xl shadow-2xl">
+
+      
+      {{-- Sub-menu --}}
+
+
+
       <table class="min-w-full divide-y divide-gray-700">
+         <h3 class="text-2xl font-bold text-yellow-300 mb-6">Your Sales</h3>
         <thead class="bg-gray-800 text-yellow-300">
           <tr>
             <th class="px-4 py-2 text-left">Referral</th>

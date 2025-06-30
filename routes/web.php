@@ -133,7 +133,7 @@ Route::get('/test/cancel',   [TestOrderController::class, 'cancel'])->name('test
  */
 
 // your existing home
-Route::get('/', [LandingPageController::class, 'index'])->name('home');
+Route::get('/', [LandingPageController::class, 'index']);
 
 // affiliate landing
 Route::get('aff', [AffiliateController::class, 'landing'])
@@ -148,12 +148,21 @@ Route::get('/affiliate/dashboard', [AffiliateController::class, 'dashboard'])
 ->middleware('auth')
 ->name('affiliate.dashboard');
 
+Route::get('/affiliate/campaigns', [AffiliateController::class, 'campaigns'])
+->middleware('auth')
+->name('affiliate.campaigns');
 
 Route::middleware(['auth'])
 ->get('/affiliate-stats', [AffiliateStatsController::class, 'index'])
 ->name('affiliate.stats');
 
+Route::middleware(['auth'])
+->get('/affiliate/tools', [AffiliateController::class, 'marketingTools'])
+->name('affiliate.tools');
 
+
+
+// spark handles this
 Route::middleware('auth')->group(function () {
     // user’s own orders
     Route::get('/orders', [OrderController::class, 'myOrders'])

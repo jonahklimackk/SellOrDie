@@ -95,11 +95,11 @@ class NewFightController extends Controller
     {
 
 
-     $fight = Team::find($fightId);
+       $fight = Team::find($fightId);
 
-     FightViewLog::logView($fight->id);
+       FightViewLog::logView($fight->id);
 
-     if(is_null($fight))
+       if(is_null($fight))
         return "error: no fight exists here";
 
     $ads = Ads::where('team_id', $fight->id)->get()->all();
@@ -292,7 +292,7 @@ public function vote($key, $clickedAdId)
         $creditClick = CreditClicks::where('key', $key)->get()->first();
         // dump($creditClick);
         if ($icon == $creditClick->challenge_icon && !$creditClick->timer_countdown) {
-           \Log::info("in new fight first b lock");
+         \Log::info("in new fight first b lock");
 
             // if (!$creditClick->earned_credits) {
 
@@ -309,22 +309,18 @@ public function vote($key, $clickedAdId)
 
             // return "You just earned  ".$creditClick->credits." credits. <br> Total Credits: ".Auth::user()->credits; 
 
-                   $earned = CreditService::awardBaseAndMatrix(
-            Auth::id(),
-            'vote',
-            'voted on fight'
-        );
+         $earned = CreditService::handleAction(Auth::user(),'vote');
+         
+         $creditClick->challenge_correct=  true;
+         $creditClick->save();
 
-           $creditClick->challenge_correct=  true;
-           $creditClick->save();
-
-           return response()->json([
+         return response()->json([
             'response'=> 'Answer Is Correct!'
         ]);
 
 
-       }    
-       else if ($icon == $creditClick->challenge_icon && $creditClick->timer_countdown && !$creditClick->earned_credits) {
+     }    
+     else if ($icon == $creditClick->challenge_icon && $creditClick->timer_countdown && !$creditClick->earned_credits) {
                        //give creditgs
         $recipient = User::where('id', $creditClick->recipient_id)->get()->first();
         $recipient->credits += $creditClick->credits;
@@ -332,12 +328,7 @@ public function vote($key, $clickedAdId)
 
         \Log::info("in new fight give c redit section");
 
-        $earned = CreditService::awardBaseAndMatrix(
-            Auth::id(),
-            'vote',
-            'voted on fight'
-        );
-
+    $earned = CreditService::handleAction(Auth::user(),'vote');
 
         $creditClick->earned_credits = true;
         $creditClick->clicks++;
