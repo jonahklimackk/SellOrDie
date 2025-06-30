@@ -20,6 +20,7 @@
 
         <!-- Splash Pages -->
         <div id="splash_tab" class="affiliate-tools-content">
+
           <p class="mb-4">Ready-made landing pages you can send straight to prospects. Each link is pre-loaded with your affiliate username.</p>
           <div class="space-y-6">
             @foreach([1,2,3,4,5] as $id)
@@ -70,6 +71,7 @@
 
         <!-- Banners -->
         <div id="banners_tab" class="affiliate-tools-content hidden">
+          <img src="/img/banner.png" height="60" width="468">
           <p class="mb-4">Grab these banner ads and drop them into your site or any ad network. They include your affiliate link automatically.</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach([1,2,3,4] as $id)

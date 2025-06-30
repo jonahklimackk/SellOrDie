@@ -10,7 +10,6 @@
 
 <div class="bg-gray-900 overflow-hidden shadow-2xl sm:rounded-2xl p-6">
     <h3 class="text-2xl font-bold text-yellow-300 mb-6">Campaign Performance</h3>
-    <a href="/affiliate-stats" class="float-right text-gray-400 hover:text-white">See individual sales</a>
 
     @if($metrics->isEmpty())
     <div class="bg-gray-800 border-l-4 border-yellow-400 p-4 mb-4">

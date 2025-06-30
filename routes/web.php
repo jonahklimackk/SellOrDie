@@ -21,6 +21,8 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\DownlineController;
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\AffiliateStatsController;
+use App\Http\Controllers\Affiliate\SalesController;
+use App\Http\Controllers\Affiliate\CommissionController;
 
 
 
@@ -160,20 +162,33 @@ Route::middleware(['auth'])
 ->get('/affiliate/tools', [AffiliateController::class, 'marketingTools'])
 ->name('affiliate.tools');
 
+//this grouping makes it so the endpoints are actually affiliate/sales prefix
+Route::middleware('auth')
+->prefix('affiliate')
+->name('affiliate.')
+->group(function () {
+         // Other affiliate routes…
 
+         // 1️⃣ Sales view (with month filter)
+   Route::get('sales', [SalesController::class, 'index'])
+   ->name('sales');
 
-// spark handles this
+   Route::get('commission', [CommissionController::class, 'index'])
+   ->name('commission');
+});
+
+    
+
+// spark handles this - it just lists products puurchased but it users the old system so propbably delete this
 Route::middleware('auth')->group(function () {
     // user’s own orders
     Route::get('/orders', [OrderController::class, 'myOrders'])
     ->name('orders.index');
 
     // affiliate’s referral sales
-    Route::get('/affiliate/sales', [OrderController::class, 'affiliateSales'])
-    ->name('affiliate.sales');
+    // Route::get('/affiliate/sales', [OrderController::class, 'affiliateSales'])
+    // ->name('affiliate.sales');
 });
-
-
 
 
 

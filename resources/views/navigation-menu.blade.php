@@ -62,116 +62,120 @@
 
       <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
         <x-nav-link href="/credits" :active="request()->routeIs('credits')">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
-  <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313M13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A5 5 0 0 0 13 5.698M14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A5 5 0 0 0 13 8.698m0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525"/>
-</svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
+              <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313M13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A5 5 0 0 0 13 5.698M14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A5 5 0 0 0 13 8.698m0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525"/>
+          </svg>
 
           &nbsp;
           {{ __('Credits') }}
       </x-nav-link>
   </div> 
-          <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-        <x-nav-link href="/upgrade" :active="request()->routeIs('upgrade')">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/>
-              <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
-          </svg>
+  <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+    <x-nav-link href="/upgrade" :active="request()->routeIs('upgrade')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/>
+          <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
+      </svg>
 
-          &nbsp;
-          {{ __('Upgrade') }}
-      </x-nav-link>
-  </div> 
-                       
+      &nbsp;
+      {{ __('Upgrade') }}
+  </x-nav-link>
+</div> 
 
-            </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <!-- Teams Dropdown -->
-                @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                <div class="ms-3 relative">
-                    <x-dropdown align="right" width="60">
-                        <x-slot name="trigger">
-                            <span class="inline-flex rounded-md">
-                                <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-800 hover:text-gray-300 focus:outline-none focus:bg-gray-700 active:bg-gray-700 transition ease-in-out duration-150">
-                                    {{ Auth::user()->currentTeam->name }}
+</div>
 
-                                    <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-                                    </svg>
-                                </button>
-                            </span>
-                        </x-slot>
+<div class="hidden sm:flex sm:items-center sm:ms-6">
+    <!-- Teams Dropdown -->
+    @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
+    <div class="ms-3 relative">
+        <x-dropdown align="right" width="60">
+            <x-slot name="trigger">
+                <span class="inline-flex rounded-md">
+                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-800 hover:text-gray-300 focus:outline-none focus:bg-gray-700 active:bg-gray-700 transition ease-in-out duration-150">
+                        {{ Auth::user()->currentTeam->name }}
 
-                        <x-slot name="content">
-                            <div class="w-60">
-                                <!-- Team Management -->
-                                <div class="block px-4 py-2 text-xs text-gray-400">
-                                    {{ __('Manage Fight') }}
-                                </div>
+                        <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                        </svg>
+                    </button>
+                </span>
+            </x-slot>
 
-                                <!-- Team Settings -->
-                                <x-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}">
-                                    {{ __('Fight Settings') }}
-                                </x-dropdown-link>
+            <x-slot name="content">
+                <div class="w-60">
+                    <!-- Team Management -->
+                    <div class="block px-4 py-2 text-xs text-gray-400">
+                        {{ __('Manage Fight') }}
+                    </div>
 
-                                @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                <x-dropdown-link href="{{ route('teams.create') }}">
-                                    {{ __('Create New Fight') }}
-                                </x-dropdown-link>
-                                @endcan
+                    <!-- Team Settings -->
+                    <x-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}">
+                        {{ __('Fight Settings') }}
+                    </x-dropdown-link>
 
-                                <!-- Team Switcher -->
-                                @if (Auth::user()->allTeams()->count() > 1)
-                                <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                    @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
+                    <x-dropdown-link href="{{ route('teams.create') }}">
+                        {{ __('Create New Fight') }}
+                    </x-dropdown-link>
+                    @endcan
 
-                                <div class="block px-4 py-2 text-xs text-gray-400">
-                                    {{ __('Switch Fights') }}
-                                </div>
+                    <!-- Team Switcher -->
+                    @if (Auth::user()->allTeams()->count() > 1)
+                    <div class="border-t border-gray-200 dark:border-gray-600"></div>
 
-                                @foreach (Auth::user()->allTeams() as $team)
-                                <x-switchable-team :team="$team" />
-                                @endforeach
-                                @endif
-                            </div>
-                        </x-slot>
-                    </x-dropdown>
+                    <div class="block px-4 py-2 text-xs text-gray-400">
+                        {{ __('Switch Fights') }}
+                    </div>
+
+                    @foreach (Auth::user()->allTeams() as $team)
+                    <x-switchable-team :team="$team" />
+                    @endforeach
+                    @endif
                 </div>
+            </x-slot>
+        </x-dropdown>
+    </div>
+    @endif
+
+    <!-- Settings Dropdown -->
+    <div class="ms-3 relative">
+        <x-dropdown align="right" width="48">
+            <x-slot name="trigger">
+                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                    <img class="size-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                </button>
+                @else
+                <span class="inline-flex rounded-md">
+                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
+                        {{ Auth::user()->name }}
+
+                        <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </button>
+                </span>
                 @endif
+            </x-slot>
 
-                <!-- Settings Dropdown -->
-                <div class="ms-3 relative">
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                            <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                <img class="size-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
-                            </button>
-                            @else
-                            <span class="inline-flex rounded-md">
-                                <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
-                                    {{ Auth::user()->name }}
+            <x-slot name="content">
+                <!-- Account Management -->
+                <div class="block px-4 py-2 text-xs text-gray-400">
+                    {{ __('Manage Account') }}
+                </div>
 
-                                    <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                    </svg>
-                                </button>
-                            </span>
-                            @endif
-                        </x-slot>
+                <x-dropdown-link href="{{ route('profile.show') }}">
+                    {{ __('Profile') }}
+                </x-dropdown-link>
 
-                        <x-slot name="content">
-                            <!-- Account Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage Account') }}
-                            </div>
+            <x-dropdown-link href="/billing">
+                    {{ __('Billing') }}
+                </x-dropdown-link>
 
-                            <x-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
-
-                            <x-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Upgrade') }}
-                            </x-dropdown-link>
+                <x-dropdown-link href="{{ route('profile.show') }}">
+                    {{ __('Upgrade') }}
+                </x-dropdown-link>
 <!--                             <x-dropdown-link href="/mailing/0">
                                 {{ __('Send Mailing') }}
                             </x-dropdown-link> -->

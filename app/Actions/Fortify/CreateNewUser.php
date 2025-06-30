@@ -6,6 +6,7 @@ use Mail;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\Referral;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -82,6 +83,13 @@ class CreateNewUser implements CreatesNewUsers
                 $user->affiliate_campaign = $affiliateCampaign;
                 $user->save();
                 logger("CreateNewUser::persisted affiliate info for user_id={$user->id}");
+
+
+                Referral::create([
+        'user_id'     => $user->id,    // the freshly registered user
+        'referrer_id' => $referrerId,
+        'campaign'    => $affiliateCampaign,       // “” or null if none
+    ]);
 
                 // Optionally assign to the binary matrix
                 // AffiliateService::assignMatrixPosition($user);
