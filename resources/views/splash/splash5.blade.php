@@ -33,7 +33,7 @@
     </p>
 
     <!-- Call to Action -->
-    <a href="{{ url('/aff/'.auth()->user()->username) }}"
+    <a href=""
        class="inline-block bg-sod-yellow text-gray-900 font-semibold px-8 py-4 rounded-lg shadow-lg hover:scale-105 transform transition">
       Become an Affiliate & Start Earning
     </a>
