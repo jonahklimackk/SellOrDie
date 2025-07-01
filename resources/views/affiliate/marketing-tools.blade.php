@@ -26,15 +26,15 @@
           <div class="space-y-6">
             @foreach([1,2,3,4,5] as $id)
             <div class="flex items-center space-x-4">
-              <a href="{{ url("/splash/id/{$id}/u/" . auth()->user()->username) }}" target="_blank">
-                <img src="{{ asset("upload/splashes/Splash_00{$id}.png") }}" alt="Splash {{ $id }}" class="w-64 border rounded">
+              <a href="{{ url("/splash/{$id}/" . auth()->user()->username) }}" target="_blank">
+                <img src="{{ asset("/img/splash{$id}_thumb.jpeg") }}" alt="Splash {{ $id }}" class="w-64 border rounded">
               </a>
               <div class="flex-1">
                 <div class="font-bold text-yellow-300 mb-1">SPLASH PAGE LINK:</div>
                 <input type="text"
                 readonly
                 class="w-full bg-gray-800 text-white border border-yellow-300 rounded px-2 py-1"
-                value="{{ url("/splash/id/{$id}/u/" . auth()->user()->username) }}">
+                value="{{ url("/splash/{$id}/" . auth()->user()->username) }}">
               </div>
             </div>
             @endforeach

@@ -24,12 +24,12 @@
     </p>
     <a href="{{ url('/signup') }}"
        class="inline-block bg-sod-yellow text-gray-900 font-semibold px-8 py-4 rounded-lg shadow-lg hover:brightness-110 transition">
-      Join the Fight & Get 100 Free Credits
+      Join the Fight & Get 500 Free Credits
     </a>
   </section>
 
   <!-- Features -->
-  <section class="py-20 px-6">
+<!--   <section class="py-20 px-6">
     <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
       <div class="text-center">
         <svg class="w-12 h-12 mx-auto mb-4 text-sod-yellow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 18l10-5..."/></svg>
@@ -47,10 +47,10 @@
         <p>Win credits for each vote you cast or ad you submit—never surf for nothing again.</p>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- How It Works -->
-  <section class="bg-gray-800 py-20 px-6">
+<!--   <section class="bg-gray-800 py-20 px-6">
     <div class="max-w-4xl mx-auto space-y-8 text-center">
       <h2 class="text-4xl font-bold text-sod-yellow">How It Works</h2>
       <ol class="list-decimal list-inside space-y-4 text-lg">
@@ -60,15 +60,15 @@
         <li>Earn credits and insights to power endless new campaigns.</li>
       </ol>
     </div>
-  </section>
+  </section> -->
 
   <!-- Footer CTA -->
-  <footer class="py-12 text-center">
+<!--   <footer class="py-12 text-center">
     <a href="{{ url('/signup') }}"
        class="bg-sod-yellow text-gray-900 font-semibold px-10 py-4 rounded-full shadow-xl hover:scale-105 transform transition">
       Start Your First Battle & Score Free Credits
     </a>
-  </footer>
+  </footer> -->
 
 </body>
 </html>

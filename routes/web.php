@@ -19,7 +19,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TestOrderController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\DownlineController;
-use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\AffiliateStatsController;
 use App\Http\Controllers\Affiliate\SalesController;
 use App\Http\Controllers\Affiliate\CommissionController;
@@ -40,7 +39,6 @@ Route::get('/teams/invitations/{invitation}/accept', [TeamInvitationController::
  *
  */
 
-Route::middleware('auth')->get('/downline/tree', [DownlineController::class, 'showTree']);
 
 Route::get('/downline', [App\Http\Controllers\DownlineController::class, 'index'])
 ->middleware('auth')
@@ -204,9 +202,6 @@ Route::middleware('auth')->get('/credits', [App\Http\Controllers\CreditControlle
 Route::get('/credit-adview', [AdsController::class, 'awardCredits']);
 
 
-Route::get('/matrix', [MatrixController::class, 'index'])
-->name('matrix')
-->middleware('auth');
 
 
 
@@ -230,7 +225,9 @@ Route::get('/vote-fight', function () {
  *
  */
 
-Route::get('/splash/{pageNum}', [SplashPageController::class, 'show']);
+Route::get('/splash/{pageNum}/{username}/', [SplashPageController::class, 'show']);
+
+// Route::get('/splash/{pageNum}', [SplashPageController::class, 'show']);
 
 
 
