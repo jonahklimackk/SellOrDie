@@ -21,7 +21,7 @@
             Commission
         </a>
         <a href="{{ url('/downline/1') }}"
-           class="px-3 py-2 rounded-md text-sm font-medium {{ request()->is('affiliate/commission') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+           class="px-3 py-2 rounded-md text-sm font-medium {{ request()->is('downeline/1') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
             Personal Referrals
         </a>        
     </nav>

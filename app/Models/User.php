@@ -74,19 +74,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_url',
     ];
 
-    /**
-     * Public entrypoint: build the full binary downline tree.
-     *
-     * @return array|null
-     */
-    public function getBinaryTree(): ?array
-    {
-        $pos = $this->matrixPosition;
-        return $pos
-        ? $this->buildBinaryNode($pos)
-        : null;
-    }
-
 
 
     /**
@@ -288,21 +275,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(AffiliateSale::class, 'referrer_id');
     }    
 
-/**
- * Get all matrix positions owned by this user.
- */
-public function matrixPositions()
-{
-    return $this->hasMany(MatrixPosition::class, 'user_id');
-}
 
-    /**
-     * One-to-one to the user's own matrix position.
-     */
-    public function matrixPosition()
-    {
-        return $this->hasOne(MatrixPosition::class);
-    }
 
     /**
      * Get the users this user has personally referred (level-1 downline).
@@ -312,105 +285,9 @@ public function matrixPositions()
         return $this->hasMany(self::class, 'referrer_id');
     }
 
-    /**
-     * Recursively build one node of the tree.
-     *
-     * @param  MatrixPosition  $pos
-     * @return array
-     */
-    protected function buildBinaryNode(MatrixPosition $pos): array
-    {
-        $user     = $pos->user;
-        $children = $pos->children()->orderBy('position_index')->get();
-
-        $leftPos  = $children->firstWhere('position_index', 1);
-        $rightPos = $children->firstWhere('position_index', 2);
-
-        return [
-            'user_id'    => $user->id,
-            'name'       => $user->name,
-            'email'      => $user->email,
-            'isPersonal' => $user->referrer_id === auth()->id(),
-            'depth'      => $pos->depth,
-            'left'       => $leftPos  ? $this->buildBinaryNode($leftPos)  : null,
-            'right'      => $rightPos ? $this->buildBinaryNode($rightPos) : null,
-        ];
-    }    
-
-    public function leftReferral()
-    {
-        return $this->hasOne(User::class, 'referrer_id')->where('side','left');
-    }
-
-    public function rightReferral()
-    {
-        return $this->hasOne(User::class, 'referrer_id')->where('side','right');
-    }    
-
-// app/Models/User.php
 
 
 
-  /**
-     * Return the downline as a nested array, limited to 7 levels deep.
-     *
-     * @return array
-     */
-  public function getDownlineTree(): array
-  {
-    $rows = DB::select("
-        WITH RECURSIVE downline AS (
-                -- Level 1
-                SELECT id, referrer_id, 1 AS lvl
-                FROM users
-                WHERE referrer_id = :rootId
-
-                UNION ALL
-
-                -- Levels 2–7
-                SELECT u.id, u.referrer_id, d.lvl + 1 AS lvl
-                FROM users u
-                JOIN downline d ON u.referrer_id = d.id
-                WHERE d.lvl < 7
-                )
-        SELECT
-        u.id,
-        u.name,
-        u.email,
-        u.profile_photo_path AS photo_path,
-        d.referrer_id,
-        d.lvl
-        FROM downline d
-        JOIN users u ON u.id = d.id
-        ", ['rootId' => $this->id]);
-
-  
-        // Build flat map of id → node
-    $map = [];
-    foreach ($rows as $r) {
-        $map[$r->id] = [
-            'id'         => $r->id,
-            'name'       => $r->name,
-            'email'      => $r->email,
-            'photo_path' => $r->photo_path,
-            'parent_id'  => $r->referrer_id,
-            'lvl'        => $r->lvl,
-            'children'   => [],
-        ];
-    }
-
-        // Nest into a tree
-    $tree = [];
-    foreach ($map as $id => &$node) {
-        if ($node['parent_id'] === $this->id) {
-            $tree[] = &$node;
-        } elseif (isset($map[$node['parent_id']])) {
-            $map[$node['parent_id']]['children'][] = &$node;
-        }
-    }
-
-    return $tree;
-}
 
 /**
  * All credit transactions for this user.

@@ -71,11 +71,5 @@ SQL;
     return view('downline.level', compact('referrals', 'level'));
 }
 
-    public function showTree()
-    {
-        $user = Auth::user();
-        $downlineTree = $user->getDownlineTree();
 
-        return view('downline.tree', compact('downlineTree'));
-    }
 }

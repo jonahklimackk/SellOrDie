@@ -23,6 +23,7 @@ use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\AffiliateStatsController;
 use App\Http\Controllers\Affiliate\SalesController;
 use App\Http\Controllers\Affiliate\CommissionController;
+use App\Http\Controllers\Affiliate\SplashPageController;
 
 
 
@@ -223,29 +224,39 @@ Route::get('/vote-fight', function () {
 
 
 
-
 /*
- * Cashier Billing Subscriptions
+ * Splash Pages
  * 
  *
  */
 
-
-// Subscription checkout starter
-Route::get('/subscribe/{planKey}',    [OrderController::class, 'subscribe'])
-->name('subscriptions.checkout');
-
-// Subscription success / cancel callbacks
-Route::get('/subscribe/{planKey}/success', [OrderController::class, 'subscriptionSuccess'])
-->name('subscriptions.success');
-Route::get('/subscribe/cancel', [OrderController::class, 'subscriptionCancel'])
-->name('subscriptions.cancel');
+Route::get('/splash/{pageNum}', [SplashPageController::class, 'show']);
 
 
-Route::get('/test-subscription', function () {
-    return view('test.test-subscribe');
 
-});
+
+/*
+ * Cashier Billing Subscriptions
+ * Spark handles this, 
+ *
+ */
+
+
+// // Subscription checkout starter
+// Route::get('/subscribe/{planKey}',    [OrderController::class, 'subscribe'])
+// ->name('subscriptions.checkout');
+
+// // Subscription success / cancel callbacks
+// Route::get('/subscribe/{planKey}/success', [OrderController::class, 'subscriptionSuccess'])
+// ->name('subscriptions.success');
+// Route::get('/subscribe/cancel', [OrderController::class, 'subscriptionCancel'])
+// ->name('subscriptions.cancel');
+
+
+// Route::get('/test-subscription', function () {
+//     return view('test.test-subscribe');
+
+// });
 
 
 // Route::middleware(['auth'])->group(function () {
