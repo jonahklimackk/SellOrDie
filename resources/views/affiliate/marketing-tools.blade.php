@@ -23,6 +23,7 @@
         <div id="splash_tab" class="affiliate-tools-content">
 
           <p class="mb-4">Ready-made landing pages you can send straight to prospects. Each link is pre-loaded with your affiliate username.</p>
+           <p class="mb-4"> You can also optionally use a campaign link to track joins and sales. Like this: {{ url('/')  }}/splash/1/{{ auth()->user()->username }}/trackme.
           <div class="space-y-6">
             @foreach([1,2,3,4,5] as $id)
             <div class="flex items-center space-x-4">
@@ -95,31 +96,103 @@
           </div>
         </div>
 
-        <!-- Social Media Content Panel -->
-        <div id="social_tab" class="affiliate-tools-content hidden">
-          <p class="mb-4">
-            Share our latest posts, graphics, and campaign links directly to your social channels with pre-built assets.
-          </p>
-          <div class="space-y-4">
-            <div>
-              <div class="font-semibold text-yellow-300 mb-1">Instagram Post:</div>
-              <textarea readonly rows="4"
-              class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
-              🚀 Ready to level up your ad game? Join Sell Or Die and vote for your favorite ad battles to earn credits! 🌟
+<!-- Social Media Content Panel -->
+<div id="social_tab" class="affiliate-tools-content hidden">
+  <p class="mb-4">
+    Share our latest posts, graphics, and campaign links directly to your social channels with pre-built assets.
+  </p>
+  <div class="space-y-4">
+    <!-- Instagram Posts -->
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">Instagram Post #1:</div>
+      <textarea readonly rows="4"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+🚀 Ready to level up your ad game? Join Sell Or Die and vote for your favorite ad battles to earn credits! 🌟
 
-              Sign up: {{ url('/aff/'.auth()->user()->username) }}
-              #SellOrDie #AdBattles #Marketing
-            </textarea>
-          </div>
-          <div>
-            <div class="font-semibold text-yellow-300 mb-1">Twitter Tweet:</div>
-            <textarea readonly rows="3"
-            class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
-            Vote in ad battles & earn credits daily! 🔥 Join me on @SellOrDie: {{ url('/aff/'.auth()->user()->username) }} #AdTech #Marketing
-          </textarea>
-        </div>
-      </div>
-    </div>        
+Sign up: {{ url('/aff/'.auth()->user()->username) }}
+#SellOrDie #AdBattles #Marketing
+      </textarea>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">Instagram Post #2:</div>
+      <textarea readonly rows="4"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+🔥 Just cast votes in epic ad battles and racked up credits! Want in on the fun? Join me now:
+
+{{ url('/aff/'.auth()->user()->username) }}
+#AdBattle #EarnCredits #SellOrDie
+      </textarea>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">Instagram Post #3:</div>
+      <textarea readonly rows="4"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+💥 Show off your creative skills—submit your ad, battle your friends, and climb the leaderboard!
+
+Get started: {{ url('/aff/'.auth()->user()->username) }}
+#AdGame #Creative #SellOrDie
+      </textarea>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">Instagram Post #4:</div>
+      <textarea readonly rows="4"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+🎉 I just earned credits voting in ad battles—never surf for nothing again! Your turn:
+
+{{ url('/aff/'.auth()->user()->username) }}
+#VotingFun #Credits #SellOrDie
+      </textarea>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">Instagram Post #5:</div>
+      <textarea readonly rows="4"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+🏆 Battle your ads, climb the ranks, and earn more credits than ever. Join the fight:
+
+{{ url('/aff/'.auth()->user()->username) }}
+#AdChampion #Earn #SellOrDie
+      </textarea>
+    </div>
+
+    <!-- X Posts -->
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">X Post #1:</div>
+      <textarea readonly rows="3"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+Cast votes, earn credits, and level up your marketing skills. Join Sell Or Die now: {{ url('/aff/'.auth()->user()->username) }} #AdTech #Marketing
+      </textarea>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">X Post #2:</div>
+      <textarea readonly rows="3"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+Who has the best ad? Vote head-to-head and get rewarded! Start here: {{ url('/aff/'.auth()->user()->username) }} #AdBattle #SellOrDie
+      </textarea>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">X Post #3:</div>
+      <textarea readonly rows="3"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+Vote in daily ad battles to earn one credit per vote. No fluff—just rewards. Sign up: {{ url('/aff/'.auth()->user()->username) }} #EarnCredits #AdBattles
+      </textarea>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">X Post #4:</div>
+      <textarea readonly rows="3"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+Challenge friends to ad showdowns and earn credits for each vote cast. Let's go: {{ url('/aff/'.auth()->user()->username) }} #AdChallenge #SellOrDie
+      </textarea>
+    </div>
+    <div>
+      <div class="font-semibold text-yellow-300 mb-1">X Post #5:</div>
+      <textarea readonly rows="3"
+        class="w-full bg-gray-800 text-white border border-yellow-300 rounded p-2 font-mono">
+Get in on the action—battle your ads, earn credits, and climb the leaderboard. Join now: {{ url('/aff/'.auth()->user()->username) }} #AdGame #Credits
+      </textarea>
+    </div>
+  </div>
+</div>
+       
 
     <!-- Banners -->
     <div id="banners_tab" class="affiliate-tools-content hidden">

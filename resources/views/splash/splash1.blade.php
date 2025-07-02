@@ -15,20 +15,23 @@
 <body class="antialiased bg-sod-dark text-white">
 
   <!-- Hero -->
-  <section class="min-h-screen flex flex-col justify-center items-center text-center px-6">
-    <h1 class="text-5xl md:text-6xl font-bold text-sod-yellow mb-6">
-      Enter the Ring of Ad Battles
-    </h1>
-    <p class="max-w-2xl text-lg md:text-xl mb-8">
-      Sell Or Die is the first-ever ad-voting exchange. Pit your creative against real competitors, climb the leaderboard, and win real traffic—and credits—every single day.
-    </p>
-    <a href="{{ url('/signup') }}"
-       class="inline-block bg-sod-yellow text-gray-900 font-semibold px-8 py-4 rounded-lg shadow-lg hover:brightness-110 transition">
-      Join the Fight & Get 500 Free Credits
-    </a>
-  </section>
+  <section 
+  onclick='window.location.href="/aff/{{ $username }}/{{ $campaign ?? '' }}"'
+  class="min-h-screen flex flex-col justify-center items-center text-center px-6"
+  style="cursor: pointer;">
+  <h1 class="text-5xl md:text-6xl font-bold text-sod-yellow mb-6">
+    Enter the Ring of Ad Battles
+  </h1>
+  <p class="max-w-2xl text-lg md:text-xl mb-8">
+    Sell Or Die is the first-ever ad-voting exchange. Pit your creative against real competitors, climb the leaderboard, and win real traffic—and credits—every single day.
+  </p>
+  <a href="/aff/{{ $username }}/{{ $campaign ?? '' }}"
+  class="inline-block bg-sod-yellow text-gray-900 font-semibold px-8 py-4 rounded-lg shadow-lg hover:brightness-110 transition">
+  Join the Fight & Get 500 Free Credits
+</a>
+</section>
 
-  <!-- Features -->
+<!-- Features -->
 <!--   <section class="py-20 px-6">
     <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
       <div class="text-center">

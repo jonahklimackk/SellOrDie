@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\DateTime;
 
@@ -46,37 +48,51 @@ class AffiliateSale extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Referrer', 'referrer', User::class)
-                ->sortable()
-                ->searchable(),
+            ->sortable()
+            ->searchable(),
 
             BelongsTo::make('Buyer', 'buyer', User::class)
-                ->sortable()
-                ->searchable(),
+            ->sortable()
+            ->searchable(),
 
             Text::make('Campaign')
-                ->sortable()
-                ->rules('required', 'max:255'),
+            ->sortable()
+            ->rules('required', 'max:255'),
 
             Text::make('Product')
-                ->sortable()
-                ->rules('nullable', 'max:255'),
+            ->sortable()
+            ->rules('nullable', 'max:255'),
 
             Currency::make('Amount')
-                ->currency('USD')
-                ->sortable()
-                ->rules('required'),
+            ->currency('USD')
+            ->sortable()
+            ->rules('required'),
+
+
+            Text::make('stripe_charge_id')
+            ->sortable(),
+
+            Text::make('stripe_payment_intent')
+            ->sortable(),
+
+            Boolean::make('refund'),
+
+            Number::make('refund_amount'),
+
+            DateTime::make('refunded_at'),
+
 
             Currency::make('Commission')
-                ->currency('USD')
-                ->sortable()
-                ->rules('required'),                
+            ->currency('USD')
+            ->sortable()
+            ->rules('required'),                
 
             DateTime::make('Created At')
-                ->onlyOnDetail()
-                ->sortable(),
+            ->onlyOnDetail()
+            ->sortable(),
 
             DateTime::make('Updated At')
-                ->onlyOnDetail(),
+            ->onlyOnDetail(),
         ];
     }
 }

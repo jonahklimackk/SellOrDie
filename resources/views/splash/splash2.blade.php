@@ -11,10 +11,13 @@
     .bg-sod-yellow { background-color: #FBBF24; }
   </style>
 </head>
-<body class="antialiased bg-sod-dark text-white">
+<body class="antialiased bg-sod-dark text-white" >
 
   <!-- Above-the-Fold Hero -->
-  <section class="min-h-screen flex flex-col justify-center items-center text-center px-6">
+  <section 
+    onclick='window.location.href="/aff/{{ $username }}/{{ $campaign ?? '' }}"'
+  class="min-h-screen flex flex-col justify-center items-center text-center px-6"
+  style="cursor: pointer;">
     <h1 class="text-4xl md:text-5xl font-bold text-sod-yellow mb-4">
       Surf Ads. Cast Votes. Earn Credits.
     </h1>
@@ -22,7 +25,7 @@
       Join the only 1:1 ad-voting exchange—every vote you cast gives you one credit.  
       No fluff, no gimmicks, just real rewards for your time.
     </p>
-    <a href="{{ url('/signup') }}"
+    <a href="/aff/{{ $username }}/{{ $campaign ?? '' }}"
        class="inline-block bg-sod-yellow text-gray-900 font-semibold px-8 py-4 rounded-lg shadow-lg hover:scale-105 transform transition">
       Start Voting & Earning
     </a>

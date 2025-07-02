@@ -225,7 +225,7 @@ Route::get('/vote-fight', function () {
  *
  */
 
-Route::get('/splash/{pageNum}/{username}/', [SplashPageController::class, 'show']);
+Route::get('/splash/{pageNum}/{username}/{campaign?}', [SplashPageController::class, 'show']);
 
 // Route::get('/splash/{pageNum}', [SplashPageController::class, 'show']);
 
@@ -549,3 +549,19 @@ Route::get('/test-listener', function() {
     event(new \Spark\Events\SubscriptionCreated($user, $subscription));
 
 });
+
+
+
+
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+Route::post('/webhook-debug', function (Request $request) {
+    Log::info('📬 WEBHOOK-DEBUG HIT', [
+        'uri'     => $request->getRequestUri(),
+        'payload' => $request->all(),
+        'headers' => $request->headers->all(),
+    ]);
+    return response()->json(['status' => 'ok']);
+})->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);

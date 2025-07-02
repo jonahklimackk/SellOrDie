@@ -6,4 +6,6 @@ return [
     App\Providers\JetstreamServiceProvider::class,
     App\Providers\NovaServiceProvider::class,
     App\Providers\SparkServiceProvider::class,
+    App\Providers\EventServiceProvider::class,
+
 ];

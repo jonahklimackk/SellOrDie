@@ -12,10 +12,14 @@
     .bg-sod-yellow { background-color: #FBBF24; }
   </style>
 </head>
-<body class="antialiased bg-sod-dark text-white">
+<body class="antialiased bg-sod-dark text-white" >
 
   <!-- Above-the-Fold Hero -->
-  <section class="min-h-screen flex flex-col justify-center items-center text-center px-6">
+  
+  <section 
+  onclick='window.location.href="/aff/{{ $username }}/{{ $campaign ?? '' }}"'
+  class="min-h-screen flex flex-col justify-center items-center text-center px-6"
+  style="cursor: pointer;">
     <!-- Logo -->
     <img src="https://sellordie.online/img/sellordie7.png"
          alt="Sell Or Die Logo"
@@ -33,7 +37,7 @@
     </p>
 
     <!-- Call to Action -->
-    <a href=""
+    <a href="/aff/{{ $username }}/{{ $campaign ?? '' }}"
        class="inline-block bg-sod-yellow text-gray-900 font-semibold px-8 py-4 rounded-lg shadow-lg hover:scale-105 transform transition">
       Start the Challenge & Earn Credits
     </a>

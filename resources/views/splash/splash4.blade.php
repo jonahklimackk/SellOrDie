@@ -12,10 +12,15 @@
     .bg-sod-yellow { background-color: #FBBF24; }
   </style>
 </head>
-<body class="antialiased bg-sod-dark text-white">
+<body class="antialiased bg-sod-dark text-white" >
+
 
   <!-- Hero -->
-  <section class="pt-20 pb-12 text-center px-6">
+
+  <section 
+  onclick='window.location.href="/aff/{{ $username }}/{{ $campaign ?? '' }}"'
+  class="pt-20 pb-12 text-center px-6"
+  style="cursor: pointer;">
     <img src="https://sellordie.online/img/sellordie7.png"
          alt="Sell Or Die Logo"
          class="w-40 mx-auto mb-6">
@@ -28,12 +33,11 @@
       Every click, every vote earns you credits in our 1:1 exchange.  
       No fluff, no guesswork—just real marketing feedback.
     </p>
-    <a href="{{ url('/signup') }}"
+    <a href="/aff/{{ $username }}/{{ $campaign ?? '' }}"
        class="inline-block bg-sod-yellow text-gray-900 font-semibold px-8 py-4 rounded-lg shadow-lg hover:scale-105 transform transition">
       Start Your First Battle
     </a>
   </section>
-
   <!-- Template Previews -->
 <!--   <section class="py-12 px-6">
     <h2 class="text-2xl font-bold text-center text-sod-yellow mb-8">Pick Your Template</h2>
