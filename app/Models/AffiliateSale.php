@@ -14,6 +14,11 @@ class AffiliateSale extends Model
         'product',
         'amount',
         'commission',
+        'stripe_payment_intent',
+        'stripe_charge_id',
+        'refund',
+        'refund_amount',
+        'refunded_at'
     ];
 
     public function referrer()

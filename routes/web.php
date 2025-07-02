@@ -161,7 +161,10 @@ Route::middleware(['auth'])
 ->get('/affiliate/tools', [AffiliateController::class, 'marketingTools'])
 ->name('affiliate.tools');
 
-//this grouping makes it so the endpoints are actually affiliate/sales prefix
+
+//DANGER
+//this grouping makes it so the endpoints are actually 
+//affiliate/sales prefix
 Route::middleware('auth')
 ->prefix('affiliate')
 ->name('affiliate.')

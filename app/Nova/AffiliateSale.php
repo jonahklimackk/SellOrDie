@@ -75,11 +75,11 @@ class AffiliateSale extends Resource
             Text::make('stripe_payment_intent')
             ->sortable(),
 
-            Boolean::make('refund'),
+            Boolean::make('refunded'),
 
             Number::make('refund_amount'),
 
-            DateTime::make('refunded_at'),
+            // DateTime::make('refunded_at'),
 
 
             Currency::make('Commission')

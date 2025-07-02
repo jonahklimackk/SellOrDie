@@ -14,24 +14,45 @@ class SalesController extends Controller
         $affiliateId  = auth()->id();
         $currentMonth = $request->get('month', Carbon::now()->format('Y-m'));
 
-        // Build the last 12 months dropdown
+    // Build the last 12 months dropdown
         $months = [];
         for ($i = 0; $i < 12; $i++) {
-            $dt           = Carbon::now()->subMonths($i);
-            $value        = $dt->format('Y-m');
-            $months[$value] = $dt->format('F, Y');
+            $dt = Carbon::now()->subMonths($i);
+            $months[$dt->format('Y-m')] = $dt->format('F, Y');
         }
 
-        // Determine start/end of selected month
+    // Start/end of selected month
         $start = Carbon::createFromFormat('Y-m', $currentMonth)->startOfMonth();
         $end   = (clone $start)->endOfMonth();
 
-        // Fetch only this month’s sales
+    // Non-refunded sales
         $sales = AffiliateSale::with('buyer')
-            ->where('referrer_id', $affiliateId)
-            ->whereBetween('created_at', [$start, $end])
-            ->get();
+        ->where('referrer_id', $affiliateId)
+        ->where('refunded', false)
+        ->whereBetween('created_at', [$start, $end])
+        ->get();
 
-        return view('affiliate.sales', compact('sales', 'months', 'currentMonth'));
+    // Refunded sales
+        $refundedSales = AffiliateSale::with('buyer')
+        ->where('referrer_id', $affiliateId)
+        ->where('refunded', true)
+        ->whereBetween('created_at', [$start, $end])
+        ->get();
+
+    // Totals
+        $totalCommission    = $sales->sum('commission');
+        $refundedCommission = $refundedSales->sum('commission');
+        $netCommission      = $totalCommission - $refundedCommission;
+
+        return view('affiliate.sales', compact(
+            'sales',
+            'refundedSales',
+            'months',
+            'currentMonth',
+            'totalCommission',
+            'refundedCommission',
+            'netCommission'
+        ));
     }
+
 }
