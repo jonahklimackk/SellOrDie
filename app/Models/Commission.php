@@ -7,21 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Commission extends Model
 {
     protected $fillable = [
-        'affiliate_sale_id',
         'affiliate_id',
+        'month',
+        'year',
         'amount',
-        'due_date',
-        'paid_at',
         'status',
+        'paid_at',
     ];
 
-    public function sale()
-    {
-        return $this->belongsTo(AffiliateSale::class, 'affiliate_sale_id');
-    }
+    protected $casts = [
+        'month'      => 'integer',
+        'year'       => 'integer',
+        'amount'     => 'decimal:2',
+        'paid_at'    => 'datetime',
+    ];
 
-    public function affiliate()
+    // Optional: for nice accessors
+    public function getLabelAttribute()
     {
-        return $this->belongsTo(User::class, 'affiliate_id');
+        return \Carbon\Carbon::create($this->year, $this->month, 1)
+                             ->format('F Y');
     }
 }

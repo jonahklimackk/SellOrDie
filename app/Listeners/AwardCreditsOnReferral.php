@@ -11,7 +11,7 @@ class AwardCreditsOnReferral
     {
         // only award if there's a referrer
         if ($refId = $event->user->referral?->referrer_id) {
-            CreditService::awardBaseAndMatrix(
+            CreditService::handleAction(
                 $refId,
                 'referral',
                 "Referred user #{$event->user->id}"

@@ -50,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'sponsor_id',
         'status',
+        'credits_balance',
         'current_team_id'
     ];
 
@@ -298,6 +299,69 @@ public function credits(): HasMany
 {
     return $this->hasMany(\App\Models\Credit::class);
 }
+
+    /**
+     * Assign a role (membership tier) to this user.
+     *
+     * @param  string  $role     The role slug (e.g. 'lightweight', 'heavyweight')
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function assignStatus(string $status)
+    {
+        // Define your set of valid roles
+        $valid = ['amateur', 'lightweight', 'heavyweight'];
+
+        if (! in_array($status, $valid, true)) {
+            throw new \InvalidArgumentException("Invalid role “{$status}”. Valid roles: " . implode(', ', $valid));
+        }
+
+        // Update the column and save
+        $this->status = $status;
+        $this->save();
+
+        return $this;
+    }
+
+    /**
+     * Determine if the user is on the free (no-subscription) plan.
+     *
+     * @return bool
+     */
+    public function isFree(): bool
+    {
+        // “default” is the name of the Cashier subscription; 
+        // returns false if there is any active subscription
+        // return ! $this->subscribed('default');
+        if ($this->status === 'free' || $this->status==='amateur')
+            return 1;
+        return 0;
+    }    
+
+
+/**
+ * Increment the user’s running credits balance.
+ *
+ * @param  int  $amount  The positive number of credits to add.
+ * @return int           The new credits_balance value.
+ */
+public function incrementCreditsBalance(int $amount): int
+{
+    return $this->increment('credits', $amount);
+}
+
+/**
+ * Decrement the user’s running credits balance.
+ *
+ * @param  int  $amount  The positive number of credits to subtract.
+ * @return int           The new credits value.
+ */
+public function decrementCreditsBalance(int $amount): int
+{
+    return $this->decrement('credits_balance', $amount);
+}    
+
 }
 
 

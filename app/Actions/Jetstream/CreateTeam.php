@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Contracts\CreatesTeams;
 use Laravel\Jetstream\Events\AddingTeam;
 use Laravel\Jetstream\Jetstream;
+use Illuminate\Validation\ValidationException;
 
 class CreateTeam implements CreatesTeams
 {
@@ -17,21 +18,42 @@ class CreateTeam implements CreatesTeams
      *
      * @param  array<string, string>  $input
      */
-    public function create(User $user, array $input): Team
-    {
-        Gate::forUser($user)->authorize('create', Jetstream::newTeamModel());
+public function create(User $user, array $input): Team
+{
+    Gate::forUser($user)->authorize('create', Jetstream::newTeamModel());
 
-        Validator::make($input, [
-            'name' => ['required', 'string', 'max:100'],
-        ])->validateWithBag('createTeam');
+    // Count existing owned teams & lookup tier limit
+    $ownedCount = $user->ownedTeams()->count();
+    $limits     = config('fights.owned_limits', []);
+    $tier       = $user->membership_tier;
+    $maxAllowed = $limits[$tier] ?? null;
 
-        AddingTeam::dispatch($user);
+    Validator::make($input, [
+        'name' => [
+            'required',
+            'string',
+            'max:100',
+            // custom inline rule to enforce per-tier cap
+            function ($attribute, $value, $fail) use ($ownedCount, $maxAllowed, $tier) {
+                if (is_null($maxAllowed)) {
+                    // guard against missing config entry
+                    $fail("Membership tier “{$tier}” is not configured for team limits.");
+                } elseif ($ownedCount >= $maxAllowed) {
+                    $fail("As a “{$tier}” member you may only create up to {$maxAllowed} teams.");
+                }
+            },
+        ],
+    ])->validateWithBag('createTeam');
 
-        $user->switchTeam($team = $user->ownedTeams()->create([
-            'name' => $input['name'],
-            'personal_team' => false,
-        ]));
+    AddingTeam::dispatch($user);
 
-        return $team;
-    }
+    $team = $user->ownedTeams()->create([
+        'name'          => $input['name'],
+        'personal_team' => false,
+    ]);
+
+    $user->switchTeam($team);
+
+    return $team;
+}
 }

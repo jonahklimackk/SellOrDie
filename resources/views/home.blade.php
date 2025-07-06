@@ -1,3 +1,12 @@
+@php
+    use App\Services\CreditService;
+    use Illuminate\Support\Facades\Auth;
+
+    $user       = Auth::user();
+    $todayCreds = CreditService::getTodaysCredits($user);
+    $todayVotes = CreditService::getTodaysVotes($user);
+@endphp
+
 <x-app-layout>
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -26,15 +35,15 @@
               </tr>
               <tr class="border-b border-gray-700">
                 <th class="py-2 px-4 font-medium text-yellow-200">Total Credits</th>
-                <td class="py-2 px-4">{{ Auth::user()->credits }}</td>
+                <td class="py-2 px-4">{{ Auth::user()->credits_balance }}</td>
               </tr>
               <tr class="border-b border-gray-700">
                 <th class="py-2 px-4 font-medium text-yellow-200">Credits Earned Today</th>
-                <td class="py-2 px-4">{{ $creditsSurfed }}</td>
+                <td class="py-2 px-4">{{ $todayCreds }}</td>
               </tr>
               <tr>
                 <th class="py-2 px-4 font-medium text-yellow-200">Fights Judged Today</th>
-                <td class="py-2 px-4">{{ $fightsJudged }}</td>
+                <td class="py-2 px-4">{{ $todayVotes }}</td>
               </tr>
             </tbody>
           </table>

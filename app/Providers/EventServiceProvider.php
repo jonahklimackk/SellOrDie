@@ -28,7 +28,7 @@ class EventServiceProvider extends ServiceProvider
     // protected $dontDiscover = [
     //     \App\Listeners\HandleStripeRefund::class,
     // ];
-     protected static $shouldDiscoverEvents = false;
+    protected static $shouldDiscoverEvents = false;
     /**
      * The event listener mappings for the application.
      *
@@ -57,6 +57,9 @@ class EventServiceProvider extends ServiceProvider
         AdViewed::class => [
             AwardCreditsOnViewed::class,
         ],
+    // \Spark\Events\SubscriptionUpdated::class => [
+    //     \App\Listeners\RefundAffiliateOnSubscriptionChange::class],        
+
 
         // **Note:** Stripe webhook handling is now managed
         // in your StripeWebhookController. Remove Cashier event listeners

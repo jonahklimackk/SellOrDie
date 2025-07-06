@@ -323,7 +323,7 @@ public function vote($key, $clickedAdId)
      else if ($icon == $creditClick->challenge_icon && $creditClick->timer_countdown && !$creditClick->earned_credits) {
                        //give creditgs
         $recipient = User::where('id', $creditClick->recipient_id)->get()->first();
-        $recipient->credits += $creditClick->credits;
+        $recipient->credits_balance += $creditClick->credits;
         $recipient->save();
 
         \Log::info("in new fight give c redit section");
@@ -337,7 +337,7 @@ public function vote($key, $clickedAdId)
 
         return response()->json([
             'earned_credits'    => $earned,
-            'total_credits' =>  Credit::where('user_id', Auth::id())->sum('amount')
+            'total_credits' =>  CreditService::getCurrentBalance(Auth::user())
         ]);
 
             // return "You just earned  ".$creditClick->credits." credits. \n  Total Credits: ".Auth::user()->credits;       
@@ -467,8 +467,7 @@ public function vote($key, $clickedAdId)
             {
             //give creditgs
                 $recipient = User::where('id', $creditClick->recipient_id)->get()->first();
-                $recipient->credits += $creditClick->credits;
-                $recipient->save();
+                $earned = CreditService::handleAction($recipient,'vote');
 
                 $creditClick->earned_credits = true;
                 $creditClick->clicks++;

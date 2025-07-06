@@ -4,37 +4,57 @@ namespace App\Http\Controllers\Affiliate;
 
 use App\Http\Controllers\Controller;
 use App\Models\Commission;
+use App\Models\AffiliateSale;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class CommissionController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $affiliateId  = auth()->id();
-        $currentMonth = $request->get('month', Carbon::now()->format('Y-m'));
+        $now          = Carbon::now();
+        $currentMonth = $now->month;
+        $currentYear  = $now->year;
 
-        // Build last 12 months for dropdown
-        $months = [];
-        for ($i = 0; $i < 12; $i++) {
-            $dt            = Carbon::now()->subMonths($i);
-            $months[$dt->format('Y-m')] = $dt->format('F, Y');
+        // 1) Load persisted monthly summaries
+        $rows = Commission::where('affiliate_id', $affiliateId)
+            ->orderByDesc('year')
+            ->orderByDesc('month')
+            ->get(['year','month','amount','status','paid_at']);
+
+        // 2) If “This Month” hasn’t been seeded yet, compute it here
+        $hasCurrent = $rows->first(fn($r) => 
+            $r->year  === $currentYear && 
+            $r->month === $currentMonth
+        );
+
+        if (! $hasCurrent) {
+            // Sum commissions POSITIVE for non-refunded, NEGATIVE for refunded
+            $net = AffiliateSale::where('referrer_id', $affiliateId)
+                ->whereYear('created_at', $currentYear)
+                ->whereMonth('created_at', $currentMonth)
+                ->selectRaw(
+                    'COALESCE(SUM(
+                        CASE 
+                          WHEN refunded = 0 THEN commission 
+                          ELSE -commission 
+                        END
+                    ),0) as net'
+                )
+                ->value('net');
+
+            $rows->prepend((object)[
+                'year'    => $currentYear,
+                'month'   => $currentMonth,
+                'amount'  => $net,
+                'status'  => 'pending',
+                'paid_at' => null,
+            ]);
         }
 
-        // Compute start/end of selected month
-        $start = Carbon::createFromFormat('Y-m', $currentMonth)->startOfMonth();
-        $end   = (clone $start)->endOfMonth();
-
-        // Fetch commissions due in that month
-        $commissions = Commission::with('sale')
-            ->where('affiliate_id', $affiliateId)
-            ->whereBetween('due_date', [$start, $end])
-            ->get();
-
-        return view('affiliate.commission', compact(
-            'commissions',
-            'months',
-            'currentMonth'
-        ));
+        return view('affiliate.commission', [
+            'rows' => $rows,
+        ]);
     }
 }

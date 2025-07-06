@@ -172,14 +172,14 @@ Route::middleware('auth')
          // Other affiliate routes…
 
          // 1️⃣ Sales view (with month filter)
-   Route::get('sales', [SalesController::class, 'index'])
-   ->name('sales');
+ Route::get('sales', [SalesController::class, 'index'])
+ ->name('sales');
 
-   Route::get('commission', [CommissionController::class, 'index'])
-   ->name('commission');
+ Route::get('commission', [CommissionController::class, 'index'])
+ ->name('commission');
 });
 
-    
+
 
 // spark handles this - it just lists products puurchased but it users the old system so propbably delete this
 Route::middleware('auth')->group(function () {
@@ -542,16 +542,16 @@ Route::get('/test-verify', function() {
 });
 
 
-Route::get('/test-listener', function() {
+// Route::get('/test-listener', function() {
 
-    // assume your Billable is User and you have a subscription
-    $user         = App\Models\User::first();
-    $subscription = $user->subscriptions()->first();
+//     // assume your Billable is User and you have a subscription
+//     $user         = App\Models\User::first();
+//     $subscription = $user->subscriptions()->first();
 
-    // dispatch the event (this will invoke your listener directly)
-    event(new \Spark\Events\SubscriptionCreated($user, $subscription));
+//     // dispatch the event (this will invoke your listener directly)
+//     event(new \Spark\Events\SubscriptionCreated($user, $subscription));
 
-});
+// });
 
 
 
@@ -568,3 +568,114 @@ Route::post('/webhook-debug', function (Request $request) {
     ]);
     return response()->json(['status' => 'ok']);
 })->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
+
+
+
+
+
+use Spark\Events\SubscriptionCreated;
+use App\Models\User;
+
+Route::get('/test-spark-event', function () {
+    // dd(Event::getListeners( SubscriptionCreated::class ));
+    // dd(Event::getListeners(\Spark\Events\SubscriptionCreated::class));
+
+    $user = User::find(2655);                         // pick an existing user
+    $subscription = $user->subscriptions()->first(); // or ->where('name','default')->first();
+
+    event(new SubscriptionCreated($user, $subscription));
+
+    return 'SubscriptionCreated event dispatched.';
+});
+
+
+use Spark\Events\SubscriptionUpdated;
+
+Route::get('/test-subscription-update', function () {
+    // 1) Pick a user who already has a subscription
+    $user = User::with('subscriptions')->find(2655); 
+    if (! $user || $user->subscriptions->isEmpty()) {
+        return 'No user #1 or no subscriptions found';
+    }
+
+    // 2) Grab their first subscription
+    $subscription = $user->subscriptions->first();
+
+    // 3) (Optional) simulate a change by temporarily swapping price IDs
+    //    $subscription->stripe_price = 'price_YOUR_LIGHT_OR_HEAVY_ID';
+    //    $subscription->save();
+
+    // 4) Fire the event
+    event(new SubscriptionUpdated($user, $subscription));
+
+    return '🔥 SubscriptionUpdated event dispatched for user #'.$user->id;
+});
+
+
+
+
+Route::middleware('auth')->get('/test-credit-deduct', function () {
+    $user = Auth::user();
+
+    // Attempt to deduct 50 credits
+    $deducted = CreditService::subtractCredits(
+        $user,
+        50,
+        'ad_view',
+        ['test' => true]
+    );
+
+    // Refresh user to get the updated balance
+    $user->refresh();
+
+    return response()->json([
+        'message'        => '50 credits deducted for ad_view',
+        'amount_deducted'=> $deducted,              // should be -50
+        'new_balance'    => $user->credits_balance, // your running balance column
+    ]);
+});
+
+
+
+Route::middleware('auth')->get('/synch', function () {
+
+    User::chunk(100, function($users) {
+        foreach ($users as $user) {
+            CreditService::syncUserBalance($user);
+        }
+    });
+});
+
+
+// Quick admin route to reset everyone's credits to 10,000
+// Route::get('/admin/reset-all-credits', function () {
+//     // You might want to protect this with middleware('auth','can:admin') in real use
+//     User::chunkById(100, function ($users) {
+//         foreach ($users as $user) {
+//             $user->update(['credits_balance' => 10000]);
+//         }
+//     });
+
+//     return response('All users credits set to 10,000.', 200);
+// });
+
+
+Route::get('/admin/reset-all-credits', function () {
+    // (In production, protect this with auth + can:admin or env check)
+    User::chunkById(100, function ($users) {
+        foreach ($users as $user) {
+            // This will:
+            //  1) Calculate delta = 10 000 – currentBalance
+            //  2) Insert a `type = 'admin_adjust'` row in credits
+            //  3) Update the running-balance column to 10 000
+            CreditService::adminAdjust(
+                $user,
+                10000,
+                'Batch reset to 10 000 by admin'
+            );
+        }
+    });
+
+    return response('All users’ balances reset to 10 000 (and logged).', 200);
+});

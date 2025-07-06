@@ -7,6 +7,7 @@ use Auth;
 use App\Models\User;
 use App\Models\FightViewLog;
 use App\Models\RandomOpponents;
+use App\Services\CreditService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,8 +65,8 @@ class Ads extends Model
         //however there must  be a logged in user to see the fight - I think
         //and ads from the same person are shown against eeach other 
         //that sounds like af eatgure, ad vs ad is ok cuz you can ssee which did better
-   
-        $fighters = User::where('credits', '>=', config('sellordie.cost_display_ad'))->where('id','!=',Auth::user()->id)->get()->all();
+
+        $fighters = User::where('credits_balance', '>=', config('sellordie.cost_display_ad'))->where('id','!=',Auth::user()->id)->get()->all();
 
 
         $possibleAds = [];
@@ -106,6 +107,17 @@ class Ads extends Model
             $ads[] = $possibleAds[$randomFightId];
         }
 
+        $cost = config('credits.actions.display_ad');
+
+        foreach ($ads as $ad) {
+            CreditService::subtractCredits(
+                $ad->user,
+                $cost,
+                'display_ad',
+            );
+
+        }
+
 
         return $ads;
 
@@ -124,7 +136,9 @@ class Ads extends Model
     public static function fromClosedFights()
     {
 
-        $fighters = User::where('credits', '>=',1)->where('id','!=',Auth::user()->id)->get()->all();
+        $fighters = User::where('credits_balance', '>=', 50)->where('id','!=',Auth::user()->id)->get()->all();
+        // $fighters = User::where('id','!=',Auth::user()->id)->get()->all();
+        // dd(count($fighters));
 
         $possibleAds = [];
         foreach($fighters as $fighter){
@@ -150,7 +164,6 @@ class Ads extends Model
             }
         }
 
-        // dump($possibleAds);
 
         $randomFight = Team::where('id',array_rand($possibleAds))->get()->first();
         FightViewLog::logView($randomFight->id);
@@ -161,8 +174,14 @@ class Ads extends Model
         foreach($possibleAds[$randomFight->id] as $ad){
             $ad->views++;
             $ad->save();
-            $ad->user->credits -= 1;
-            $ad->user->save();
+            $cost = config('credits.actions.display_ad');
+
+            CreditService::subtractCredits(
+                $ad->user,
+                $cost,
+                'display_ad',
+            );
+
         }
 
         return $possibleAds[$randomFight->id];

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\DateTime;
@@ -52,10 +53,9 @@ class Credit extends Resource
                 ->displayUsingLabels()
                 ->sortable(),
 
-            Currency::make('Amount')
-                ->currency('USD')
-                ->sortable()
-                ->step(0.01),
+            Number::make('Amount')
+                ->sortable(),
+                
 
             Textarea::make('Description')
                 ->alwaysShow()

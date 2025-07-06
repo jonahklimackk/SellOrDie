@@ -19,17 +19,17 @@ use App\Events\AdVoted;
 class AdsController extends Controller
 {
 
-	public function awardCredits()
-	{
+    public function awardCredits()
+    {
         // Your existing logic to record the view...
-
+        
         // 1) Dispatch the event (will trigger CreditService under the hood)
-		event(new AdVoted(Auth::user()));
+        event(new AdVoted(Auth::user()));
 
         // 2) Return the ad view
         // return view('ads.show', compact('ad'));
-		return 'success!';
-	}
+        return 'success!';
+    }
 
 
 
@@ -100,46 +100,39 @@ class AdsController extends Controller
 	/**
 	 * Show the form for creating a new resource.
 	 */
-	public function create(Request $request)
+	public function create(request $request)
 	{
-    	// 1) Base validation rules
-		$rules = [
-			'headline' => ['required', 'string', 'max:200'],
-			'category' => ['required', 'string', 'max:200'],
-			'body'     => ['required', 'string', 'max:50000'],
-			'url'      => ['required', 'url',    'max:500'],
-		];
 
-    	// 2) If free member, forbid any HTML tags in the body
-		if ($request->user()->isFree()) {
-			$rules['body'][] = 'not_regex:/<[^>]+>/';
-		}
+		$validatedData = $request->validate([
+			'headline' => 'required|string|max:200',
+			'category' => 'required|string|max:200',
+			'body' => 'required|string|max:50000',
+			'url' => 'required|url|max:500',
+		]);
 
-    	// 3) Validate
-		$validated = $request->validate($rules);
 
-    	// 4) Prevent the 3-ad-per-fight problem & save
-		if (! Auth::user()->currentTeam->isFull()) {
-			$ad = Ads::updateOrCreate(
-				['id' => $request->id],
-				[
-					'team_id'  => Auth::user()->currentTeam->id,
-					'user_id'  => Auth::user()->id,
-					'headline' => $validated['headline'],
-					'category' => $validated['category'],
-					'body'     => $validated['body'],
-					'url'      => $validated['url'],
-					'status'   => 'config',
-				]
-			);
-		} else {
-			return redirect('ads')
-			->with('red_message', "This fight is already full.");
-		}
+		// need to prevent the 3 ad per fight problem
+		if (! Auth::user()->currentTeam->isFull())            
+			$ad = Ads::updateOrCreate([
+				'id' => $request->id
+			],
+			[
+				'team_id' => Auth::user()->currentTeam->id,
+				'user_id' => Auth::user()->id,
+				'headline' => $request->headline,
+				'category' => $request->category,
+				'body'=> $request->body,
+				'url' => $request->url,
+				'status' => 'config',
+			]);
+		else
+			return redirect('ads')->with('red_message', "This fight is already full.");
 
-		return redirect('ads')
-		->with('green_message', 'Your Ad Weapon has been configured. You are ready for the fight!');
-	}	
+
+
+
+		return redirect('ads')->with('green_message', 'Your Ad Weapon has been configured. You are ready for the fight!');
+	}
 
 	/**
 	 * Store a newly created resource in storage.
@@ -257,5 +250,5 @@ class AdsController extends Controller
 
 		return redirect('ads')->with('green_message', 'You will have random opponents to your ad Weapon');
 	}   
-
+ 
 }

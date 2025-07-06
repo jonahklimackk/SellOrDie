@@ -56,7 +56,7 @@
               id="username"
               name="username"
               type="text"
-              value="{{ old('username', $faker->unique()->userName) }}"
+              value="{{ old('username', str_replace('.', '', $faker->unique()->userName)) }}"
               required
               autocomplete="username"
               class="w-full px-4 py-2 bg-gray-700 text-gray-100 rounded-lg border-transparent focus:border-yellow-400 focus:ring focus:ring-yellow-300 focus:ring-opacity-50"

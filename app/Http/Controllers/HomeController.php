@@ -90,15 +90,13 @@ class HomeController extends Controller
 		}
 
 		// dd($data);
-		$credits = Auth::user()->credits;
-
 		$fightsJudged = CreditClicks::where('recipient_id',Auth::user()->id)->whereDate('updated_at',Carbon::today())->get()->count();
 
 		$creditsSurfed = CreditClicks::where('recipient_id',Auth::user()->id)->whereDate('updated_at',Carbon::today())->where('earned_credits',1)->get()->sum('credits');
 
 
 
-		return view('home', compact('data','credits','fightsJudged','creditsSurfed'));
+		return view('home', compact('data','fightsJudged','creditsSurfed'));
 
 
 	}

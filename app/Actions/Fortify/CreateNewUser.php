@@ -29,13 +29,29 @@ class CreateNewUser implements CreatesNewUsers
    {
     logger('CreateNewUser::create started');
 
+    // Validator::make($input, [
+    //     'name'     => ['required', 'string', 'max:255'],
+    //     'username' => ['required', 'string', 'max:100', 'unique:users'],
+    //     'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+    //     'password' => $this->passwordRules(),
+    //     'terms'    => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+    // ])->validate();
+
     Validator::make($input, [
         'name'     => ['required', 'string', 'max:255'],
-        'username' => ['required', 'string', 'max:100', 'unique:users'],
-        'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => $this->passwordRules(),
-        'terms'    => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-    ])->validate();
+        'username' => [
+            'required',
+            'string',
+            'max:100',
+        'alpha_dash',      // only letters, numbers, dashes and underscores
+        'unique:users,username'
+    ],
+    'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+    'password' => $this->passwordRules(),
+    'terms'    => Jetstream::hasTermsAndPrivacyPolicyFeature() 
+    ? ['accepted', 'required'] 
+    : [],
+])->validate();    
 
     logger('CreateNewUser::create validation passed');
 
@@ -85,11 +101,11 @@ class CreateNewUser implements CreatesNewUsers
                 logger("CreateNewUser::persisted affiliate info for user_id={$user->id}");
 
 
-                Referral::create([
-        'user_id'     => $user->id,    // the freshly registered user
-        'referrer_id' => $referrerId,
-        'campaign'    => $affiliateCampaign,       // “” or null if none
-    ]);
+    //             Referral::create([
+    //     'user_id'     => $user->id,    // the freshly registered user
+    //     'referrer_id' => $referrerId,
+    //     'campaign'    => $affiliateCampaign,       // “” or null if none
+    // ]);
 
                 // Optionally assign to the binary matrix
                 // AffiliateService::assignMatrixPosition($user);

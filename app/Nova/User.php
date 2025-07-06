@@ -93,7 +93,7 @@ class User extends Resource
             ->sortable()
             ->rules('required', 'max:255'),
 
-            Number::make('credits')
+            Number::make('credits_balance')
             ->sortable(),
 
             Text::make('status')

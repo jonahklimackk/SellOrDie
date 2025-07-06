@@ -16,6 +16,10 @@ return [
 
         // ← add your signup action here:
         'signup'   => 500, // fixed 50-credit bonus on signup
+
+        'display_ad' => 50,
+
+        'admin_adjust' => null,
     ],
 
     // … your existing downline_vote config …
@@ -41,6 +45,11 @@ return [
         6 => 50,
         7 => 25,
     ],
+
+    'purchase' => [
+        'lightweight' => 100000,
+        'heavyweight' => 250000
+    ]  
 
     // … rest of your config …
 ];

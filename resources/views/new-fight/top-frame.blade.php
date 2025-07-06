@@ -28,7 +28,7 @@
 
             <div class="flex justify-around">
 
-             <img src="/img/sellordie7.png" width="200" height="200">
+             <img src="/img/sellordie7.png" width="200" height="200" onclick="parent.location='/home'" style="cursor: pointer;">
              <!-- </div> -->
              <h1 class="mt-2  text-4xl font-medium text-white ">
                 Click The Ad That Interests You The Most
