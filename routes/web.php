@@ -528,6 +528,9 @@ Route::get('/ai/timer3', function () {
 Route::get('/ai/oto', function () {
     return view('ai-output.one-time-offer');
 });
+Route::get('/ai/heroes', function () {
+    return view('feature-heroes');
+});
 
 
 

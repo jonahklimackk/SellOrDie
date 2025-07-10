@@ -34,6 +34,95 @@
   </section>
 
 
+@php
+  $bonuses = [
+    [
+      'title'       => 'Done-For-You Ad Template Pack',
+      'description' => '10–15 pre-built HTML ad templates (Tailwind-ready) you can drop right into your campaigns.',
+      'iconSrc'     => asset('images/icons/template-pack.svg'),
+      'imageSrc'    => asset('images/bonuses/template-pack.jpg'),
+    ],
+    [
+      'title'       => 'Swipe-File of Top-Performing Ad Copy',
+      'description' => 'Curated headlines, subheads & CTAs with “fill-in-the-blank” prompts so you write winning copy in minutes.',
+      'iconSrc'     => asset('images/icons/swipe-file.svg'),
+      'imageSrc'    => asset('images/bonuses/swipe-file.jpg'),
+    ],
+    [
+      'title'       => 'Video Crash-Course: From Zero to Hero Ad Weapon',
+      'description' => 'A 60-minute screencast showing step-by-step how to build, launch & A/B test your ads in Sell Or Die.',
+      'iconSrc'     => asset('images/icons/video-course.svg'),
+      'imageSrc'    => asset('images/bonuses/video-course.jpg'),
+    ],
+    [
+      'title'       => 'Ad Audit & Feedback Session',
+      'description' => 'A 30-minute one-on-one Zoom call where we review your ad, suggest improvements & unlock quick wins.',
+      'iconSrc'     => asset('images/icons/feedback.svg'),
+      'imageSrc'    => asset('images/bonuses/feedback.jpg'),
+    ],
+    [
+      'title'       => 'Conversion-Boosting Swipe File: Irresistible Offers',
+      'description' => '20 proven upsell, downsell & cross-sell templates you can plug right into your funnels.',
+      'iconSrc'     => asset('images/icons/bolt.svg'),
+      'imageSrc'    => asset('images/bonuses/irresistible-offers.jpg'),
+    ],
+    [
+      'title'       => 'High-Impact Graphics Asset Bundle',
+      'description' => '100+ royalty-free SVG/PNG icons, backgrounds & headers sized for all Sell Or Die slots (468×60, 300×250, etc.).',
+      'iconSrc'     => asset('images/icons/graphics.svg'),
+      'imageSrc'    => asset('images/bonuses/graphics-bundle.jpg'),
+    ],
+    [
+      'title'       => '“Ad Weapon” AI Credit Booster',
+      'description' => '5,000 extra AI-generation credits (25 heavyweight ad weapons) so you never hit your limits.',
+      'iconSrc'     => asset('images/icons/rocket.svg'),
+      'imageSrc'    => asset('images/bonuses/ai-booster.jpg'),
+    ],
+    [
+      'title'       => 'Quick-Start Checklist & Swipe-Sheet',
+      'description' => 'A laminated PDF checklist walking you through setup, launch & optimization—plus a fillable results sheet.',
+      'iconSrc'     => asset('images/icons/clipboard.svg'),
+      'imageSrc'    => asset('images/bonuses/checklist.jpg'),
+    ],
+    [
+      'title'       => 'Private Mastermind Community Access',
+      'description' => '30 days in an exclusive Slack/Discord with other power users and Sell Or Die insiders.',
+      'iconSrc'     => asset('images/icons/users.svg'),
+      'imageSrc'    => asset('images/bonuses/community.jpg'),
+    ],
+    [
+      'title'       => 'Monthly “Inside the Funnel” Case Study',
+      'description' => 'Real-world breakdown of a top member’s campaign: ad weapon, budgets, results & tweaks.',
+      'iconSrc'     => asset('images/icons/chart-bar.svg'),
+      'imageSrc'    => asset('images/bonuses/case-study.jpg'),
+    ],
+    [
+      'title'       => 'Copywriting Mini-Workbook',
+      'description' => 'Fill-in-the-blank templates for bullets, guarantees & scarcity triggers—with top-grossing examples.',
+      'iconSrc'     => asset('images/icons/book.svg'),
+      'imageSrc'    => asset('images/bonuses/workbook.jpg'),
+    ],
+    [
+      'title'       => 'Lifetime Discount on Future Add-Ons',
+      'description' => 'A 20% off coupon for any future upgrades—advanced reporting, premium analytics or voice-overs.',
+      'iconSrc'     => asset('images/icons/tag.svg'),
+      'imageSrc'    => asset('images/bonuses/discount.jpg'),
+    ],
+  ];
+@endphp
+
+@foreach($bonuses as $bonus)
+  <x-bonus-hero
+    :title="$bonus['title']"
+    :description="$bonus['description']"
+    :iconSrc="$bonus['iconSrc']"
+    :imageSrc="$bonus['imageSrc']"
+  />
+@endforeach
+
+
+
+
   <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow-lg">
   <thead class="bg-gray-800">
     <tr>
