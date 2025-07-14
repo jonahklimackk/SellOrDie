@@ -3,6 +3,7 @@
   'description',  // string
   'iconSrc',      // URL to a small SVG/PNG icon
   'imageSrc',     // URL to a larger hero image
+  'trueValue'     // optional numeric/string value for “True Value”
 ])
 
 <section class="bg-[#1f1c27] text-white py-16">
@@ -18,6 +19,13 @@
     <div class="flex-1">
       <h3 class="text-3xl font-bold text-yellow-300 mb-2">{{ $title }}</h3>
       <p class="text-lg">{{ $description }}</p>
+
+      {{-- True Value --}}
+      @if(!empty($trueValue))
+        <p class="text-2xl text-red-500 font-semibold mt-2">
+          True Value: ${{ $trueValue }}
+        </p>
+      @endif
     </div>
 
     {{-- Hero Image --}}

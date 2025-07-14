@@ -531,6 +531,9 @@ Route::get('/ai/oto', function () {
 Route::get('/ai/heroes', function () {
     return view('feature-heroes');
 });
+Route::get('/ai/login-ad', function () {
+    return view('ai-output.login-ad');
+});
 
 
 
